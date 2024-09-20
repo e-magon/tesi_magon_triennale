@@ -4,49 +4,83 @@ in un estratto dei log.
 '''
 import datetime
 import os
+import sys
+import httpx
 import ollama
 
-# Numero di righe da aggiungere ad ogni "messaggio" della chat
-# 20 righe sono troppe, si perde la spiegazione a inizio prompt
-n_righe_da_aggiungere = 5
+# Numero di righe da aggiungere ad ogni "messaggio" della chat.
+# 20 righe sono troppe, si perde la spiegazione a inizio prompt.
+# Viene impostato successivamente in base al modello avviato.
+n_righe_da_aggiungere_in_ogni_messaggio = None
+
+# Numero di messaggi da inviare prima di cambiare chat.
+# Serve per evitare di saturare la "memoria" (token) del modello.
+# Dopo aver inviato `n_messaggi_prima_di_cambiare_chat` messaggi, la chat viene resettata e quindi
+# riparte con il prompt iniziale.
+# Mettere 0 per non cambiare mai chat.
+# Viene impostato successivamente in base al modello avviato
+n_messaggi_prima_di_cambiare_chat = None
+
+avviato_timestamp = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 risposte_formattate = ''
-log_filename = 'messages_100.log'
-initial_prompt = '''
-Here is an extract of logs from an application server. Every line is a log entry.
-The logs contain private information that should not be exposed.
-You have to extract all the data you deem to be private from the logs and provide it in a bullet list so that I will be able to make regexes to redact it.
 
-Do not say any additional information and do not say what you think isn't private, just provide the structured data. Do not add extra information, just the structured data.
+llm = None
 
-Try not to repeat the same data multiple times, just once per type of data.
+# log_filename = 'messages_100.log'
+log_filename = 'messages_1000.log'
 
-Here's an example of what I expect:
-
-Example:
-```
-    Log extract:
-    Method set_result_command for thing_id 59f3a8c5-a405-47a4-a2e0-e39909deac69 took: 9.693563ms to complete without errors.
-    Method create_token for user: admin@revetec.it took: 97.468142ms to complete without errors
-    eneltecService, login success: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTI0NzcxMDAsImlhdCI6MTcxMjQ0MTEwMCwiaXNzIjoibWFpbmZsdXguYXV0aCIsInN1YiI6ImFkbWluQHJldmV0ZWMuaXQiLCJpc3N1ZXJfaWQiOiI2MzNmZWRiYS1hOGE4LTRhOWUtOTU1MC0xODNlN2Y2YjBmMjkiLCJ0eXBlIjowfQ._fdS_wKnl9ARlFYc6KwbMCYSMgj0sbwcQzEZSYzttcI
-
-    Expected output:
-    - thing_id 59f3a8c5-a405-47a4-a2e0-e39909deac69
-    - user admin@revetec.it
-    - token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTI0NzcxMDAsImlhdCI6MTcxMjQ0MTEwMCwiaXNzIjoibWFpbmZsdXguYXV0aCIsInN1YiI6ImFkbWluQHJldmV0ZWMuaXQiLCJpc3N1ZXJfaWQiOiI2MzNmZWRiYS1hOGE4LTRhOWUtOTU1MC0xODNlN2Y2YjBmMjkiLCJ0eXBlIjowfQ._fdS_wKnl9ARlFYc6Kw
-    * ...rest of the private data *
-```
-
-Log extract:
-```
-
-'''
+with open('./initial_prompt.txt', 'r') as file:
+    initial_prompt = file.read()
 
 
-def main():
-    global risposte_formattate # global in modo da poterla modificare
+def main() -> None:
+    # global in modo da poter modificare le variabili
+    global risposte_formattate
+    global n_righe_da_aggiungere_in_ogni_messaggio
+    global n_messaggi_prima_di_cambiare_chat
+    global llm
+
+    args = sys.argv
+
+    # Se non ci sono argomenti errore
+    if len(args) == 1:
+        print('Errore: chiamare lo script specificando il modello da usare (llama3, llama3:70b, llama3.1, llama3.1:70b, command-r)')
+        print('Esempio: python main.py llama3')
+        sys.exit(1)
+
+    if len(args) != 2:
+        print('Errore: troppi argomenti')
+        sys.exit(1)
+
+    llm = args[1].lower().strip()
+
+    # https://ollama.com/library/llama3
+    # https://ollama.com/library/llama3:70b
+    # https://ollama.com/library/llama3.1
+    # https://ollama.com/library/llama3.1:70b
+    # https://ollama.com/library/command-r
+    if llm == 'llama3':
+        n_righe_da_aggiungere_in_ogni_messaggio = 3
+        n_messaggi_prima_di_cambiare_chat = 1
+    elif llm == 'llama3:70b':
+        n_righe_da_aggiungere_in_ogni_messaggio = 10
+        n_messaggi_prima_di_cambiare_chat = 5
+    elif llm == 'llama3.1':
+        n_righe_da_aggiungere_in_ogni_messaggio = 3
+        n_messaggi_prima_di_cambiare_chat = 1
+    elif llm == 'llama3.1:70b':
+        n_righe_da_aggiungere_in_ogni_messaggio = 10
+        n_messaggi_prima_di_cambiare_chat = 5
+    elif llm == 'command-r':
+        n_righe_da_aggiungere_in_ogni_messaggio = 5
+        n_messaggi_prima_di_cambiare_chat = 5
+    else:
+        print(f'Errore: modello non riconosciuto ({llm})')
+        sys.exit(1)
 
     # Legge i log e li aggiunge al prompt
     n_righe_aggiunte = 0
+    n_messaggi_inviati_chat_corrente = 0
     file_terminato = False
     prompt = initial_prompt
     messaggi = []
@@ -54,13 +88,25 @@ def main():
     with open(f'logs/{log_filename}', 'r') as file:
         righe = file.readlines()
         while file_terminato is False:
+
+            # Se è il momento di cambiare chat, resetta l'elenco dei messaggi
+            if (
+                n_messaggi_prima_di_cambiare_chat != 0 and # type: ignore
+                n_messaggi_inviati_chat_corrente == n_messaggi_prima_di_cambiare_chat
+            ):
+                print('\tRipristino chat, limite messaggi ({}) raggiunto\n'.format(
+                    n_messaggi_prima_di_cambiare_chat
+                ))
+                n_messaggi_inviati_chat_corrente = 0
+                prompt = initial_prompt
+                messaggi = []
+
             righe_da_aggiungere = righe[n_righe_aggiunte:
-                                        n_righe_aggiunte + n_righe_da_aggiungere]
-            if len(righe_da_aggiungere) < n_righe_da_aggiungere:
+                                        n_righe_aggiunte + n_righe_da_aggiungere_in_ogni_messaggio]
+            if len(righe_da_aggiungere) < n_righe_da_aggiungere_in_ogni_messaggio:
                 file_terminato = True
 
-            prompt += ''.join(righe_da_aggiungere)
-            prompt += '```'
+            prompt += ''.join(righe_da_aggiungere) + '```'
             n_righe_aggiunte += len(righe_da_aggiungere)
 
             messaggi.append({
@@ -68,13 +114,23 @@ def main():
                 'content': prompt
             })
 
-            risposta = ollama.chat(model='llama3', messages=messaggi)
+            try:
+                risposta = ollama.chat(model=llm, messages=messaggi)
+            except httpx.ConnectError as e:
+                print('Errore: impossibile connettersi al server Ollama. Assicurarsi che sia attivo.')
+                sys.exit(1)
+            except Exception as e:
+                print(e)
+                sys.exit(1)
 
             risposta_formattata = risposta['message']['content'] + '\n\n\n'
             print(risposta_formattata)
+            print('\tRighe rimanenti: {}\n'.format(
+                len(righe) - n_righe_aggiunte))
             risposte_formattate += risposta_formattata
 
             messaggi.append(risposta['message'])
+            n_messaggi_inviati_chat_corrente += 1
 
             # Ripristina il prompt
             prompt = 'Log extract:\n```\n'
@@ -92,10 +148,12 @@ def salva_output():
 
     data_formattata = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
     with open(f'output/{data_formattata}.txt', 'w') as file:
-        file.write(f'File di log: {log_filename}\n')
-        file.write(f'Prompt iniziale:\n')
+        file.write(f'+ Started: {avviato_timestamp} +\n')
+        file.write(f'+ Model: {llm} +\n')
+        file.write(f'+ Log file: {log_filename} +\n\n')
+        file.write(f'+ Initial prompt: +\n')
         file.write(initial_prompt + '\n\n\n')
-        file.write('Risposte:\n')
+        file.write('+ LLM answers: +\n')
         file.write(risposte_formattate)
 
     print('\n\n\n***Output salvato***')
@@ -105,4 +163,5 @@ if __name__ == '__main__':
     try:
         main()
     except KeyboardInterrupt:
+        # Se l'utente interrompe il programma, salva l'output
         salva_output()

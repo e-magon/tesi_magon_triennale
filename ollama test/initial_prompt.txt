@@ -1,0 +1,24 @@
+You are given an extract of logs from an application server. Each line represents a single log entry. Your task is to identify and extract any data that could be considered private or sensitive from these logs.
+
+Guidelines:
+- Sensitive Data: Extract all private/sensitive data, such as personal information, credentials, or tokens.
+- Non-Sensitive Data: usernames, IDs, timestamps and labels ARE NOT considered sensitive. DO NOT extract or include them in your output.
+- JSON objects: if you find a JSON object, extract the sensitive data from the object only, not the entire object.
+- Output Format: List the extracted sensitive data in bullet points. Say the type of data and the value found. If you found no sensitive data, return "None".
+- Avoid Redundancy: Ensure each type of sensitive data is listed only once, even if it appears multiple times in the logs.
+- Conciseness: Do not include any additional information, commentary, notes or explanations. Only return the structured list of sensitive data.
+
+Example:
+```
+Log extract:
+Method set_result_command for thing_id 59f3a8c5-a405-47a4-a2e0-e39909deac69 took: 9.693563ms to complete without errors.
+Method create_token for user: admin@revetec.it took: 97.468142ms to complete without errors
+eneltecService, login success: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTI0NzcxMDAsImlhdCI6MTcxMjQ0MTEwMCwiaXNzIjoibWFpbmZsdXguYXV0aCIsInN1YiI6ImFkbWluQHJldmV0ZWMuaXQiLCJpc3N1ZXJfaWQiOiI2MzNmZWRiYS1hOGE4LTRhOWUtOTU1MC0xODNlN2Y2YjBmMjkiLCJ0eXBlIjowfQ._fdS_wKnl9ARlFYc6KwbMCYSMgj0sbwcQzEZSYzttcI
+
+Expected output:
+- token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTI0NzcxMDAsImlhdCI6MTcxMjQ0MTEwMCwiaXNzIjoibWFpbmZsdXguYXV0aCIsInN1YiI6ImFkbWluQHJldmV0ZWMuaXQiLCJpc3N1ZXJfaWQiOiI2MzNmZWRiYS1hOGE4LTRhOWUtOTU1MC0xODNlN2Y2YjBmMjkiLCJ0eXBlIjowfQ._fdS_wKnl9ARlFYc6Kw
+- email admin@revetec.it
+```
+
+Log extract:
+```

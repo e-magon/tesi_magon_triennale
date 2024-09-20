@@ -1,2 +1,3 @@
+.venv
 ollama test/logs/*
 ollama test/output/*
