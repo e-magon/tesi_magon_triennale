@@ -34,7 +34,7 @@ with open('./initial_prompt.txt', 'r') as file:
 
 
 def main() -> None:
-    # global in modo da poter modificare le variabili
+    # global in modo da poterle modificare
     global risposte_formattate
     global n_righe_da_aggiungere_in_ogni_messaggio
     global n_messaggi_prima_di_cambiare_chat
@@ -87,11 +87,11 @@ def main() -> None:
 
     with open(f'logs/{log_filename}', 'r') as file:
         righe = file.readlines()
-        while file_terminato is False:
 
+        while file_terminato is False:
             # Se è il momento di cambiare chat, resetta l'elenco dei messaggi
             if (
-                n_messaggi_prima_di_cambiare_chat != 0 and # type: ignore
+                n_messaggi_prima_di_cambiare_chat != 0 and  # type: ignore
                 n_messaggi_inviati_chat_corrente == n_messaggi_prima_di_cambiare_chat
             ):
                 print('\tRipristino chat, limite messaggi ({}) raggiunto\n'.format(
@@ -109,27 +109,29 @@ def main() -> None:
             prompt += ''.join(righe_da_aggiungere) + '```'
             n_righe_aggiunte += len(righe_da_aggiungere)
 
-            messaggi.append({
+            messaggi.append({  # type: ignore
                 'role': 'user',
                 'content': prompt
             })
 
             try:
-                risposta = ollama.chat(model=llm, messages=messaggi)
+                risposta = ollama.chat(
+                    model=llm, messages=messaggi)  # type: ignore
             except httpx.ConnectError as e:
-                print('Errore: impossibile connettersi al server Ollama. Assicurarsi che sia attivo.')
+                print(
+                    'Errore: impossibile connettersi al server Ollama. Assicurarsi che sia attivo.')
                 sys.exit(1)
             except Exception as e:
                 print(e)
                 sys.exit(1)
 
-            risposta_formattata = risposta['message']['content'] + '\n\n\n'
-            print(risposta_formattata)
+            risposta_formattata = risposta['message']['content'] + '\n\n\n' # type: ignore
+            print(risposta_formattata)  # type: ignore
             print('\tRighe rimanenti: {}\n'.format(
                 len(righe) - n_righe_aggiunte))
-            risposte_formattate += risposta_formattata
+            risposte_formattate += risposta_formattata  # type: ignore
 
-            messaggi.append(risposta['message'])
+            messaggi.append(risposta['message'])  # type: ignore
             n_messaggi_inviati_chat_corrente += 1
 
             # Ripristina il prompt
@@ -161,6 +163,7 @@ def salva_output():
 
 if __name__ == '__main__':
     try:
+        print('Avvio in corso. Premere Ctrl+C per interrompere in qualsiasi momento, i risultati verranno salvati.')
         main()
     except KeyboardInterrupt:
         # Se l'utente interrompe il programma, salva l'output
