@@ -29,7 +29,7 @@ llm = None
 # log_filename = 'messages_100.log'
 log_filename = 'messages_1000.log'
 
-with open('./initial_prompt.txt', 'r') as file:
+with open('./prompt-v1.txt', 'r') as file:
     initial_prompt = file.read()
 
 
