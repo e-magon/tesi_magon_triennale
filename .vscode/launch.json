@@ -5,10 +5,10 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python main.py",
+      "name": "Ollama extractor v1",
       "type": "debugpy",
       "request": "launch",
-      "cwd": "${workspaceFolder}/ollama test",
+      "cwd": "${workspaceFolder}/ollama extractor v1",
       "program": "main.py",
       "args": ["llama3"],
       "console": "integratedTerminal"

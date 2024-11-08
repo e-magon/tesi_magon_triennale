@@ -1,7 +1,7 @@
-# Ollama test
+# Ollama extractor v1
 
-Script che chiama un modello con ollama (`llama3`, `llama3:70b`, `llama3.1`, `llama3.1:70b` o `command-r`) tramite le API REST ollama e cerca di estrarre tutti i dati privati presenti
-in un estratto dei log.
+Script che chiama un modello con ollama (`llama3`, `llama3:70b`, `llama3.1`, `llama3.1:70b` o `command-r`)
+tramite le API REST ollama e cerca di estrarre tutti i dati privati presenti in un estratto dei log.
 
 ## Installazione Ollama
 
@@ -12,7 +12,7 @@ brew install homebrew/cask/ollama
 # Installazione dei modelli
 ollama pull llama3
 ollama pull llama3:70b
-ollama pull llama3.1:70b
+ollama pull llama3.1
 ollama pull llama3.1:70b
 ollama pull command-r
 ```
@@ -35,7 +35,7 @@ pip install -r requirements.txt
 # Avviare del server ollama
 ollama serve
 
-# Avvio lo script con il modello llama3
+# Avviare lo script con il modello llama3
 python main.py llama3
 # o con il modello llama3:70b
 python main.py llama3:70b
@@ -46,7 +46,3 @@ python main.py llama3.1:70b
 # o con il modello command-r
 python main.py command-r
 ```
-
----
-
-Si potrebbe provare a creare un modello personalizzato con un prompt iniziale adatto a questo caso d'uso ([Customize a prompt](https://github.com/ollama/ollama?tab=readme-ov-file#customize-a-prompt)).

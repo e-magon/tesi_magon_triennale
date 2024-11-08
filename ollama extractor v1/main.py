@@ -29,7 +29,7 @@ llm = None
 # log_filename = 'messages_100.log'
 log_filename = 'messages_1000.log'
 
-with open('./prompt-v1.txt', 'r') as file:
+with open('./prompt.txt', 'r') as file:
     initial_prompt = file.read()
 
 
@@ -85,7 +85,7 @@ def main() -> None:
     prompt = initial_prompt
     messaggi = []
 
-    with open(f'logs/{log_filename}', 'r') as file:
+    with open(f'../example_logs/{log_filename}', 'r') as file:
         righe = file.readlines()
 
         while file_terminato is False:
