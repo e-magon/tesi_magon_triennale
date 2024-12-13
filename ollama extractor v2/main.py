@@ -20,7 +20,7 @@ risposte_formattate = ''
 
 llm = 'sensitive-data-extractor'
 
-log_filename = 'messages_200.log'
+log_filename = 'messages_1000.log'
 
 num_righe = None
 veri_negativi = None
