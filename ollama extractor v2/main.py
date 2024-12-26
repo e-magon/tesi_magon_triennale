@@ -18,8 +18,14 @@ n_messaggi_prima_di_cambiare_chat = 15
 avviato_timestamp = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 risposte_formattate = ''
 
-llm = 'sensitive-data-extractor'
+# llm = 'sensitive-data-extractor-llama3.1:8b'
+# llm = 'sensitive-data-extractor-llama3.2:3b'
+# llm = 'sensitive-data-extractor-mistral:7b'
+# llm = 'sensitive-data-extractor-mistral-nemo:12b'
+llm = 'sensitive-data-extractor-qwen2.5:7b'
 
+# log_filename = 'messages_100.log'
+# log_filename = 'messages_200.log'
 log_filename = 'messages_1000.log'
 
 num_righe = None
@@ -214,6 +220,7 @@ def salva_output():
 if __name__ == '__main__':
     try:
         print('Avvio in corso. Premere Ctrl+C per interrompere in qualsiasi momento, i risultati verranno salvati.')
+        print('Modello: ' + llm)
         main()
     except KeyboardInterrupt:
         # Se l'utente interrompe il programma, salva l'output

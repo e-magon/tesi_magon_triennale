@@ -1,7 +1,7 @@
 # https://github.com/ollama/ollama/blob/main/docs/modelfile.md
-FROM llama3.1:8b
-# Imposta la temperatura (più alto è più creativo, più basso è più coerente. Predefinito 0.8]
-PARAMETER temperature 0.4
+FROM qwen2.5:7b
+# Imposta la temperatura (più alto è più creativo, più basso è più coerente. Predefinito 0.8)
+PARAMETER temperature 0.2
 # Imposta la dimensione della context window a 4096, questo controlla quanti token può utilizzare l'LLM per generare il token successivo [predefinito 2048]
 PARAMETER num_ctx 4096
 

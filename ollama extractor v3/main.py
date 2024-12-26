@@ -15,7 +15,12 @@ import ollama
 # viene resettata e quindi riparte.
 # Mettere 0 per non cambiare mai chat.
 n_messaggi_prima_di_cambiare_chat = 15
-llm = 'sensitive-data-extractor'
+
+# llm = 'sensitive-data-extractor-llama3.1:8b'
+# llm = 'sensitive-data-extractor-llama3.2:3b'
+# llm = 'sensitive-data-extractor-mistral:7b'
+# llm = 'sensitive-data-extractor-mistral-nemo:12b'
+llm = 'sensitive-data-extractor-qwen2.5:7b'
 
 num_righe = None
 

@@ -1,7 +1,14 @@
 # Ollama test
 
-Script che chiama un modello personalizzato con ollama (`llama3.1:8b` con prompt personalizzato, `sensitive-data-extractor`)
-tramite le API REST ollama e cerca di estrarre tutti i dati privati presenti in un estratto dei log.
+Script che chiama un modello personalizzato con ollama tramite le API REST ollama e cerca di estrarre tutti i dati privati presenti in un estratto dei log.
+
+I modelli personalizzati sono:
+
+1. sensitive-data-extractor-llama3.1:8b
+2. sensitive-data-extractor-llama3.2:3b
+3. sensitive-data-extractor-mistral:7b
+4. sensitive-data-extractor-mistral-nemo:12b
+5. sensitive-data-extractor-qwen2.5:7b
 
 ## Installazione Ollama
 
@@ -10,10 +17,15 @@ tramite le API REST ollama e cerca di estrarre tutti i dati privati presenti in 
 brew install homebrew/cask/ollama
 
 # Installazione dei modelli
-ollama pull llama3.1
 cd "ollama extractor v2"
-ollama create sensitive-data-extractor -f Modelfile
+ollama create sensitive-data-extractor-llama3.1:8b -f modelfiles/sensitive-data-extractor-llama3.1:8b.modelfile
+ollama create sensitive-data-extractor-llama3.2:3b -f modelfiles/sensitive-data-extractor-llama3.2:3b.modelfile
+ollama create sensitive-data-extractor-mistral:7b -f modelfiles/sensitive-data-extractor-mistral:7b.modelfile
+ollama create sensitive-data-extractor-mistral-nemo:12b -f modelfiles/sensitive-data-extractor-mistral-nemo:12b.modelfile
+ollama create sensitive-data-extractor-qwen2.5:7b -f modelfiles/sensitive-data-extractor-qwen2.5:7b.modelfile
 ```
+
+Per selezionare il modello da utilizzare, decommentare la relativa riga di codice nel file main.py.
 
 ## Esecuzione dello script
 
