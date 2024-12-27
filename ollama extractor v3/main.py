@@ -1,13 +1,17 @@
 '''
 Script che chiama il modello llama3 (4.7 GB) tramite le API REST ollama e cerca
 di estrarre tutti i dati privati presenti in un estratto dei log.
-Questa versione (v3) accetta come argomento il path del file di log da analizzare.
-Il file viene aperto come stream e letto riga per riga, quindi è possibile far analizzare
-anche file di grandi dimensioni.
+Questa versione (v3) ascolta sulla porta TCP 24367 dalla quale legge righe di log in formato GELF.
 '''
+
+import asyncio
+import json
+import socket
 import sys
 import httpx
 import ollama
+
+port = 24367
 
 # Numero di messaggi da inviare prima di cambiare chat.
 # Serve per evitare di saturare la "memoria" (token) del modello.
@@ -22,35 +26,39 @@ n_messaggi_prima_di_cambiare_chat = 15
 # llm = 'sensitive-data-extractor-mistral-nemo:12b'
 llm = 'sensitive-data-extractor-qwen2.5:7b'
 
-num_righe = None
+n_messaggi_inviati_chat_corrente = 0
+messaggi = []
 
 
-def main() -> None:
-    global n_messaggi_prima_di_cambiare_chat
-    global llm
-    global num_righe
+async def handle_connection(reader, _writer):
+    global n_messaggi_inviati_chat_corrente
+    global messaggi
 
-    # Legge i log e li aggiunge al prompt
-    n_righe_aggiunte = 0
-    n_messaggi_inviati_chat_corrente = 0
-    messaggi = []
+    while True:
+        payload = (await reader.read(16384)).decode('utf-8')
+        if not payload:
+            continue
 
-    with open(log_filename, 'r') as file:
-        for line_number, riga in enumerate(file, start=1):
+        payload = payload.split('\x00')
+
+        for messaggio in payload:
+            if messaggio == '':
+                continue
+
+            messaggio = json.loads(messaggio)
+            riga = messaggio['_message']
+            riga = messaggio['_message']
+            log_id = messaggio['_id']
+
             # Se è il momento di cambiare chat, resetta l'elenco dei messaggi
             if (
                 n_messaggi_prima_di_cambiare_chat != 0 and
                 n_messaggi_inviati_chat_corrente == n_messaggi_prima_di_cambiare_chat
             ):
-                # print('\tRipristino chat, limite messaggi ({}) raggiunto\n'.format(
-                #     n_messaggi_prima_di_cambiare_chat
-                # ))
                 n_messaggi_inviati_chat_corrente = 0
                 messaggi = []
 
-            n_righe_aggiunte += 1
-
-            messaggi.append({  # type: ignore
+            messaggi.append({
                 'role': 'user',
                 'content': riga
             })
@@ -58,7 +66,7 @@ def main() -> None:
             try:
                 response = ollama.chat(
                     model=llm,
-                    messages=messaggi  # type: ignore
+                    messages=messaggi
                 )
             except httpx.ConnectError as e:
                 print(
@@ -68,24 +76,41 @@ def main() -> None:
                 print(e)
                 sys.exit(1)
 
-            risposta: str = response['message']['content']  # type: ignore
-            if risposta.lower().strip() != 'none':  # type: ignore
-                # type: ignore
-                print('Riga {}: {}'.format(line_number, risposta))  # type: ignore
+            risposta: str = response['message']['content']
+            if risposta.lower().strip() != 'none':
+                msg = f'{log_id}: {risposta}'
+                print(msg)
+                # Invio della risposta allo stream apposito di GrayLog
+                client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                client.connect(('localhost', 5556))
+                msg = msg + '\x00'
+                client.send(msg.encode('utf-8'))
+                client.close()
+            else:
+                print(risposta)
 
-            messaggi.append(response['message'])  # type: ignore
+            messaggi.append(response['message'])
             n_messaggi_inviati_chat_corrente += 1
+
+
+async def main() -> None:
+    global n_messaggi_prima_di_cambiare_chat
+    global llm
+
+    server = await asyncio.start_server(
+        handle_connection,
+        '0.0.0.0',
+        port
+    )
+
+    async with server:
+        await server.serve_forever()
 
 
 if __name__ == '__main__':
     try:
-        if len(sys.argv) < 2:
-            print('Specificare il nome del file di log da analizzare')
-            sys.exit(1)
-
-        log_filename = sys.argv[1]
-        print(f'Avvio in corso. Lettura del file {
-              log_filename}. Premere Ctrl+C per interrompere in qualsiasi momento.')
-        main()
+        print(f'Avvio in corso, in ascolto sulla porta {
+              port}. Premere Ctrl+C per interrompere in qualsiasi momento.')
+        asyncio.run(main())
     except KeyboardInterrupt:
         exit(0)

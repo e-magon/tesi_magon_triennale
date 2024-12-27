@@ -1,4 +1,4 @@
-# Ollama test
+# # Sensitive Data Extractor v2
 
 Script che chiama un modello personalizzato con ollama tramite le API REST ollama e cerca di estrarre tutti i dati privati presenti in un estratto dei log.
 

@@ -1,9 +1,7 @@
-# Ollama test
+# Sensitive Data Extractor v3
 
-Script che chiama un modello personalizzato con ollama tramite le API REST ollama e cerca di estrarre tutti i dati privati presenti in un estratto dei log.
-Questa versione (v3) legge il file specificato come argomento.
-Il file viene aperto come stream e letto riga per riga, quindi è possibile far analizzare
-anche file di grandi dimensioni.
+Script che ascolta sulla porta TCP 24367 dalla quale legge righe di log GrayLog (in formato GELF) in arrivo.
+Per ogni log ricevuto, chiama un modello personalizzato con ollama tramite le API REST ollama e cerca di estrarre tutti i dati privati presenti nella riga di log.
 
 I modelli personalizzati sono:
 
@@ -29,6 +27,68 @@ ollama create sensitive-data-extractor-qwen2.5:7b -f modelfiles/sensitive-data-e
 ```
 
 Per selezionare il modello da utilizzare, decommentare la relativa riga di codice nel file main.py.
+
+## Configurazione GrayLog (Docker)
+
+- Creare l'environment:
+
+```sh
+cd "graylog docker"
+docker compose up -d
+```
+
+- In seguito è necessario leggere i log del container `graylog` per ottenere l'url della pagina di configurazione.
+- Procedere lasciando tutte le opzioni di default.
+- Al termine della configurazione, effettuare il login con le credenziali di default (`admin`/`admin`).
+- Nella pagina principale, accedere alla sezione `System` e selezionare `Inputs`.
+- Aggiungere un nuovo input di tipo `Raw/Plaintext TCP` e cambiare le seguenti impostazioni:
+
+| Opzione | Valore                  |
+| ------- | ----------------------- |
+| Global  | `true`                  |
+| Title   | Raw tcp 5555: input log |
+| Port    | 5555                    |
+
+- Aggiungere un ulteriore nuovo input di tipo `Raw/Plaintext TCP` e cambiare le seguenti impostazioni:
+
+| Opzione | Valore                                         |
+| ------- | ---------------------------------------------- |
+| Global  | `true`                                         |
+| Title   | Raw tcp 5556: input segnalazioni log sensibili |
+| Port    | 5556                                           |
+
+- Copiare l'ID del PRIMO input creato `Raw tcp 5555: input log` (l'id è segnato tra parentesi dopo il nome, per es. `676e7c841d685114ff4b76e7`)
+- Andare nella pagina `Stream` e creare un nuovo `Stream` chiamato `Sensitive data extractor log stream`
+- Premere su `Paused` per avviare lo stream
+- Premere il tasto `Data routing`
+- Creare una `rule` di input con le seguenti impostazioni:
+
+| Opzione | Valore                                    |
+| ------- | ----------------------------------------- |
+| Field   | gl2_source_input                          |
+| Type    | match exactly                             |
+| Value   | <ID dell'input `Raw tcp 5555: input log`> |
+
+- Premere su `3: Destinations` e aggiungere un nuovo `Output` con le seguenti impostazioni:
+
+| Opzione          | Valore                               |
+| ---------------- | ------------------------------------ |
+| Type             | GELF Output                          |
+| Title            | Sensitive data extractor GELF output |
+| Destination host | host.docker.internal                 |
+| Destination port | 24367                                |
+| Protocol         | TCP                                  |
+
+- Tornare nella pagina `Stream` e creare un nuovo `Stream` chiamato `Sensitive data extractor segnalazioni log sensibili stream`
+- Premere su `Paused` per avviare lo stream
+- Premere il tasto `Data routing`
+- Creare una `rule` di input con le seguenti impostazioni:
+
+| Opzione | Valore                                                           |
+| ------- | ---------------------------------------------------------------- |
+| Field   | gl2_source_input                                                 |
+| Type    | match exactly                                                    |
+| Value   | <ID dell'input `Raw tcp 5556: input segnalazioni log sensibili`> |
 
 ## Esecuzione dello script
 
