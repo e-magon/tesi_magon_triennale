@@ -11,7 +11,7 @@ import socket
 import sys
 import httpx
 import ollama
-import regex_list
+# import regex_list
 
 port = 24367
 
@@ -60,26 +60,27 @@ async def handle_connection(reader, _writer):
                 n_messaggi_inviati_chat_corrente = 0
                 messaggi = []
 
+            # Gestione regex disabilitata: viene già applicata nelle pipeline di GrayLog.
             # Applica le regex manuali per cercare dati sensibili
-            all_regex_matches = []
-            for regex in regex_list.regex_list:
-                matches = re.findall(regex['regex'], riga)
-                if matches:
-                    for m in matches:
-                        all_regex_matches.append(f"{regex['name']} {m}")
+            # all_regex_matches = []
+            # for regex in regex_list.regex_list:
+            #     matches = re.findall(regex['regex'], riga)
+            #     if matches:
+            #         for m in matches:
+            #             all_regex_matches.append(f"{regex['name']} {m}")
 
             # Se sono già stati trovati dati sensibili con la regex, vengono
             # già inviati a GrayLog.
-            if len(all_regex_matches) > 0:
-                for match in all_regex_matches:
-                    msg = f'{log_id}: {match}'
-                    print(msg)
-                    # Invio della risposta allo stream apposito di GrayLog
-                    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                    client.connect(('localhost', 5556))
-                    msg = msg + '\x00'
-                    client.send(msg.encode('utf-8'))
-                    client.close()
+            # if len(all_regex_matches) > 0:
+            #     for match in all_regex_matches:
+            #         msg = f'{log_id}: {match}'
+            #         print(msg)
+            #         # Invio della risposta allo stream apposito di GrayLog
+            #         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            #         client.connect(('localhost', 5556))
+            #         msg = msg + '\x00'
+            #         client.send(msg.encode('utf-8'))
+            #         client.close()
 
             messaggi.append({
                 'role': 'user',

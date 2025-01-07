@@ -30,6 +30,8 @@ Per selezionare il modello da utilizzare, decommentare la relativa riga di codic
 
 ## Configurazione GrayLog (Docker)
 
+### Creazione dell'environment
+
 - Creare l'environment:
 
 ```sh
@@ -40,6 +42,9 @@ docker compose up -d
 - In seguito è necessario leggere i log del container `graylog` per ottenere l'url della pagina di configurazione.
 - Procedere lasciando tutte le opzioni di default.
 - Al termine della configurazione, effettuare il login con le credenziali di default (`admin`/`admin`).
+
+### Aggiunta degli input
+
 - Nella pagina principale, accedere alla sezione `System` e selezionare `Inputs`.
 - Aggiungere un nuovo input di tipo `Raw/Plaintext TCP` e cambiare le seguenti impostazioni:
 
@@ -56,6 +61,8 @@ docker compose up -d
 | Global  | `true`                                         |
 | Title   | Raw tcp 5556: input segnalazioni log sensibili |
 | Port    | 5556                                           |
+
+### Aggiunta degli stream
 
 - Copiare l'ID del PRIMO input creato `Raw tcp 5555: input log` (l'id è segnato tra parentesi dopo il nome, per es. `676e7c841d685114ff4b76e7`)
 - Andare nella pagina `Stream` e creare un nuovo `Stream` chiamato `Sensitive data extractor log stream`
@@ -89,6 +96,50 @@ docker compose up -d
 | Field   | gl2_source_input                                                 |
 | Type    | match exactly                                                    |
 | Value   | <ID dell'input `Raw tcp 5556: input segnalazioni log sensibili`> |
+
+### Aggiunta della pipeline per segnalazioni tramite regex
+
+- Ottenere l'ID dello stream `Sensitive data extractor segnalazioni log sensibili stream`: aprire lo stream e copiare l'ID presente nell'URL (per esempio: `676eacacb5dca951608b0a84`)
+- Andare nella pagina `System > Pipelines`, premere `Manage rules` e poi `Create rule`
+- Premere `Use Source Code Editor`
+- Inserire il seguente codice:
+
+```plaintext
+rule "Regex email"
+when
+    regex("[^\\s@]+@[^\\s@]+\\.[^\\s@]+", to_string($message.message)).matches == true
+then
+    let newMsg = create_message(
+        to_string($message._id) +
+        ": regex email " +
+        to_string($message.message)
+    );
+    route_to_stream(id: "<ID dello stream Sensitive data extractor segnalazioni log sensibili stream>", message: newMsg);
+end
+```
+
+- Premere `Create rule`
+- Premere `Use Source Code Editor`
+- Inserire il seguente codice:
+
+```plaintext
+rule "Regex JWT"
+when
+    regex("(^[A-Za-z0-9-_]*\\.[A-Za-z0-9-_]*\\.[A-Za-z0-9-_]*$)", to_string($message.message)).matches == true
+then
+    let newMsg = create_message(
+        to_string($message._id) +
+        ": regex JWT " +
+        to_string($message.message)
+    );
+    route_to_stream(id: "<ID dello stream Sensitive data extractor segnalazioni log sensibili stream>", message: newMsg);
+end
+```
+
+- Premere `Manage pipelines` e creare una nuova `Pipeline` chiamata `Segnalazioni log regex pipeline`
+- Premere `Edit` sullo `Stage 0`, selezionare `At least one of the rules on this stage matches the message`, selezionare tutte le route create in precedenza e premere `Update stage`
+- Tornare nella pagina `Stream` e premere il tasto `Data routing` sullo stream di input dei log
+- Andare nella sezione `2: Processing`, premere `Edit pipelines connection` e aggiungere la pipeline `Regex pipeline`
 
 ## Esecuzione dello script
 
