@@ -125,11 +125,29 @@ end
 ```plaintext
 rule "Regex JWT"
 when
-    regex("(^[A-Za-z0-9-_]*\\.[A-Za-z0-9-_]*\\.[A-Za-z0-9-_]*$)", to_string($message.message)).matches == true
+    regex("[A-Za-z0-9-_]*\\.[A-Za-z0-9-_]*\\.[A-Za-z0-9-_]*", to_string($message.message)).matches == true
 then
     let newMsg = create_message(
         to_string($message._id) +
         ": regex JWT " +
+        to_string($message.message)
+    );
+    route_to_stream(id: "<ID dello stream Sensitive data extractor segnalazioni log sensibili stream>", message: newMsg);
+end
+```
+
+- Premere `Create rule`
+- Premere `Use Source Code Editor`
+- Inserire il seguente codice:
+
+```plaintext
+rule "Regex coordinate"
+when
+    regex("(?:latitude.{0,4}\\d+\\.\\d+|longitude.{0,4}\\d+\\.\\d+)", lowercase(to_string($message.message))).matches == true
+then
+    let newMsg = create_message(
+        to_string($message._id) +
+        ": regex coordinate " +
         to_string($message.message)
     );
     route_to_stream(id: "<ID dello stream Sensitive data extractor segnalazioni log sensibili stream>", message: newMsg);
