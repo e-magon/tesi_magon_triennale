@@ -43,7 +43,19 @@ docker compose up -d
 - Procedere lasciando tutte le opzioni di default.
 - Al termine della configurazione, effettuare il login con le credenziali di default (`admin`/`admin`).
 
-### Aggiunta degli input
+### Configurazione Graylog tramite API
+
+Eseguire lo script `graylog_setup.py` per automatizzare la configurazione di Graylog usando le API REST.
+
+```sh
+cd "graylog docker"
+pip install -r requirements.txt
+python graylog_setup.py
+```
+
+### Configurazione Graylog manuale tramite UI
+
+#### Aggiunta degli input
 
 - Nella pagina principale, accedere alla sezione `System` e selezionare `Inputs`.
 - Aggiungere un nuovo input di tipo `Raw/Plaintext TCP` e cambiare le seguenti impostazioni:
@@ -62,7 +74,7 @@ docker compose up -d
 | Title   | Raw tcp 5556: input segnalazioni log sensibili |
 | Port    | 5556                                           |
 
-### Aggiunta degli stream
+#### Aggiunta degli stream
 
 - Copiare l'ID del PRIMO input creato `Raw tcp 5555: input log` (l'id è segnato tra parentesi dopo il nome, per es. `676e7c841d685114ff4b76e7`)
 - Andare nella pagina `Stream` e creare un nuovo `Stream` chiamato `Sensitive data extractor log stream`
@@ -97,7 +109,7 @@ docker compose up -d
 | Type    | match exactly                                                    |
 | Value   | <ID dell'input `Raw tcp 5556: input segnalazioni log sensibili`> |
 
-### Aggiunta della pipeline per segnalazioni tramite regex
+#### Aggiunta della pipeline per segnalazioni tramite regex
 
 - Ottenere l'ID dello stream `Sensitive data extractor segnalazioni log sensibili stream`: aprire lo stream e copiare l'ID presente nell'URL (per esempio: `676eacacb5dca951608b0a84`)
 - Andare nella pagina `System > Pipelines`, premere `Manage rules` e poi `Create rule`
