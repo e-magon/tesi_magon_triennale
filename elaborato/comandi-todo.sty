@@ -1,0 +1,91 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                             %
+%           PACCHETTO TODO AUTOMATICI                                         %
+%           _______________________                                           %
+%                                                                             %
+%           Pacchetto LaTeX per aggiungere automaticamente                    %
+%           "(TODO)" ai titoli di sezioni che contengono TODO        %
+%                                                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{comandi-todo}[2024/12/11 v1.0 Comandi automatici per TODO]
+
+% Dipendenze richieste
+\RequirePackage{todonotes}
+
+% Opzioni del pacchetto (per future estensioni)
+\DeclareOption{disable}{\renewcommand{\todo}[1]{}}
+\DeclareOption*{\PackageWarning{comandi-todo}{Opzione sconosciuta '\CurrentOption'}}
+\ProcessOptions\relax
+
+% Comando che crea un capitolo con TODO e aggiunge automaticamente (TODO)
+\newcommand{\todochapter}[3]{%
+    \chapter{(TODO) #1}%
+    \label{#2}%
+    \todo{TODO #3}%
+}
+
+% Comando che crea una sezione con TODO e aggiunge automaticamente (TODO)
+\newcommand{\todosection}[3]{%
+    \section{(TODO) #1}%
+    \label{#2}%
+    \todo{TODO #3}%
+}
+
+% Comando che crea una sottosezione con TODO e aggiunge automaticamente (TODO)
+\newcommand{\todosubsection}[3]{%
+    \subsection{(TODO) #1}%
+    \label{#2}%
+    \todo{TODO #3}%
+}
+
+% Comando che crea una sotto-sottosezione con TODO e aggiunge automaticamente (TODO)
+\newcommand{\todosubsubsection}[3]{%
+    \subsubsection{(TODO) #1}%
+    \label{#2}%
+    \todo{TODO #3}%
+}
+
+% Comando che crea una prefazione con TODO e aggiunge automaticamente (TODO)
+\newcommand{\todoprefacesection}[2]{%
+    \prefacesection{(TODO) #1}%
+    \todo{TODO #2}%
+}
+
+% Versioni senza label (per casi dove non serve il riferimento)
+\newcommand{\todochapternolabel}[2]{%
+    \chapter{(TODO) #1}%
+    \todo{TODO #2}%
+}
+
+\newcommand{\todosectionnolabel}[2]{%
+    \section{(TODO) #1}%
+    \todo{TODO #2}%
+}
+
+\newcommand{\todosubsectionnolabel}[2]{%
+    \subsection{(TODO) #1}%
+    \todo{TODO #2}%
+}
+
+% Messaggio di conferma caricamento pacchetto
+\PackageInfo{comandi-todo}{Pacchetto TODO automatici caricato correttamente}
+
+\endinput
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ESEMPI DI UTILIZZO:                                                        %
+%                                                                            %
+% Nel preambolo:                                                             %
+% \usepackage{comandi-todo}                                                  %
+%                                                                            %
+% Nel documento:                                                             %
+% \todochapter{Introduzione}{chap:introduzione}{introduzione}               %
+% \todosection{Metodologia}{sec:metodologia}{metodologia}                   %
+% \todosubsection{Architettura}{subsec:architettura}{architettura}          %
+% \todoprefacesection{Ringraziamenti}{ringraziamenti}                       %
+%                                                                            %
+% Opzioni disponibili:                                                       %
+% \usepackage[disable]{comandi-todo}  % Disabilita tutti i TODO             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

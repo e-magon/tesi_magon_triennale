@@ -4,6 +4,7 @@ di estrarre tutti i dati privati presenti in un estratto dei log.
 '''
 import datetime
 import os
+import re
 import sys
 import httpx
 import ollama
@@ -22,11 +23,15 @@ risposte_formattate = ''
 # llm = 'sensitive-data-extractor-llama3.2:3b'
 # llm = 'sensitive-data-extractor-mistral:7b'
 # llm = 'sensitive-data-extractor-mistral-nemo:12b'
-llm = 'sensitive-data-extractor-qwen2.5:7b'
+# llm = 'sensitive-data-extractor-qwen2.5:7b'
+# llm = 'sensitive-data-extractor-gemma3:4b'
+llm = 'sensitive-data-extractor-gemma3:12b'
+# llm = 'sensitive-data-extractor-deepseek-r1:7b'
+# llm = 'sensitive-data-extractor-deepseek-r1:8b'
 
-# log_filename = 'messages_100.log'
+log_filename = 'messages_100.log'
 # log_filename = 'messages_200.log'
-log_filename = 'messages_1000.log'
+# log_filename = 'messages_1000.log'
 
 num_righe = None
 veri_negativi = None
@@ -124,6 +129,10 @@ def main() -> None:
             risposta: str = response['message']['content']  # type: ignore
             risposta_formattata: str = risposta + '\n\n'  # type: ignore
             print(risposta_formattata)  # type: ignore
+
+            # Elimina i tag <think>, </think> e tutto ciò che è contenuto in mezzo
+            risposta = re.sub(r'<think>.*?</think>', '', risposta)
+            risposta = risposta.strip()
 
             # Controlla la correttezza della risposta del modello
             riga_segnalata = not risposta.lower().startswith("none")  # type: ignore
