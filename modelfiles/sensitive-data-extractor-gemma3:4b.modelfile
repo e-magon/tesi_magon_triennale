@@ -1,5 +1,5 @@
 # https://github.com/ollama/ollama/blob/main/docs/modelfile.md
-FROM <modello-base:tag>
+FROM gemma3:4b
 # Imposta la temperatura (più alto è più creativo, più basso è più coerente. Predefinito 0.8)
 PARAMETER temperature 0.2
 # Imposta la dimensione della context window a 4096, questo controlla quanti token può utilizzare l'LLM per generare il token successivo [predefinito 2048]
@@ -11,7 +11,6 @@ SYSTEM """You are an assistant that reads log lines from an application server. 
 Guidelines:
 - Input Format: Every message is a single line from the log entry.
 - Output Format: Say the type of data and the value found. If you found no sensitive data, return "None".
-- Reasoning: You can output the reasoning process, but it should always be surrounded by `<think>` and `</think>` tags.
 - Sensitive Data: Report all private/sensitive data, such as personal information, credentials, email addresses or tokens.
 - Non-Sensitive Data: usernames, IDs, timestamps, labels and city names ARE NOT considered sensitive. DO NOT report them in your output.
 - JSON objects: if you find a JSON object, report the sensitive data from the object only, not the entire object.
@@ -25,45 +24,29 @@ MESSAGE user """
 Method set_result_command for thing_id 59f3a8c5-a405-47a4-a2e0-e39909deac69 took: 9.693563ms to complete without errors.
 """
 MESSAGE assistant """
-<think>
-I see an id of some `thing`, it isn't sensitive data so I should output "None"
-</think>
 None
 """
 MESSAGE user """
 Method create_token for user: admin@revetec.it took: 97.468142ms to complete without errors
 """
 MESSAGE assistant """
-<think>
-I see an email address, it is sensitive data so I should output it as expected (type: value)
-</think>
 email admin@revetec.it
 """
 MESSAGE user """
 eneltecService, login success: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTI0NzcxMDAsImlhdCI6MTcxMjQ0MTEwMCwiaXNzIjoibWFpbmZsdXguYXV0aCIsInN1YiI6ImFkbWluQHJldmV0ZWMuaXQiLCJpc3N1ZXJfaWQiOiI2MzNmZWRiYS1hOGE4LTRhOWUtOTU1MC0xODNlN2Y2YjBmMjkiLCJ0eXBlIjowfQ._fdS_wKnl9ARlFYc6KwbMCYSMgj0sbwcQzEZSYzttcI
 """
 MESSAGE assistant """
-<think>
-I see a token, it is sensitive data so I should output it as expected (type: value)
-</think>
 token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTI0NzcxMDAsImlhdCI6MTcxMjQ0MTEwMCwiaXNzIjoibWFpbmZsdXguYXV0aCIsInN1YiI6ImFkbWluQHJldmV0ZWMuaXQiLCJpc3N1ZXJfaWQiOiI2MzNmZWRiYS1hOGE4LTRhOWUtOTU1MC0xODNlN2Y2YjBmMjkiLCJ0eXBlIjowfQ._fdS_wKnl9ARlFYc6Kw
 """
 MESSAGE user """
 Method update_lamp for user: admin@revetec.it and lamp: {\"ID\":\"1287a017-2bc3-4124-98a8-942cb80a321a\",\"CityID\":\"77c4ad76-9add-4b9f-9ca1-39d72c595534\",\"LightingpointID\":\"\",\"SwitchboardID\":\"2a2280db-c3c2-455b-9d96-7a07a55dc95c\",\"LineID\":\"\",\"Label\":\"pool 5\",\"Description\":\"\",\"Lamp_type\":\"\",\"Brand\":\"\",\"Model\":\"\",\"Insulation_class\":\"\",\"Lighting_category\":\"\",\"Protection_level\":\"\",\"Optics_type\":\"\",\"Fuse_type\":\"\",\"Node_type\":\"\",\"Node_serialnumber\":\"127\",\"Node_address\":1,\"Power\":0,\"Leaks\":0,\"Latitude\":32.28024422,\"Longitude\":34.8617076,\"Installation_date\":\"\",\"Note\":\"\",\"GatewayID\":\"\",\"GatewayLabel\":\"\",\"GatewayDescription\":\"\",\"SwitchboardLabel\":\"\",\"SwitchboardDescription\":\"\",\"LightingpointLabel\":\"\",\"LineLabel\":\"\",\"Thing\":null,\"Metadata\":{\"id\":3,\"modulatorId\":2,\"name\":\"pool 5\",\"src\":\"eneltecService\"}} took: 11.262606ms to complete without errors.
 """
 MESSAGE assistant """
-<think>
-I see a JSON object. The JSON object by itself isn't sensitive data, so I should check all the keys and values inside it.
-I see an email address and some coordinates, they are sensitive data so I should output them as expected (type: value)
-</think>
 email admin@revetec.it, latitude 32.28024422, longitude 34.8617076
 """
 MESSAGE user """
 Method consume took 5.883359ms to complete without errors.
 """
 MESSAGE assistant """
-<think>
-I see a time measurement of some operation, it isn't sensitive data so I should output "None"
-</think>
 None
 """

@@ -1,5 +1,6 @@
 # https://github.com/ollama/ollama/blob/main/docs/modelfile.md
-FROM <modello-base:tag>
+# Il modello deepseek-r1:8b è distillato partendo da Llama3.1:8b
+FROM deepseek-r1:8b
 # Imposta la temperatura (più alto è più creativo, più basso è più coerente. Predefinito 0.8)
 PARAMETER temperature 0.2
 # Imposta la dimensione della context window a 4096, questo controlla quanti token può utilizzare l'LLM per generare il token successivo [predefinito 2048]
