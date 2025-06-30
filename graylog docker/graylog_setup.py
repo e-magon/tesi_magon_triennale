@@ -217,13 +217,13 @@ def main():
 
         # Crea gli stream
         stream_log = setup.create_stream(
-            'Sensitive data extractor log stream',
+            'Sensitive Data Detector log stream',
             'Stream per l\'elaborazione dei log in ingresso',
             input_log
         )
 
         stream_sensitive = setup.create_stream(
-            'Sensitive data extractor segnalazioni log sensibili stream',
+            'Sensitive Data Detector segnalazioni log sensibili stream',
             'Stream per le notifiche di dati sensibili',
             input_sensitive
         )
@@ -231,7 +231,7 @@ def main():
         # Crea l'output GELF
         setup.create_gelf_output(
             stream_log,
-            'Sensitive data extractor GELF output',
+            'Sensitive Data Detector GELF output',
             'host.docker.internal',
             24367
         )

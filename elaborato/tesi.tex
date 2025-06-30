@@ -283,7 +283,7 @@ La soluzione finale integra infatti un approccio ibrido che combina l'efficienza
 \chapter{Tecnologie utilizzate}
 \label{chap:tecnologie_utilizzate}
 
-Il progetto \textit{Sensitive Data Extractor} integra diverse tecnologie per creare una soluzione completa di analisi automatica dei log. L'architettura si basa su un approccio multi-componente che combina strumenti di gestione dei log enterprise, tecnologie di intelligenza artificiale e linguaggi di programmazione consolidati.
+Il progetto \textit{Sensitive Data Detector} integra diverse tecnologie per creare una soluzione completa di analisi automatica dei log. L'architettura si basa su un approccio multi-componente che combina strumenti di gestione dei log enterprise, tecnologie di intelligenza artificiale e linguaggi di programmazione consolidati.
 
 Questa sezione descrive nel dettaglio le tecnologie scelte, motivando le decisioni architetturali e spiegando come ogni componente contribuisce al funzionamento complessivo del sistema.
 
@@ -298,7 +298,7 @@ Il livello di elaborazione costituisce il cuore del sistema, responsabile della 
 GrayLog rappresenta la piattaforma centrale per la gestione dei log del sistema. Si tratta di una soluzione enterprise open-source che fornisce funzionalità avanzate di raccolta, indicizzazione, ricerca e analisi dei log in tempo reale.
 \todo{TODO aggiungere link a graylog}
 
-La scelta di GrayLog è stata motivata principalmente dal fatto che questa piattaforma viene già utilizzata nell'ambiente di produzione target del progetto, rendendo l'integrazione del \textit{Sensitive Data Extractor} un'estensione naturale dell'infrastruttura esistente.
+La scelta di GrayLog è stata motivata principalmente dal fatto che questa piattaforma viene già utilizzata nell'ambiente di produzione target del progetto, rendendo l'integrazione del \textit{Sensitive Data Detector} un'estensione naturale dell'infrastruttura esistente.
 
 \subsubsection{Caratteristiche principali}
 Oltre al vantaggio dell'integrazione con l'ambiente esistente, le caratteristiche tecniche che rendono GrayLog ideale per questo progetto includono:
@@ -312,7 +312,7 @@ Oltre al vantaggio dell'integrazione con l'ambiente esistente, le caratteristich
 \end{itemize}
 
 \subsubsection{Integrazione nel progetto}
-Nel contesto del \textit{Sensitive Data Extractor}, GrayLog svolge un ruolo duplice:
+Nel contesto del \textit{Sensitive Data Detector}, GrayLog svolge un ruolo duplice:
 
 \begin{enumerate}
     \item \textbf{Sorgente di dati}: Riceve log da sistemi di produzione tramite input configurabili sulla porta TCP 5555
@@ -321,7 +321,7 @@ Nel contesto del \textit{Sensitive Data Extractor}, GrayLog svolge un ruolo dupl
 
 La configurazione utilizza stream e output GELF per creare un pipeline che:
 \begin{itemize}
-    \item Instrada i log in ingresso verso il \textit{Sensitive Data Extractor} tramite output GELF sulla porta 24367
+    \item Instrada i log in ingresso verso il \textit{Sensitive Data Detector} tramite output GELF sulla porta 24367
     \item Raccoglie le notifiche di ritorno per visualizzazione e alerting
     \item Applica regole regex aggiuntive per identificazione rapida di pattern comuni (email, JWT, coordinate geografiche)
 \end{itemize}
@@ -428,7 +428,7 @@ Le librerie Python utilizzate includono:
     \item \textbf{requests}: Per configurazione automatica di GrayLog tramite API REST
 \end{itemize}
 
-\subsubsection{Sensitive Data Extractor}
+\subsubsection{Sensitive Data Detector}
 Il core del sistema è implementato in tre versioni evolutive, ognuna con caratteristiche specifiche:
 
 \paragraph{Versione 1: Proof of Concept}
@@ -478,7 +478,7 @@ Lo script configura automaticamente:
 \begin{itemize}
     \item Input TCP per log in ingresso e notifiche di ritorno
     \item Stream per routing intelligente dei messaggi
-    \item Output GELF per comunicazione con il \textit{Sensitive Data Extractor}
+    \item Output GELF per comunicazione con il \textit{Sensitive Data Detector}
     \item Pipeline con regole regex per identificazione rapida di pattern comuni
 \end{itemize}
 
@@ -529,8 +529,8 @@ L'utilizzo di Docker porta diversi benefici:
 %			CAPITOLO: Il lavoro svolto
 %
 
-\chapter{Sensitive Data Extractor}
-\label{chap:sensitive_data_extractor}
+\chapter{Sensitive Data Detector}
+\label{chap:sensitive_data_detector}
 
 Il lavoro è stato diviso in tre versioni separate, ognuna con un obiettivo specifico. \\
 La prima versione è stata sviluppata per dimostrare la fattibilità del progetto e opera analizzando dei piccoli file di log. \\
@@ -540,7 +540,7 @@ La terza versione è la versione finale e si integra con GrayLog per la lettura 
 \section{Versione 1: Proof of Concept}
 \label{sec:ver1}
 
-La prima versione del \textit{Sensitive Data Extractor} rappresenta un proof of concept sviluppato per dimostrare la fattibilità dell'utilizzo di Large Language Models nell'identificazione automatica di dati sensibili all'interno dei file di log. \\
+La prima versione del \textit{Sensitive Data Detector} rappresenta un proof of concept sviluppato per dimostrare la fattibilità dell'utilizzo di Large Language Models nell'identificazione automatica di dati sensibili all'interno dei file di log. \\
 Questa versione costituisce la base concettuale dell'intero progetto, implementando un approccio diretto e semplificato per l'analisi di file di log di dimensioni contenute.
 
 \subsection{Obiettivi e scopo}
@@ -652,7 +652,7 @@ Nonostante queste limitazioni, la prima versione ha fornito risultati promettent
 \section{Versione 2: Elaborazione di batch di log}
 \label{sec:ver2}
 
-La seconda versione del \textit{Sensitive Data Extractor} rappresenta un'evoluzione significativa del proof of concept, introducendo un sistema di valutazione automatica delle performance e l'utilizzo di modelli LLM personalizzati ottimizzati per il compito specifico. \\
+La seconda versione del \textit{Sensitive Data Detector} rappresenta un'evoluzione significativa del proof of concept, introducendo un sistema di valutazione automatica delle performance e l'utilizzo di modelli LLM personalizzati ottimizzati per il compito specifico. \\
 Questa versione si concentra sull'elaborazione efficiente di file di log di dimensioni maggiori tramite streaming delle righe e implementa metriche di valutazione quantitative.
 
 \subsection{Obiettivi e scopo}
@@ -779,7 +779,7 @@ Queste limitazioni, sebbene non compromettano l'utilità della versione per scop
 \section{Versione 3: Integrazione con GrayLog}
 \label{sec:ver3}
 
-La terza versione del \textit{Sensitive Data Extractor} rappresenta l'evoluzione finale del progetto, trasformando il sistema da uno strumento di analisi offline a una soluzione completamente integrata per l'elaborazione in tempo reale dei log. \\
+La terza versione del \textit{Sensitive Data Detector} rappresenta l'evoluzione finale del progetto, trasformando il sistema da uno strumento di analisi offline a una soluzione completamente integrata per l'elaborazione in tempo reale dei log. \\
 Questa versione si interfaccia direttamente con GrayLog, una piattaforma enterprise di gestione e analisi dei log, creando un sistema end-to-end per il monitoraggio continuo della sicurezza dei dati.
 
 \subsection{Obiettivi e scopo}
@@ -821,7 +821,7 @@ L'integrazione con GrayLog avviene attraverso una configurazione di input, strea
 
 \begin{itemize}
     \item \textbf{Input TCP 5555}: Riceve i log originali dai sistemi sorgente
-    \item \textbf{Stream di routing}: Indirizza i log verso il Sensitive Data Extractor tramite output GELF
+    \item \textbf{Stream di routing}: Indirizza i log verso il Sensitive Data Detector tramite output GELF
     \item \textbf{Input TCP 5556}: Riceve le notifiche di dati sensibili dal sistema di analisi
     \item \textbf{Pipeline di processing}: Applica regole aggiuntive per categorizzazione e alerting
 \end{itemize}
@@ -907,7 +907,7 @@ Queste limitazioni, pur non compromettendo l'utilità operativa del sistema, rap
 \chapter{Test e valutazione}
 \label{chap:test}
 
-Il sistema \textit{Sensitive Data Extractor} è stato sottoposto a un processo di testing e valutazione sistematico attraverso due fasi evolutive principali, corrispondenti alle prime due versioni del progetto. Ogni fase ha introdotto metodologie di test sempre più raffinate e metriche di valutazione quantitative per misurare l'efficacia del sistema nell'identificazione di dati sensibili.
+Il sistema \textit{Sensitive Data Detector} è stato sottoposto a un processo di testing e valutazione sistematico attraverso due fasi evolutive principali, corrispondenti alle prime due versioni del progetto. Ogni fase ha introdotto metodologie di test sempre più raffinate e metriche di valutazione quantitative per misurare l'efficacia del sistema nell'identificazione di dati sensibili.
 
 La terza versione del sistema, pur rappresentando un'evoluzione significativa dal punto di vista architetturale e operativo, non è stata sottoposta a un processo di testing sistematico analogo alle versioni precedenti. Questa scelta è motivata da considerazioni sia tecniche che metodologiche:
 
@@ -1300,7 +1300,7 @@ caption=\textit{Modelfile} di partenza usato per generare i modelli personalizza
 label=app:modelfile,
   language=Python,
   literate={è}{{\`e}}1 {à}{{\`a}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {ì}{{\`i}}1
-]{"../modelfiles/sensitive-data-extractor-BASE.modelfile"}
+]{"../modelfiles/sensitive-data-detector-BASE.modelfile"}
 \todo{sistemare testo che esce dai confini del box}
 
 

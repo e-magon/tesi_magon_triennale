@@ -1,19 +1,19 @@
-# Sensitive Data Extractor v3
+# Sensitive Data Detector v3
 
 Script che ascolta sulla porta TCP 24367 dalla quale legge righe di log GrayLog (in formato GELF) in arrivo.
 Per ogni log ricevuto, chiama un modello personalizzato con ollama tramite le API REST ollama e cerca di estrarre tutti i dati privati presenti nella riga di log.
 
 I modelli personalizzati sono:
 
-1. sensitive-data-extractor-llama3.1:8b
-2. sensitive-data-extractor-llama3.2:3b
-3. sensitive-data-extractor-mistral:7b
-4. sensitive-data-extractor-mistral-nemo:12b
-5. sensitive-data-extractor-qwen2.5:7b
-6. sensitive-data-extractor-gemma3:4b
-7. sensitive-data-extractor-gemma3:12b
-8. sensitive-data-extractor-deepseek-r1:7b
-9. sensitive-data-extractor-deepseek-r1:8b
+1. sensitive-data-detector-llama3.1:8b
+2. sensitive-data-detector-llama3.2:3b
+3. sensitive-data-detector-mistral:7b
+4. sensitive-data-detector-mistral-nemo:12b
+5. sensitive-data-detector-qwen2.5:7b
+6. sensitive-data-detector-gemma3:4b
+7. sensitive-data-detector-gemma3:12b
+8. sensitive-data-detector-deepseek-r1:7b
+9. sensitive-data-detector-deepseek-r1:8b
 
 ## Installazione Ollama
 
@@ -23,13 +23,13 @@ brew install homebrew/cask/ollama
 
 # Installazione dei modelli
 cd "ollama extractor v3"
-ollama create sensitive-data-extractor-llama3.1:8b -f ../modelfiles/sensitive-data-extractor-llama3.1:8b.modelfile
-ollama create sensitive-data-extractor-llama3.2:3b -f ../modelfiles/sensitive-data-extractor-llama3.2:3b.modelfile
-ollama create sensitive-data-extractor-mistral:7b -f ../modelfiles/sensitive-data-extractor-mistral:7b.modelfile
-ollama create sensitive-data-extractor-mistral-nemo:12b -f ../modelfiles/sensitive-data-extractor-mistral-nemo:12b.modelfile
-ollama create sensitive-data-extractor-qwen2.5:7b -f ../modelfiles/sensitive-data-extractor-qwen2.5:7b.modelfile
-ollama create sensitive-data-extractor-deepseek-r1:7b -f ../modelfiles/sensitive-data-extractor-deepseek-r1:7b.modelfile
-ollama create sensitive-data-extractor-deepseek-r1:8b -f ../modelfiles/sensitive-data-extractor-deepseek-r1:8b.modelfile
+ollama create sensitive-data-detector-llama3.1:8b -f ../modelfiles/sensitive-data-detector-llama3.1:8b.modelfile
+ollama create sensitive-data-detector-llama3.2:3b -f ../modelfiles/sensitive-data-detector-llama3.2:3b.modelfile
+ollama create sensitive-data-detector-mistral:7b -f ../modelfiles/sensitive-data-detector-mistral:7b.modelfile
+ollama create sensitive-data-detector-mistral-nemo:12b -f ../modelfiles/sensitive-data-detector-mistral-nemo:12b.modelfile
+ollama create sensitive-data-detector-qwen2.5:7b -f ../modelfiles/sensitive-data-detector-qwen2.5:7b.modelfile
+ollama create sensitive-data-detector-deepseek-r1:7b -f ../modelfiles/sensitive-data-detector-deepseek-r1:7b.modelfile
+ollama create sensitive-data-detector-deepseek-r1:8b -f ../modelfiles/sensitive-data-detector-deepseek-r1:8b.modelfile
 ```
 
 Per selezionare il modello da utilizzare, decommentare la relativa riga di codice nel file main.py.
@@ -83,7 +83,7 @@ python graylog_setup.py
 #### Aggiunta degli stream
 
 - Copiare l'ID del PRIMO input creato `Raw tcp 5555: input log` (l'id è segnato tra parentesi dopo il nome, per es. `676e7c841d685114ff4b76e7`)
-- Andare nella pagina `Stream` e creare un nuovo `Stream` chiamato `Sensitive data extractor log stream`
+- Andare nella pagina `Stream` e creare un nuovo `Stream` chiamato `Sensitive Data Detector log stream`
 - Premere su `Paused` per avviare lo stream
 - Premere il tasto `Data routing`
 - Creare una `rule` di input con le seguenti impostazioni:
@@ -99,12 +99,12 @@ python graylog_setup.py
 | Opzione          | Valore                               |
 | ---------------- | ------------------------------------ |
 | Type             | GELF Output                          |
-| Title            | Sensitive data extractor GELF output |
+| Title            | Sensitive Data Detector GELF output |
 | Destination host | host.docker.internal                 |
 | Destination port | 24367                                |
 | Protocol         | TCP                                  |
 
-- Tornare nella pagina `Stream` e creare un nuovo `Stream` chiamato `Sensitive data extractor segnalazioni log sensibili stream`
+- Tornare nella pagina `Stream` e creare un nuovo `Stream` chiamato `Sensitive Data Detector segnalazioni log sensibili stream`
 - Premere su `Paused` per avviare lo stream
 - Premere il tasto `Data routing`
 - Creare una `rule` di input con le seguenti impostazioni:
@@ -117,7 +117,7 @@ python graylog_setup.py
 
 #### Aggiunta della pipeline per segnalazioni tramite regex
 
-- Ottenere l'ID dello stream `Sensitive data extractor segnalazioni log sensibili stream`: aprire lo stream e copiare l'ID presente nell'URL (per esempio: `676eacacb5dca951608b0a84`)
+- Ottenere l'ID dello stream `Sensitive Data Detector segnalazioni log sensibili stream`: aprire lo stream e copiare l'ID presente nell'URL (per esempio: `676eacacb5dca951608b0a84`)
 - Andare nella pagina `System > Pipelines`, premere `Manage rules` e poi `Create rule`
 - Premere `Use Source Code Editor`
 - Inserire il seguente codice:
@@ -132,7 +132,7 @@ then
         ": regex email " +
         to_string($message.message)
     );
-    route_to_stream(id: "<ID dello stream Sensitive data extractor segnalazioni log sensibili stream>", message: newMsg);
+    route_to_stream(id: "<ID dello stream Sensitive Data Detector segnalazioni log sensibili stream>", message: newMsg);
 end
 ```
 
@@ -150,7 +150,7 @@ then
         ": regex JWT " +
         to_string($message.message)
     );
-    route_to_stream(id: "<ID dello stream Sensitive data extractor segnalazioni log sensibili stream>", message: newMsg);
+    route_to_stream(id: "<ID dello stream Sensitive Data Detector segnalazioni log sensibili stream>", message: newMsg);
 end
 ```
 
@@ -168,7 +168,7 @@ then
         ": regex coordinate " +
         to_string($message.message)
     );
-    route_to_stream(id: "<ID dello stream Sensitive data extractor segnalazioni log sensibili stream>", message: newMsg);
+    route_to_stream(id: "<ID dello stream Sensitive Data Detector segnalazioni log sensibili stream>", message: newMsg);
 end
 ```
 

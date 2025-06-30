@@ -22,15 +22,15 @@ port = 24367
 # Mettere 0 per non cambiare mai chat.
 n_messaggi_prima_di_cambiare_chat = 15
 
-# llm = 'sensitive-data-extractor-llama3.1:8b'
-# llm = 'sensitive-data-extractor-llama3.2:3b'
-# llm = 'sensitive-data-extractor-mistral:7b'
-# llm = 'sensitive-data-extractor-mistral-nemo:12b'
-# llm = 'sensitive-data-extractor-qwen2.5:7b'
-# llm = 'sensitive-data-extractor-gemma3:4b'
-# llm = 'sensitive-data-extractor-gemma3:12b'
-# llm = 'sensitive-data-extractor-deepseek-r1:7b'
-llm = 'sensitive-data-extractor-deepseek-r1:8b'
+# llm = 'sensitive-data-detector-llama3.1:8b'
+# llm = 'sensitive-data-detector-llama3.2:3b'
+# llm = 'sensitive-data-detector-mistral:7b'
+# llm = 'sensitive-data-detector-mistral-nemo:12b'
+# llm = 'sensitive-data-detector-qwen2.5:7b'
+# llm = 'sensitive-data-detector-gemma3:4b'
+# llm = 'sensitive-data-detector-gemma3:12b'
+# llm = 'sensitive-data-detector-deepseek-r1:7b'
+llm = 'sensitive-data-detector-deepseek-r1:8b'
 
 n_messaggi_inviati_chat_corrente = 0
 messaggi = []

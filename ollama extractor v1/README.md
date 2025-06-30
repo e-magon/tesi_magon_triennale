@@ -1,4 +1,4 @@
-# # Sensitive Data Extractor v1
+# # Sensitive Data Detector v1
 
 Script che chiama un modello con ollama (`llama3`, `llama3:70b`, `llama3.1`, `llama3.1:70b` o `command-r`)
 tramite le API REST ollama e cerca di estrarre tutti i dati privati presenti in un estratto dei log.
