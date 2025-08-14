@@ -1,22 +1,19 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
-%           PACCHETTO TODO AUTOMATICI                                         %
-%           _______________________                                           %
-%                                                                             %
 %           Pacchetto LaTeX per aggiungere automaticamente                    %
-%           "(TODO)" ai titoli di sezioni che contengono TODO        %
+%           "(TODO)" ai titoli di sezioni che contengono TODO                 %
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{comandi-todo}[2024/12/11 v1.0 Comandi automatici per TODO]
+\ProvidesPackage{todo-chapters}[2024/12/11 v1.0 Comandi automatici per TODO]
 
 % Dipendenze richieste
 \RequirePackage{todonotes}
 
 % Opzioni del pacchetto (per future estensioni)
 \DeclareOption{disable}{\renewcommand{\todo}[1]{}}
-\DeclareOption*{\PackageWarning{comandi-todo}{Opzione sconosciuta '\CurrentOption'}}
+\DeclareOption*{\PackageWarning{todo-chapters}{Opzione sconosciuta '\CurrentOption'}}
 \ProcessOptions\relax
 
 % Comando che crea un capitolo con TODO e aggiunge automaticamente (TODO)
@@ -70,22 +67,6 @@
 }
 
 % Messaggio di conferma caricamento pacchetto
-\PackageInfo{comandi-todo}{Pacchetto TODO automatici caricato correttamente}
+\PackageInfo{todo-chapters}{Pacchetto TODO automatici caricato correttamente}
 
 \endinput
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% ESEMPI DI UTILIZZO:                                                        %
-%                                                                            %
-% Nel preambolo:                                                             %
-% \usepackage{comandi-todo}                                                  %
-%                                                                            %
-% Nel documento:                                                             %
-% \todochapter{Introduzione}{chap:introduzione}{introduzione}               %
-% \todosection{Metodologia}{sec:metodologia}{metodologia}                   %
-% \todosubsection{Architettura}{subsec:architettura}{architettura}          %
-% \todoprefacesection{Ringraziamenti}{ringraziamenti}                       %
-%                                                                            %
-% Opzioni disponibili:                                                       %
-% \usepackage[disable]{comandi-todo}  % Disabilita tutti i TODO             %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

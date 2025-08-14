@@ -1,0 +1,19 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                             %
+%           Pacchetto LaTeX per aggiungere automaticamente                    %
+%           il riferimento alla pagina quando si usa un riferimento           %
+%                                                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{refwithpage}[2024/12/11 v1.0 Ref con riferimento alla pagina]
+
+% Comando che crea un riferimento con riferimento alla pagina
+\newcommand{\refwithpage}[1]{%
+    \ref{#1} (pag. \pageref{#1})%
+}
+
+% Messaggio di conferma caricamento pacchetto
+\PackageInfo{refwithpage}{Pacchetto ref con riferimento alla pagina caricato correttamente}
+
+\endinput

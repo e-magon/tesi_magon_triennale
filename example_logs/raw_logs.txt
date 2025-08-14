@@ -1,0 +1,5 @@
+messages.2.gz:Apr  7 00:03:39 ID24167 sw3-devaccess|55dacabaa607[561]: {"level":"info","message":"Method Ping for Host 10.217.28.5 took 9.878187763s to complete without errors.","ts":"2024-04-06T22:03:39.879682703Z"}
+messages.2.gz:Apr  7 00:03:39 ID24167 mainflux-influxdb-writer|c3ffa80e2a07[561]: {"level":"info","message":"Method consume took 5.883359ms to complete without errors.","ts":"2024-04-06T22:03:39.887964728Z"}
+messages.2.gz:Apr  7 00:03:39 ID24167 sw3-devcommand|f9a259615b15[561]: {"level":"info","message":"Method set_result_command for thing_id 59f3a8c5-a405-47a4-a2e0-e39909deac69 took: 9.693563ms to complete without errors.","ts":"2024-04-06T22:03:39.890749303Z"}
+messages.2.gz:Apr  7 00:05:00 ID24167 sw3-eneltec|85954aa2a2f4[561]: {"level":"debug","message":"eneltecService, 2024-04-06 22:05:00.001207841 +0000 UTC m=+215109.357677418 executing","ts":"2024-04-06T22:05:00.001255642Z"}
+messages.2.gz:Apr  7 00:05:00 ID24167 mainflux-auth|67c0b9728e8e[561]: {"level":"info","message":"Method issue for the key with expiration date 2024-04-07 08:05:00.098298372 +0000 UTC took 133.704µs to complete without errors.","ts":"2024-04-06T22:05:00.098448476Z"}

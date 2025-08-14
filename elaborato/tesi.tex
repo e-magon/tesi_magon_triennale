@@ -41,8 +41,9 @@
 % \usepackage[disable]{todonotes}
 % \usepackage{todonotes}
 
-% Inclusione comandi personalizzati per TODO automatici
-\usepackage{comandi-todo}
+% Inclusione comandi personalizzati
+\usepackage{todo-chapters}
+\usepackage{refwithpage}
 
 % Pacchetto per grafici con dati integrati
 \usepackage{pgfplots}
@@ -65,7 +66,7 @@
 \title{Tesi}
 % Questo comando (opzionale) sovrascrive \title per quanto riguarda la copertina
 % Può essere usato per stampare caratteri speciali, tenendo i metadati puliti
-\printedtitle{Titolo tesi}
+\printedtitle{(TODO NON DEFINITIVO) Identificazione automatica di dati sensibili all'interno di log di sistemi complessi tramite un approccio ibrido di Large Language Models e analisi statica}
 
 %   AUTORE:
 \author{Emanuele Magon}
@@ -122,7 +123,7 @@
 % per specificare manualmente un anno accademico
 % NON inserire nel formato 1970-1971, ma
 % inserire solo 1970
-\academicyear{2024}
+\academicyear{2025}
 
 %   INDICI:
 % elenco delle figure (facoltativo)
@@ -175,8 +176,6 @@
 % Creazione automatica della copertina
 % Centra la copertina nel foglio: usa questo comando per la copertina esterna
 \makecenteredfrontpage
-\todo{TODO titolo tesi}
-\todo{TODO Antongiacomo è correlatore?}
 % Copertina allineata alle altre pagine: usa questo comando per la copertina interna
 % \makefrontpage
 
@@ -233,19 +232,15 @@ Questa sezione, facoltativa, contiene i ringraziamenti.
 %			CAPITOLO: Introduzione o Abstract
 %
 
-\todochapter{Introduzione}{chap:introduzione}{aumentando piattaforme di microservizi e più importanza sulla sicurezza abbiamo fatto x y z nei capitoli a b c}
+\todochapter{Introduzione}{chap:introduzione}{inserire riassunto che spiega velocemente ogni capitolo cosa contiene}
 
 L'obiettivo di questo lavoro è sviluppare un sistema automatico per l'identificazione e la notificazione della presenza di dati sensibili all'interno di log di grandi dimensioni, fornendo agli amministratori di sistema una soluzione efficace per il monitoraggio della conformità alla privacy. \\
-Sebbene il sistema sia progettato per essere generico e applicabile a diverse tipologie di log, il presente lavoro è stato sviluppato e testato specificamente per l'integrazione con una piattaforma di gestione \textit{smart city}.
+Sebbene il sistema sia progettato per essere generico e applicabile a diverse tipologie di log, il presente lavoro è stato sviluppato e testato specificamente per l'integrazione nel mondo dell'\textit{IoT}, nello specifico per una piattaforma complessa di gestione domotica di \textit{smart city}, composta da svariati micro-servizi eterogenei.
 
-Inizialmente, l'approccio progettuale prevedeva l'utilizzo esclusivo di analisi statica basata su espressioni regolari per l'identificazione dei dati sensibili, con il supporto di Large Language Models (LLM) limitato alla fase di sviluppo per la generazione di regex sempre più esaustive e precise. Una volta completato il progetto, il sistema avrebbe dovuto operare esclusivamente con le espressioni regolari generate, senza ulteriore dipendenza dagli LLM. Tuttavia, durante la fase di sviluppo e test, l'osservazione delle potenzialità degli LLM nell'analisi semantica del contenuto ha portato a una evoluzione dell'architettura del sistema.
+L'approccio progettuale adottato integra un sistema ibrido che combina due metodologie complementari per l'identificazione di dati sensibili nei log. La soluzione utilizza espressioni regolari per l'identificazione efficiente di dati sensibili strutturati e ben definiti (come codici fiscali, numeri di telefono, indirizzi email, JWT\footnote{JWT (JSON Web Token) è uno standard RFC 7519 per la trasmissione sicura di informazioni tra parti come in file JSON firmati digitalmente. In genere è utilizzato per l'autenticazione e l'autorizzazione di utenti.}, coordinate geografiche etc.) insieme a Large Language Models che, con la loro capacità di comprensione contestuale, permettono il rilevamento di informazioni sensibili non strutturate o espresse in linguaggio naturale. \\
+Inoltre, gli LLM sono stati impiegati durante la fase di sviluppo per assistere nell'identificazione di dati sensibili all'interno di campioni di log, facilitando la progettazione di espressioni regolari specifiche e ottimizzate per i pattern identificati.
 
-La soluzione finale integra infatti un approccio ibrido che combina l'efficienza delle espressioni regolari per l'identificazione di dati sensibili strutturati (come codici fiscali, numeri di telefono, indirizzi email) con la capacità di comprensione contestuale degli LLM per il rilevamento di informazioni sensibili non strutturate o espresse in linguaggio naturale.
-
-
-
-\todo{TODO inserire riassunto che spiega velocemente ogni capitolo cosa contiene}
-
+Questa architettura ibrida permette di sfruttare i vantaggi di entrambe le tecnologie: l'efficienza computazionale e il determinismo delle espressioni regolari per pattern ricorrenti e la flessibilità semantica degli LLM per l'analisi di contenuti più complessi che potrebbero sfuggire a un approccio puramente basato su regex.
 
 
 %
@@ -255,12 +250,14 @@ La soluzione finale integra infatti un approccio ibrido che combina l'efficienza
 \todochapter{Stato dell'arte}{chap:stato_arte}{stato dell'arte}
 \todo{TODO provare a chiedere a chatGPT aiuto su come cercare paper in google scholar e simili (che keyword usare ecc.)}
 
+TODO da scrivere
+
 \begin{itemize}
-    \item Log deformati, fare ricerca su soluzioni attuali su fonti autorevoli (paper con scholar.google.com). Se proprio non si trova si possono usare siti (se autoritevoli).
-    \item Parlare di llm orientati nel nostro caso specifico.
-    \item Stato dell'arte su analisi sicurezza e lettura dei log etc.
+    \item Log deformati, fare ricerca su soluzioni attuali su fonti autorevoli (paper con scholar.google.com). Se proprio non si trova si possono usare siti (se autoritevoli)
+    \item Parlare di llm orientati nel nostro caso specifico
     \item Stato dell'arte dei log in generale: perché fare raccolta di log, raccorta centralizzata etc.
-    \item Vedere se si trova nello stato dell'arte soluzioni già presenti, simili ma comunque un po' diverse
+    \item Stato dell'arte su analisi sicurezza e lettura dei log etc.
+    \item Vedere se si trova nello stato dell'arte soluzioni già presenti, simili o diverse
 \end{itemize}
 
 \todosection{Sicurezza nei log}{sec:sicurezza_log}{finire}
@@ -281,42 +278,126 @@ La soluzione finale integra infatti un approccio ibrido che combina l'efficienza
 
 \todosection{Architettura proposta}{sec:architettura_proposta}{grafico di flusso dell'architettura}
 
+TODO qua una descrizione generale della soluzione teorica, che utilizza sia llm che regex per l'analisi di log alla ricerca di dati sensibili. \\
+Spiegare come gli LLM sono stati usati sia come supporto per definire le regex per l'analisi statica, sia come strumento attivo per l'analisi di log in tempo reale.
+
+\todo{TODO completare}
+
 \todosection{Approccio all'identificazione dei dati sensibili}{sec:approccio_identificazione}{approccio all'identificazione dei dati sensibili}
 
-\todosection{Metriche di valutazione (forse?)}{sec:metriche_valutazione}{metriche di valutazione}
+L'approccio metodologico del progetto prevede l'utilizzo dei Large Language Models sia come strumento di supporto per la definizione e la validazione delle espressioni regolari, sia come componente attiva integrata nel processo di analisi in tempo reale.
 
+\todosubsection{Utilizzo di LLM per supportare la definizione di regex}{subsec:llm_definizione_regex}{verificare e nel caso cambiare tempi verbali}
+
+La strategia si basa sul principio che l'identificazione di dati sensibili strutturati (come codici fiscali, numeri di telefono, indirizzi email, JWT, coordinate geografiche etc.) può essere efficacemente realizzata tramite espressioni regolari opportunamente progettate. \\
+Gli LLM, in questo contesto, svolgono un ruolo di \textit{consulenza esperta} durante la fase di sviluppo, contribuendo a identificare pattern complessi nei campioni di log, a validare e ottimizzare le espressioni regolari analizzando le righe non catturate per verificare la presenza di dati sensibili non identificati e a gestire i casi limite individuando varianti e formati \textit{edge-case} che potrebbero sfuggire alle regex iniziali.
+\todo{TODO migliorare questo paragrafo}
+
+\subsubsection{Processo di verifica e ottimizzazione delle regex assistito da LLM}
+Il workflow previsto per la generazione delle espressioni regolari comprende:
+
+\begin{enumerate}
+    \item \textbf{Analisi esplorativa}: Utilizzo di LLM per analizzare campioni di log e identificare potenziali dati sensibili, inclusi formati non convenzionali
+    \item \textbf{Categorizzazione}: Classificazione dei dati sensibili identificati in categorie omogenee (credenziali, PII, token, ecc.)
+    \item \textbf{Generazione iterativa}: Creazione progressiva di regex specifiche per ogni categoria, con il supporto dell'LLM per gestire variazioni e casi speciali
+    \item \textbf{Test e raffinamento}: Applicazione delle regex su dataset di test più ampi e analisi tramite LLM delle righe non catturate, con l'obiettivo di raggiungere un punto in cui l'LLM non identifichi più dati sensibili nelle righe non rilevate dalle regex
+    \item \textbf{Consolidamento}: Creazione di un set finale di espressioni regolari ottimizzate e pronte per l'utilizzo in produzione
+\end{enumerate}
+
+\subsubsection{Limitazioni e sfide identificate}
+In questo approccio si identificano diverse sfide significative:
+
+\begin{itemize}
+    \item \textbf{Complessità dei pattern}: Alcuni tipi di dati sensibili, specialmente quelli espressi in linguaggio naturale, risultano difficilmente catturabili tramite regex
+    \item \textbf{Contesto semantico}: Le espressioni regolari non possono comprendere il contesto semantico in cui un dato appare, potendo generare falsi positivi
+    \item \textbf{Evoluzione continua}: La necessità di aggiornamento continuo delle regex per adattarsi a nuovi formati e variazioni nei log
+    \item \textbf{Manutenzione complessa}: La gestione di un insieme crescente di regex specializzate comporta complessità di manutenzione significative
+\end{itemize}
+
+Queste considerazioni vengono in parte affrontate dalla scelta di un sistema ibrido, descritto nella sezione \refwithpage{subsec:ibrido_llm_regex}, che mantiene i vantaggi delle espressioni regolari integrandoli con le capacità di comprensione contestuale degli LLM.
+\todo{TODO migliorare questo paragrafo}
+
+\todosubsection{Integrazione ibrida di LLM e regex per l'identificazione in tempo reale}{subsec:ibrido_llm_regex}{Da scrivere}
+
+TODO qua una spiegazione operativa del sistema ibrido che integra in modo attivo gli LLM per l'identificazione di dati sensibili non rilevati dalle regex in produzione.
 
 
 %
-%			CAPITOLO: Tecnologie utilizzate
-%			(omettere questo capitolo se non necessario)
+%			CAPITOLO: Implementazione e tecnologie
 %
 
-\chapter{Tecnologie utilizzate}
-\label{chap:tecnologie_utilizzate}
+\chapter{Implementazione e tecnologie}
+\label{chap:implementazione_tecnologie}
 
-Il progetto \textit{Sensitive Data Detector} integra diverse tecnologie per creare una soluzione completa di analisi automatica dei log. L'architettura si basa su un approccio multi-componente che combina strumenti di gestione dei log enterprise, tecnologie di intelligenza artificiale e linguaggi di programmazione consolidati.
+Il progetto \textit{Sensitive Data Detector} integra diverse tecnologie per creare una soluzione completa di analisi automatica dei log. L'architettura si basa su un approccio multi-componente che combina diversi strumenti.
 
 Questo capitolo descrive nel dettaglio le tecnologie scelte, motivando le decisioni architetturali e spiegando come ogni componente contribuisce al funzionamento complessivo del sistema.
 
+\todo{TODO aggiungere un diagramma del sistema}
+
+\section{Scenario applicativo}
+\label{sec:scenario_applicativo}
+La necessità di implementare questo sistema è emersa dalle esigenze operative di un'azienda che opera nel settore dell'\textit{IoT}, sviluppando e integrando diversi micro-servizi destinati alla gestione domotica di \textit{smart city}. \\
+L'integrazione di una moltitudine di sistemi software eterogenei ha comportato un incremento significativo sia del volume che della complessità dei log generati. \\
+Inoltre, la natura composta, le dimensioni e la provenienza da fornitori terzi di molti di questi sistemi hanno reso impraticabile intervenire direttamente sul codice sorgente per eliminare alla fonte la generazione di log contenenti dati sensibili, introducendo quindi la necessità di un sistema automatico, scalabile e preciso per l'analisi dei log.
+
+\clearpage
+
+\subsection{Formato dei log}
+\label{subsec:formato_log}
+
+I log del sistema seguono il formato strutturato definito nella tabella \refwithpage{tab:formato_log}. \\
+Il sorgente \refwithpage{lst:esempio_log} presenta un campione di cinque righe di log rappresentativo della struttura dati utilizzata.
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|p{0.11\textwidth}|p{0.25\textwidth}|p{0.27\textwidth}|p{0.25\textwidth}|}
+        \hline
+        \textbf{Nome} & \textbf{Formato}   & \textbf{Descrizione}                                                    & \textbf{Esempio}                    \\
+        \hline
+        Nome file     & Stringa            & Nome del file di log compresso                                          & `messages.2.gz`                     \\
+        \hline
+        Data          & `MMM dd HH:mm:ss`  & Timestamp nel formato syslog                                            & `Apr  7 00:03:39`                   \\
+        \hline
+        ID            & `ID` + numero      & Identificativo univoco dell'istanza del software che ha generato il log & `ID24167`                           \\
+        \hline
+        Host+PID      & Stringa + `[PID]:` & Nome host e process ID del processo che ha generato il log              & `sw3-devaccess|55dacabaa 607[561]:` \\
+        \hline
+        Body          & Oggetto JSON       & Contenuto strutturato con `level` e `message`                           & `\{"level":"info",
+
+        "message":"..."\}`                                                                                                                                 \\
+        \hline
+    \end{tabular}
+    \caption{Formato strutturato dei log del sistema}
+    \label{tab:formato_log}
+\end{table}
+
+\lstinputlisting[
+caption=Esempio di log,
+label=lst:esempio_log,
+literate={è}{{\`e}}1 {à}{{\`a}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {ì}{{\`i}}1 {µ}{{$\mu$}}1
+]{"../example_logs/raw_logs.txt"}
+
+Poiché gli eventuali dati sensibili sono presenti esclusivamente nel contenuto testuale dei log, il sistema concentra l'analisi unicamente sul campo \texttt{message} del body JSON\footnote{JSON (JavaScript Object Notation) è un formato standard per la rappresentazione di dati strutturati.}, ignorando gli altri elementi strutturali.
+
 \section{Elaborazione}
-\label{sec:elaborazione}
+\label{sec:elaborazione_log}
 
 Il livello di elaborazione costituisce il cuore del sistema ed è responsabile della raccolta, gestione e analisi dei log. Le tecnologie in questo layer sono state selezionate per garantire scalabilità, affidabilità e precisione nell'identificazione dei dati sensibili.
 
 \subsection{GrayLog}
 \label{subsec:graylog}
 
-GrayLog rappresenta la piattaforma centrale per la gestione dei log del sistema. Si tratta di una soluzione enterprise open-source che fornisce funzionalità avanzate di raccolta, indicizzazione, ricerca e analisi dei log in tempo reale.
-\todo{TODO aggiungere link a graylog}
+GrayLog\footnote{GrayLog \url{https://graylog.org}} rappresenta la piattaforma centrale per la gestione dei log del sistema. \\
+Si tratta di una soluzione enterprise e open-source che fornisce funzionalità avanzate di raccolta, indicizzazione, ricerca e analisi dei log in tempo reale.
 
-La scelta di GrayLog è stata motivata principalmente dal fatto che questa piattaforma viene già utilizzata nell'ambiente di produzione target del progetto, rendendo l'integrazione del \textit{Sensitive Data Detector} un'estensione naturale dell'infrastruttura esistente.
+La scelta di GrayLog è stata motivata principalmente dal fatto che questa piattaforma viene già utilizzata nell'ambiente di produzione per il quale è stato sviluppato questo progetto, rendendo quindi l'integrazione di quest'ultimo una naturale estensione dell'infrastruttura esistente.
 
 \subsubsection{Caratteristiche principali}
 Oltre al vantaggio dell'integrazione con l'ambiente esistente, le caratteristiche tecniche che rendono GrayLog ideale per questo progetto includono:
 
 \begin{itemize}
-    \item \textbf{Raccolta centralizzata}: Supporto nativo per diversi protocolli di logging (GELF\footnote{GELF (GrayLog Extended Log Format) è un formato strutturato progettato specificamente per il trasporto di log su reti TCP/UDP, che estende il formato syslog standard con campi aggiuntivi e supporto nativo per metadati.}, Syslog\footnote{Syslog è un protocollo standard per il logging di sistema definito dall RFC 3164, ampiamente utilizzato per la trasmissione di messaggi di log su reti IP.}) che permette l'integrazione con sistemi eterogenei
+    \item \textbf{Raccolta centralizzata}: Supporto nativo per diversi protocolli di logging (GELF\footnote{GELF (GrayLog Extended Log Format) è un formato strutturato progettato specificamente per il trasporto di log su reti TCP/UDP, che estende il formato syslog standard con campi aggiuntivi e supporto nativo per metadati.}, Syslog\footnote{Syslog è un protocollo standard per il logging di sistema definito dall'RFC 3164 (\url{https://datatracker.ietf.org/doc/html/rfc3164}), ampiamente utilizzato per la trasmissione di messaggi di log su reti IP.}) che permette l'integrazione con sistemi eterogenei
     \item \textbf{Indicizzazione real-time}: Capacità di indicizzare e rendere ricercabili i log immediatamente dopo la ricezione
     \item \textbf{Pipeline di processing}: Sistema di regole configurabili per trasformare, filtrare e arricchire i log durante l'ingestion
     \item \textbf{API REST complete}: Interfacce programmatiche per l'automazione della configurazione e l'integrazione con sistemi esterni
@@ -331,18 +412,14 @@ Nel contesto del \textit{Sensitive Data Detector}, GrayLog svolge un ruolo dupli
     \item \textbf{Destinazione per notifiche}: Riceve le segnalazioni di dati sensibili identificati dal sistema tramite la porta \texttt{TCP 5556}
 \end{enumerate}
 
-La configurazione utilizza stream e output GELF per creare un pipeline che:
-\begin{itemize}
-    \item Instrada i log in ingresso verso il \textit{Sensitive Data Detector} tramite output GELF sulla porta \texttt{TCP 24367}
-    \item Raccoglie le notifiche di ritorno per visualizzazione e alerting
-    \item Applica regole regex aggiuntive per identificazione rapida di pattern comuni (email, JWT\footnote{JWT (JSON Web Token) è uno standard RFC 7519 per la trasmissione sicura di informazioni tra parti come in file JSON firmati digitalmente. In genere è utilizzato per l'autenticazione e l'autorizzazione di utenti.}, coordinate geografiche)
-\end{itemize}
+La configurazione utilizza stream e output GELF per creare una pipeline che instrada i log in ingresso verso il \textit{Sensitive Data Detector} tramite output GELF sulla porta \texttt{TCP 24367}, raccoglie le notifiche di ritorno per visualizzazione e alerting e applica regole regex aggiuntive per l'identificazione rapida di pattern comuni.
 
 \subsection{Ollama}
 \label{subsec:ollama}
 
-Ollama è un framework open-source progettato per semplificare l'esecuzione locale di Large Language Models.\\
-Rappresenta il ponte che permette al sistema di interfacciarsi con diversi modelli LLM in modo unificato ed efficiente.
+Ollama\footnote{Ollama \url{https://ollama.com}} è un framework open-source progettato per semplificare l'esecuzione locale di Large Language Models.\\
+Esso offre un'interfaccia uniforme per l'integrazione e l'orchestrazione di differenti modelli LLM.
+\todo{TODO aggiungere tutti gli LLM utilizzati in tutte le versioni, con link a sito/modello e spiegazione}
 
 \subsubsection{Architettura e funzionalità}
 Ollama offre un'architettura client-server che include:
@@ -350,9 +427,9 @@ Ollama offre un'architettura client-server che include:
 \begin{itemize}
     \item \textbf{Server locale}: Processo daemon che gestisce il caricamento e l'esecuzione dei modelli LLM
     \item \textbf{API REST}: Interfaccia HTTP standardizzata per l'interazione con i modelli caricati
-    \item \textbf{Gestione dei modelli}: Sistema per il download, l'aggiornamento e la configurazione di modelli da repository pubblici
-    \item \textit{\textbf{Modelfile}}: Formato di configurazione che permette la creazione di modelli personalizzati con prompt engineering incorporato
-    \item \textbf{Ottimizzazioni hardware}: Supporto per accelerazione GPU e ottimizzazioni specifiche per diverse architetture (CPU, Metal\footnote{Metal è l'API grafica e di calcolo di Apple per macOS e iOS.} su macOS, CUDA\footnote{CUDA è la piattaforma di calcolo parallelo di NVIDIA per GPU.}/ROCM\footnote{ROCM è la piattaforma open-source di AMD per calcolo su GPU.} su Linux)
+    \item \textbf{Gestione dei modelli}: Comandi per il download, l'aggiornamento e la configurazione di modelli da repository pubblici
+    \item \textit{\textbf{Modelfile}}: Formato di configurazione che permette la creazione di modelli personalizzati (a partire da modelli già esistenti) con prompt di sistema ad-hoc incorporati. Per ulteriori dettagli riguardanti i \textit{Modelfile} si rimanda alla sezione \refwithpage{subsec:llm}.
+    \item \textbf{Ottimizzazioni hardware}: Supporto per accelerazione GPU e ottimizzazioni specifiche per diverse architetture (CPU, Metal\footnote{Metal è l'API grafica e di calcolo di Apple per macOS e iOS.} su macOS, CUDA\footnote{CUDA è la piattaforma di calcolo parallelo di NVIDIA per GPU.}/ROCM\footnote{ROCM è la piattaforma open-source di AMD per calcolo su GPU.} su Windows e GNU/Linux)
 \end{itemize}
 
 \subsubsection{Vantaggi per il progetto}
@@ -371,39 +448,41 @@ La scelta di Ollama ha portato diversi vantaggi architetturali:
 Il sistema utilizza un approccio multi-modello per massimizzare l'accuratezza nell'identificazione di dati sensibili. La strategia prevede l'utilizzo di modelli personalizzati ottimizzati specificamente per il dominio dei log di sistema.
 
 \subsubsection{Modelli supportati}
-Il progetto supporta nove diversi modelli LLM selezionati per bilanciare performance, accuratezza e requisiti computazionali. I modelli sono elencati nella tabella \ref{tab:modelli_llm}.
+Il progetto supporta nove diversi modelli LLM selezionati per bilanciare performance, accuratezza e requisiti computazionali. I modelli sono elencati nella tabella \refwithpage{tab:modelli_llm}.
 
 \begin{table}[h!]
     \centering
-    \begin{tabular}{|l|c|l|}
+    \begin{tabular}{|p{0.15\textwidth}|p{0.18\textwidth}|p{0.52\textwidth}|}
         \hline
-        \textbf{Nome} & \textbf{Num. di token} & \textbf{Caratteristiche principali} \\ \hline
-        Llama 3.1 & 8B & Modello generale con ottimo rapporto qualità/perf. \\ \hline
-        Llama 3.2 & 3B & Versione compatta per ambienti con risorse limitate \\ \hline
-        Mistral & 7B, 12B & Modelli europei con architettura Mixture of Experts \\ \hline
-        Qwen 2.5 & 7B & Modello multilingue trainato su dati di tutti i tipi \\ \hline
-        Gemma 3 & 4B, 12B & Modelli Google con ottimizzazioni per task specifici \\ \hline
-        DeepSeek R1 & 7B, 8B & Modelli con capacità di reasoning avanzate \\ \hline
+        \textbf{Nome} & \textbf{Num. di token} & \textbf{Caratteristiche principali}                  \\ \hline
+        Llama 3.1     & 8B                     & Modello generale con ottimo rapporto qualità/performance   \\ \hline
+        Llama 3.2     & 3B                     & Versione compatta per ambienti con risorse limitate  \\ \hline
+        Mistral       & 7B, 12B                & Modelli europei con architettura Mixture of Experts  \\ \hline
+        Qwen 2.5      & 7B                     & Modello multilingue trainato su dati di svariati tipi \\ \hline
+        Gemma 3       & 4B, 12B                & Modelli Google con ottimizzazioni per task specifici \\ \hline
+        DeepSeek R1   & 7B, 8B                 & Modelli con capacità di reasoning avanzate           \\ \hline
     \end{tabular}
     \caption{Modelli LLM supportati dal sistema}
     \label{tab:modelli_llm}
 \end{table}
 
-I modelli DeepSeek R1 includono capacità di reasoning\footnote{Il reasoning negli LLM si riferisce alla capacità di mostrare esplicitamente il processo di ragionamento step-by-step che porta alla risposta finale. Questi modelli utilizzano tag speciali (come \texttt{<think>...</think>}) per separare il processo di ragionamento interno dalla risposta definitiva, permettendo maggiore trasparenza nel processo decisionale.} avanzate che permettono di visualizzare il processo di ragionamento interno del modello.
+I modelli Mistral sono stati sviluppati seguendo l'architettura \textit{Mixture of Experts}, cioè un approccio di machine learning che suddivide un modello di intelligenza artificiale in sottoreti specializzate chiamate "esperti", ognuna delle quali si concentra su un sottoinsieme specifico dei dati di input.~\cite{mu2025moe_survey}~\cite{ibm_moe}
 
-\todo{TODO bibliografia a mixture of experts}
+Mistral ha implementato questo approccio utilizzando 8 gruppi distinti di parametri: a ogni livello e per ogni token, una rete di instradamento seleziona due di questi esperti per elaborare il token, permettendo di utilizzare solo 12,9 miliardi di parametri sui 46,7 miliardi totali e ottenendo prestazioni superiori con maggiore efficienza computazionale.~\cite{mistral_moe}
+
+I modelli DeepSeek R1 includono capacità di reasoning\footnote{Il reasoning negli LLM si riferisce alla capacità di generare esplicitamente il processo di ragionamento step-by-step che porta alla risposta finale. Questi modelli utilizzano tag speciali (come \texttt{<think>...</think>}) per separare il processo di ragionamento interno dalla risposta definitiva, permettendo maggiore trasparenza nel processo decisionale.} avanzate che permettono di visualizzare il processo di ragionamento interno del modello.
 
 \subsubsection{Personalizzazione tramite \textit{Modelfile}}
-Ogni modello viene personalizzato attraverso file di configurazione \textit{Modelfile} che includono:
+Ogni modello viene personalizzato attraverso dei file di configurazione \textit{Modelfile} che includono:
 
 \begin{itemize}
-    \item \textbf{Prompt engineering}: Istruzioni specifiche per l'identificazione di dati sensibili nei log
+    \item \textbf{Prompt di sistema}: Istruzioni specifiche per l'identificazione di dati sensibili nei log
     \item \textbf{Parametri ottimizzati}: Configurazione di temperatura\footnote{La temperatura è un parametro che controlla la casualità delle risposte dell'LLM: valori bassi (0.0-0.3) producono risposte più deterministiche e conservative, mentre valori alti (0.7-1.0) aumentano la creatività ma riducono la coerenza.} e context window\footnote{Il context window rappresenta il numero massimo di token (parole o porzioni di parole) che un LLM può processare simultaneamente in una singola conversazione, inclusi prompt, messaggi precedenti e risposta generata.} per massimizzare la precisione
     \item \textbf{Esempi di training}: Messaggi di esempio che guidano il modello nel formato di output atteso
     \item \textbf{Definizioni precise}: Specifiche dettagliate su cosa costituisce un dato sensibile e cosa escludere dall'analisi
 \end{itemize}
 
-Il prompt engineering incorpora linee guida specifiche per:
+Il prompt di sistema incorpora linee guida specifiche per:
 \begin{itemize}
     \item Identificazione di email, token di autenticazione, coordinate geografiche
     \item Esclusione di dati non sensibili come username, ID, timestamp
@@ -411,7 +490,7 @@ Il prompt engineering incorpora linee guida specifiche per:
     \item Formato di output standardizzato per facilità di parsing
 \end{itemize}
 
-Per ulteriori dettagli riguardanti i \textit{Modelfile} e la configurazione dei LLM si rimanda alla sezione \ref{subsec:ver2_prompt_engineering}.
+Per ulteriori dettagli riguardanti i \textit{Modelfile} e la configurazione dei LLM si rimanda alla sezione \refwithpage{subsec:ver2_prompt_engineering}.
 
 
 \section{Codice}
@@ -422,7 +501,7 @@ Il livello di implementazione si basa su tecnologie consolidate che garantiscono
 \subsection{Python}
 \label{subsec:python}
 
-Python rappresenta il linguaggio di programmazione principale del progetto, scelto per la sua versatilità e l'ampio ecosistema di librerie specializzate per l'integrazione con sistemi di AI.
+Python\footnote{Python \url{https://www.python.org}} rappresenta il linguaggio di programmazione principale del progetto, scelto per la sua versatilità e l'ampio ecosistema di librerie specializzate per l'integrazione con sistemi di AI.
 
 \subsubsection{Versione e compatibilità}
 Il progetto utilizza Python 3.12, che garantisce:
@@ -438,12 +517,12 @@ Le librerie Python utilizzate includono:
 
 \begin{itemize}
     \item \textbf{ollama}: Libreria ufficiale per l'interazione con il server Ollama tramite API REST
-    \item \textbf{httpx}: Client HTTP asincrono per comunicazioni ad alte performance
+    \item \textbf{httpx}: Client HTTP asincrono per comunicazioni non bloccanti
     \item \textbf{anyio}: Framework per programmazione asincrona cross-platform
     \item \textbf{requests}: Per configurazione automatica di GrayLog tramite API REST
 \end{itemize}
 
-\subsubsection{Sensitive Data Detector}
+\subsubsection{Il progetto \textit{Sensitive Data Detector}}
 Il core del sistema è implementato in tre versioni evolutive che rappresentano l'evoluzione del progetto dalla dimostrazione di fattibilità all'integrazione enterprise.
 
 La \textbf{prima versione} costituisce un proof of concept per validare l'uso di LLM nell'identificazione di dati sensibili.
@@ -452,45 +531,31 @@ La \textbf{seconda versione} introduce sistemi di valutazione quantitativa e mod
 
 La \textbf{terza versione} implementa l'integrazione real-time con GrayLog per deployment in ambiente di produzione.
 
-Per una descrizione completa dell'architettura, delle funzionalità e dei risultati di ogni versione si rimanda al capitolo \ref{chap:sensitive_data_detector}.
+Per una descrizione completa dell'architettura, delle funzionalità e dei risultati di ogni versione si rimanda al capitolo \refwithpage{chap:sensitive_data_detector}.
 
 \subsubsection{Script di inizializzazione GrayLog}
-Il file \texttt{graylog\_setup.py} automatizza la configurazione iniziale di GrayLog utilizzando:
+Il file \texttt{graylog\_setup.py} automatizza la configurazione iniziale di GrayLog tramite le API REST per la creazione programmatica di input, stream, output e pipeline; adotta una configurazione idempotente che consente esecuzioni ripetute senza effetti collaterali; include meccanismi di gestione degli errori con validazione delle configurazioni e, dove previsto, rollback automatico; e supporta template personalizzabili per adattare le configurazioni a diversi ambienti.
 
-\begin{itemize}
-    \item \textbf{API REST di GrayLog}: Per creazione programmatica di input, stream, output e pipeline
-    \item \textbf{Configurazione idempotente}: Script eseguibile multiple volte senza effetti collaterali
-    \item \textbf{Gestione degli errori}: Validazione delle configurazioni e rollback automatico in caso di errori
-    \todo{TODO verificare rollback}
-    \item \textbf{Template personalizzabili}: Configurazioni parametrizzate per adattamento a diversi ambienti
-\end{itemize}
+In particolare, lo script provvede alla definizione degli input \texttt{TCP} per i log in ingresso e per le notifiche di ritorno, alla creazione di stream per il routing intelligente dei messaggi, alla configurazione di output GELF per la comunicazione con il \textit{Sensitive Data Detector} e all'impostazione di pipeline con regole regex per l'identificazione rapida di pattern comuni.
 
-Lo script configura automaticamente:
-\begin{itemize}
-    \item Input \texttt{TCP} per log in ingresso e notifiche di ritorno
-    \item Stream per routing intelligente dei messaggi
-    \item Output GELF per comunicazione con il \textit{Sensitive Data Detector}
-    \item Pipeline con regole regex per identificazione rapida di pattern comuni
-\end{itemize}
-
-Il codice completo dello script è disponibile nell'appendice \ref{app:code_graylog_script}.
+Il codice completo dello script è disponibile nell'appendice \refwithpage{lst:code_graylog_script}.
 \todo{TODO aggiungere script graylog in appendice}
 
 \subsection{Docker}
 \label{subsec:docker}
 
-Docker viene utilizzato per la containerizzazione dell'ambiente GrayLog, garantendo portabilità, isolamento e semplicità di deployment.
+Docker\footnote{Docker \url{https://www.docker.com}} viene utilizzato per la containerizzazione dell'ambiente GrayLog, garantendo portabilità, isolamento e semplicità di deployment.
 
 \subsubsection{Architettura multi-container}
 La configurazione Docker Compose definisce un ambiente completo che include:
 
 \begin{itemize}
-    \item \textbf{MongoDB}: Database per memorizzazione dei metadati di configurazione di GrayLog
+    \item \textbf{MongoDB}\footnote{MongoDB \url{https://www.mongodb.com}}: Database per memorizzazione dei metadati di configurazione di GrayLog
     \item \textbf{GrayLog DataNode}: Nodo di indicizzazione per storage e ricerca dei log
     \item \textbf{GrayLog Enterprise}: Server principale con interfaccia web e API REST
 \end{itemize}
 
-Il codice completo della configurazione del container è disponibile nell'appendice \ref{app:code_container_config}.
+Il codice completo della configurazione del container è disponibile nell'appendice \refwithpage{lst:code_container_config}.
 \todo{TODO aggiungere script graylog in appendice}
 
 \subsubsection{Configurazione di rete e persistenza}
@@ -504,16 +569,7 @@ L'ambiente Docker implementa:
 \end{itemize}
 
 \subsubsection{Vantaggi operativi}
-L'utilizzo di Docker porta diversi benefici:
-
-\begin{itemize}
-    \item \textbf{Deployment semplificato}: Avvio dell'intero stack con un singolo comando
-    \item \textbf{Isolamento delle dipendenze}: Prevenzione di conflitti con software pre-esistente nel sistema host
-    \item \textbf{Portabilità cross-platform}: Funzionamento consistente su Windows, macOS e Linux
-    \item \textbf{Scalabilità orizzontale}: Possibilità di replicare l'ambiente per testing o deployment distribuito
-    \item \textbf{Gestione delle versioni}: Controllo preciso delle versioni dei componenti utilizzati
-\end{itemize}
-
+L'utilizzo di Docker porta diversi benefici, tra cui un deployment semplificato che consente l'avvio dell'intero stack con un singolo comando, l'isolamento delle dipendenze per prevenire conflitti con software preesistente sull'host, la portabilità cross-platform con comportamento consistente su Windows, macOS e Linux, la scalabilità orizzontale per replicare l'ambiente a fini di testing o di deployment distribuito e una gestione puntuale delle versioni dei componenti utilizzati.
 
 
 %
@@ -523,9 +579,9 @@ L'utilizzo di Docker porta diversi benefici:
 \chapter{Sensitive Data Detector}
 \label{chap:sensitive_data_detector}
 
-Il sistema \textit{Sensitive Data Detector} rappresenta il cuore del progetto ed è stato sviluppato attraverso un processo iterativo che ha portato alla realizzazione di tre versioni evolutive, ognuna con obiettivi specifici e caratteristiche tecniche distinte.
+Il progetto \textit{Sensitive Data Detector} rappresenta il cuore del sistema ed è stato sviluppato attraverso un processo iterativo che ha portato alla realizzazione di tre versioni evolutive, ognuna con obiettivi specifici e caratteristiche tecniche distinte.
 
-Questo approccio progressivo ha permesso di affrontare le sfide tecniche in modo sistematico, partendo dalla validazione del concetto di base fino all'implementazione di una soluzione \textit{production-ready}. Ogni versione ha beneficiato delle lezioni apprese dalla precedente, introducendo miglioramenti significativi in termini di scalabilità, accuratezza e integrazione operativa.
+Questo approccio progressivo ha permesso di affrontare le sfide tecniche in modo sistematico, partendo dalla validazione del concetto di base fino all'implementazione di una soluzione pronta per il rilascio in produzione. Ogni versione introduce significativi miglioramenti in termini di scalabilità, accuratezza e facilità di integrazione in ambienti esistenti rispetto alla precedente.
 
 \textbf{Versione 1: Proof of Concept} \\
 La prima implementazione costituisce un proof of concept sviluppato per dimostrare la fattibilità dell'utilizzo di Large Language Models nell'identificazione automatica di dati sensibili all'interno dei file di log.
@@ -534,18 +590,23 @@ Questa versione utilizza un'architettura sincrona con elaborazione batch, interf
 
 L'output viene salvato su file per consentire analisi offline e tracciabilità del processo.
 
+Ulteriori dettagli sono disponibili nella sezione \refwithpage{sec:ver1}.
+
 \textbf{Versione 2: Streaming e valutazione} \\
 La seconda versione rappresenta un'evoluzione significativa con focus sulla scalabilità e la valutazione quantitativa delle performance. Introduce l'elaborazione riga per riga dei log per ottimizzare l'uso della memoria e utilizza modelli LLM personalizzati creati tramite \textit{Modelfile} di Ollama, che incorporano prompt specifici per l'identificazione di dati sensibili.
 
 Un aspetto fondamentale di questa versione è l'implementazione di un sistema di ground truth\footnote{Ground truth indica i dati di riferimento considerati corretti e utilizzati come standard per valutare la precisione di un sistema di classificazione. Nel contesto di questo progetto, consiste in etichette manuali che indicano se ogni riga di log contiene o meno dati sensibili.} per la valutazione automatica, che consente il calcolo real-time di metriche di classificazione binaria (veri/falsi positivi/negativi) e l'analisi comparativa di diversi modelli LLM.
 
+Ulteriori dettagli sono disponibili nella sezione \refwithpage{sec:ver2}.
+
 \textbf{Versione 3: Integrazione enterprise} \\
 La terza versione costituisce la soluzione \textit{production-ready} del progetto, implementando un'architettura asincrona completa per l'integrazione real-time con GrayLog. \\
-Utilizza programmazione asincrona con \texttt{asyncio} per gestione concorrente delle connessioni, protocollo GELF per comunicazione nativa con la piattaforma di gestione log e un server TCP non-bloccante per elaborazione in tempo reale.
+Utilizza programmazione asincrona con \texttt{asyncio} per gestione concorrente delle connessioni, protocollo GELF per comunicazione nativa con la piattaforma di gestione log e un server TCP non bloccante per elaborazione in tempo reale.
 
 Il sistema implementa un feedback loop bidirezionale che reinvia automaticamente i risultati delle analisi a GrayLog, permettendo la visualizzazione unificata di log originali e notifiche di rilevamento di dati sensibili attraverso le sue dashboard specializzate.
 
-Ogni versione mantiene compatibilità con i modelli LLM supportati, ma introduce ottimizzazioni specifiche per il caso d'uso di questo progetto.
+Ulteriori dettagli sono disponibili nella sezione \refwithpage{sec:ver3}.
+
 
 \section{Versione 1: Proof of Concept}
 \label{sec:ver1}
@@ -569,7 +630,7 @@ Il sistema è progettato per riconoscere diverse tipologie di dati sensibili, tr
 \subsection{Architettura e funzionamento}
 \label{subsec:ver1_architettura}
 
-Il sistema è implementato come uno script Python che utilizza la libreria \texttt{ollama} per interfacciarsi con diversi modelli LLM tramite API REST. L'architettura segue un paradigma client-server dove lo script Python agisce come client che invia richieste al server Ollama locale. L'implementazione completa è disponibile nell'appendice \ref{app:code_ver1}.
+Il sistema è implementato tramite linguaggio Python e utilizza la libreria \texttt{ollama}\footnote{\texttt{ollama} \url{https://pypi.org/project/ollama}} per interfacciarsi con diversi modelli LLM tramite API REST. L'architettura segue un paradigma client-server dove lo script Python agisce come client che invia richieste al server Ollama locale. L'implementazione completa è disponibile nell'appendice \refwithpage{lst:code_ver1}.
 
 Il flusso di elaborazione si articola nelle seguenti fasi:
 
@@ -584,14 +645,7 @@ Il flusso di elaborazione si articola nelle seguenti fasi:
 \subsection{Gestione del context window}
 \label{subsec:ver1_context_window}
 
-Un aspetto critico dell'implementazione riguarda la gestione del context window limitato dei modelli LLM. Il sistema implementa due strategie principali:
-
-\begin{itemize}
-    \item \textbf{Segmentazione dei dati}: I file di log vengono suddivisi in blocchi di dimensioni adattive basate sulle capacità del modello
-    \item \textbf{Ripristino periodico della conversazione}: Dopo un numero predefinito di messaggi, la cronologia della chat viene ripristinata per evitare il superamento dei limiti di token
-\end{itemize}
-
-Questa approccio garantisce che il modello mantenga sempre accesso al prompt iniziale e alle linee guida per l'identificazione dei dati sensibili.
+Un aspetto critico dell'implementazione riguarda la gestione del context window limitato dei modelli LLM. Il sistema implementa due strategie principali: \textbf{Segmentazione dei dati}, in cui i file di log vengono suddivisi in blocchi di dimensioni adattive basate sulle capacità del modello, e \textbf{Ripristino periodico della conversazione}, per cui, dopo un numero predefinito di messaggi, la cronologia della chat viene ripristinata per evitare il superamento dei limiti di token. Questo approccio garantisce che il modello mantenga sempre accesso al prompt iniziale e alle linee guida per l'identificazione dei dati sensibili.
 
 \subsection{Prompt engineering}
 \label{subsec:ver1_prompt_engineering}
@@ -607,17 +661,16 @@ Il prompt di sistema è stato progettato per guidare il modello nell'identificaz
 \end{itemize}
 
 Il prompt include inoltre istruzioni per la gestione di oggetti JSON, richiedendo al modello di estrarre solo i dati sensibili contenuti all'interno di essi e non l'intero oggetto. \\
-Il prompt completo è disponibile nell'appendice \ref{app:prompt_ver1}.
-\todo{TODO verificare che sia il prompt della versione 1 e non 2 e 3}
+Il prompt completo è disponibile nell'appendice \refwithpage{lst:prompt_ver1}.
 
 \subsection{Modelli supportati e configurazione}
 \label{subsec:ver1_modelli_supportati}
 
-La prima versione supporta cinque diversi modelli LLM, ognuno con parametri di configurazione ottimizzati, come mostrato nella tabella \ref{tab:modelli_llm_ver1}.
+La prima versione supporta cinque diversi modelli LLM, ognuno con parametri di configurazione ottimizzati, come mostrato nella tabella \refwithpage{tab:modelli_llm_ver1}.
 
 \begin{table}[h!]
     \centering
-    \begin{tabular}{|l|c|c|c|}
+    \begin{tabular}{|l|c|r|c|}
         \hline
         \textbf{Modello} & \textbf{Parametri} & \textbf{Righe per messaggio} & \textbf{Reset chat} \\ \hline
         Llama3           & 8B                 & 3                            & Ogni messaggio      \\ \hline
@@ -629,7 +682,7 @@ La prima versione supporta cinque diversi modelli LLM, ognuno con parametri di c
     \caption{Configurazioni ottimizzate per modello nella versione 1}
     \label{tab:modelli_llm_ver1}
 \end{table}
-\todo{TODO: verificare correttezza tabella}
+\todo{TODO: ri-verificare tabella}
 
 \todo{TODO spiegare che il numero di righe per messaggio e reset chat è stato deciso a tentativi, notando che tenendolo troppo alto gli LLM perdevano il prompt iniziale e quindi finivano a non rispettare più la richiesta originale Con riferimento a sottosezione subsec metodologia\_v1}
 
@@ -686,7 +739,7 @@ La versione introduce diversi miglioramenti sostanziali:
 
 L'architettura della seconda versione mantiene il paradigma client-server della versione precedente e al contempo introduce ottimizzazioni nel flusso di elaborazione. \\
 Il sistema utilizza modelli LLM personalizzati creati tramite \textit{Modelfile}, una funzionalità di Ollama, che incorporano prompt specifici e configurazioni ottimizzate per l'identificazione di dati sensibili.\\
-L'implementazione completa è disponibile nell'appendice \ref{app:code_ver2}.
+L'implementazione completa è disponibile nell'appendice \refwithpage{lst:code_ver2}.
 \todo{TODO specificare meglio cosa sono i modelfile, assicurarsi che "funzionalità di Ollama" non sia presente altrove. In caso, spostare la spiegazione in quel punto}
 
 Il flusso di elaborazione ottimizzato si articola nelle seguenti fasi:
@@ -715,36 +768,37 @@ Questa strategia offre diversi vantaggi:
     \item \textbf{Reasoning avanzato}: Supporto per modelli con capacità di reasoning che utilizzano tag speciali come \texttt{<think>}
 \end{itemize}
 
-Il sistema implementa anche un meccanismo di post-processing per gestire le risposte dei modelli reasoning, rimuovendo automaticamente i tag \texttt{<think>...</think>} che contengono il processo di ragionamento interno del modello, considerando solo la risposta finale.
+Il sistema implementa anche un meccanismo di post-processing per gestire le risposte dei modelli reasoning, rimuovendo automaticamente i tag \texttt{<think>...</think>} che contengono il processo di ragionamento interno del modello, considerando solamente la risposta finale.
 
 \subsection{Modelli supportati e configurazione}
 \label{subsec:ver2_modelli_supportati}
 
 La seconda versione espande significativamente il supporto per diversi modelli LLM, introducendo nove modelli personalizzati ottimizzati specificamente per l'identificazione di dati sensibili. \\
-Tutti i modelli condividono una configurazione unificata ottimizzata per l'elaborazione sequenziale di singole righe di log, come mostrato nella tabella \ref{tab:modelli_llm_ver2}.
+Tutti i modelli condividono una configurazione unificata ottimizzata per l'elaborazione sequenziale di singole righe di log, come mostrato nella tabella \refwithpage{tab:modelli_llm_ver2}.
 
 \begin{table}[h!]
     \centering
-    \begin{tabular}{|l|c|c|c|}
+    \begin{tabular}{|l|c|r|c|}
         \hline
         \textbf{\textit{Modelfile} basato su} & \textbf{Parametri} & \textbf{Righe per messaggio} & \textbf{Reset chat} \\ \hline
-        Llama3.1         & 8B                 & 1                            & Ogni 15 messaggi    \\ \hline
-        Llama3.2         & 3B                 & 1                            & Ogni 15 messaggi    \\ \hline
-        Mistral          & 7B                 & 1                            & Ogni 15 messaggi    \\ \hline
-        Mistral Nemo     & 12B                & 1                            & Ogni 15 messaggi    \\ \hline
-        Qwen2.5          & 7B                 & 1                            & Ogni 15 messaggi    \\ \hline
-        Gemma3           & 4B                 & 1                            & Ogni 15 messaggi    \\ \hline
-        Gemma3           & 12B                & 1                            & Ogni 15 messaggi    \\ \hline
-        DeepSeek R1      & 7B                 & 1                            & Ogni 15 messaggi    \\ \hline
-        DeepSeek R1      & 8B                 & 1                            & Ogni 15 messaggi    \\ \hline
+        Llama3.1                              & 8B                 & 1                            & Ogni 15 messaggi    \\ \hline
+        Llama3.2                              & 3B                 & 1                            & Ogni 15 messaggi    \\ \hline
+        Mistral                               & 7B                 & 1                            & Ogni 15 messaggi    \\ \hline
+        Mistral Nemo                          & 12B                & 1                            & Ogni 15 messaggi    \\ \hline
+        Qwen2.5                               & 7B                 & 1                            & Ogni 15 messaggi    \\ \hline
+        Gemma3                                & 4B                 & 1                            & Ogni 15 messaggi    \\ \hline
+        Gemma3                                & 12B                & 1                            & Ogni 15 messaggi    \\ \hline
+        DeepSeek R1                           & 7B                 & 1                            & Ogni 15 messaggi    \\ \hline
+        DeepSeek R1                           & 8B                 & 1                            & Ogni 15 messaggi    \\ \hline
     \end{tabular}
     \caption{Configurazioni ottimizzate per modello nella versione 2 e 3}
     \label{tab:modelli_llm_ver2}
 \end{table}
-\todo{TODO: verificare correttezza tabella}
+\todo{TODO: ri-verificare tabella}
 
 A differenza della prima versione, tutti i modelli utilizzano una configurazione unificata con elaborazione di una riga per messaggio e ripristino della conversazione ogni 15 messaggi. Questa standardizzazione facilita il confronto diretto delle performance tra modelli diversi e ottimizza l'utilizzo delle risorse computazionali. \\
 Inoltre, l'elaborazione di singole righe consente una valutazione immediata dell'accuratezza delle classificazioni prodotte dal modello.
+\todo{TODO spiegare che gestendo una riga alla volta si ottiene una risposta "decisa" dall'LLM per ogni singola riga. Mandando più righe alla volta bisogna parsare la risposta per capire quali righe l'LLM reputa sensibili. Inoltre aumenta il rischio che l'LLM non risponda correttamente o che salti qualche riga}
 
 \subsection{Output e tracciabilità}
 \label{subsec:ver2_output}
@@ -795,12 +849,13 @@ Queste limitazioni, sebbene non compromettano l'utilità della versione per scop
 
 La terza versione del \textit{Sensitive Data Detector} rappresenta l'evoluzione finale del progetto, trasformando il sistema da uno strumento di analisi offline a una soluzione completamente integrata per l'elaborazione in tempo reale dei log.
 
-Questa versione si interfaccia direttamente con GrayLog, creando un sistema end-to-end per il monitoraggio continuo dei log.
+Questa versione si interfaccia direttamente con GrayLog, creando un sistema \\
+end-to-end per il monitoraggio continuo dei log.
 
 \subsection{Obiettivi e scopo}
 \label{subsec:ver3_obiettivi}
 
-L'obiettivo principale della terza versione è fornire una soluzione \textit{production-ready} per l'identificazione automatica di dati sensibili in ambienti operativi reali. Questa implementazione affronta le principali limitazioni delle versioni precedenti, introducendo:
+L'obiettivo principale della terza versione è fornire una soluzione pronta per il rilascio in produzione per l'identificazione automatica di dati sensibili in ambienti operativi reali. Questa implementazione affronta le principali limitazioni delle versioni precedenti, introducendo:
 
 \begin{itemize}
     \item \textbf{Elaborazione in tempo reale}: Analisi immediata dei log non appena vengono generati dai sistemi
@@ -813,8 +868,8 @@ L'obiettivo principale della terza versione è fornire una soluzione \textit{pro
 \subsection{Architettura e funzionamento}
 \label{subsec:ver3_architettura}
 
-L'architettura della terza versione introduce un cambio del paradigma rispetto alle versioni precedenti, passando da un modello client-server a un sistema basato su stream processing. Il sistema opera come un microservizio che si posiziona tra GrayLog e i modelli LLM, fungendo da bridge intelligente per l'analisi dei contenuti. \\
-L'implementazione completa è disponibile nell'appendice \ref{app:code_ver3}.
+L'architettura della terza versione introduce un cambio del paradigma rispetto alle versioni precedenti, passando da un modello client-server a un sistema basato su stream processing. Il sistema opera come un micro-servizio che si posiziona tra GrayLog e i modelli LLM, fungendo da ponte per l'analisi dei log. \\
+L'implementazione completa è disponibile nell'appendice \refwithpage{lst:code_ver3}.
 
 Il flusso di elaborazione real-time si articola nelle seguenti fasi:
 
@@ -828,6 +883,8 @@ Il flusso di elaborazione real-time si articola nelle seguenti fasi:
 \end{enumerate}
 
 La comunicazione avviene tramite protocollo GELF, che garantisce la preservazione di tutti i metadati necessari per la tracciabilità e la risoluzione di eventuali problemi.
+
+\todo{TODO: esempio di messaggio GELF (vedere se magari spostare in capitolo 4)}
 
 \subsection{Integrazione con GrayLog}
 \label{subsec:ver3_integrazione}
@@ -846,7 +903,7 @@ Questa architettura permette di mantenere separati i log originali dalle notific
 \subsection{Modelli supportati e configurazione}
 \label{subsec:ver3_modelli_supportati}
 
-La terza versione eredita il supporto completo per i nove modelli personalizzati della versione precedente, mantenendo la stessa configurazione unificata ottimizzata per l'elaborazione in tempo reale, come mostrato nella tabella \ref{tab:modelli_llm_ver2}.
+La terza versione eredita il supporto completo per tutti i modelli personalizzati della versione precedente, mantenendo la stessa configurazione unificata e ottimizzata per l'elaborazione in tempo reale, come mostrato nella tabella \refwithpage{tab:modelli_llm_ver2}.
 
 La configurazione real-time mantiene l'elaborazione di un messaggio per volta per semplificare il processo di rilevazione della correttezza delle risposte. \\
 L'analisi di un messaggio alla volta permette inoltre di ottimizzare la latenza di risposta, aspetto critico in ambienti di produzione dove la velocità di identificazione delle vulnerabilità può essere determinante per la sicurezza del sistema.
@@ -881,14 +938,14 @@ Le notifiche seguono il formato: \\
 \subsection{Limitazioni e considerazioni operative}
 \label{subsec:ver3_limitazioni}
 
-Nonostante rappresenti una soluzione \textit{production-ready}, la terza versione presenta alcune considerazioni operative importanti:
+Nonostante rappresenti una soluzione pronta per ambienti di produzione, la terza versione presenta alcune considerazioni operative importanti:
 
 \begin{itemize}
-    \item \textbf{Dipendenza da Ollama}: Il sistema richiede un'istanza Ollama sempre attiva, introducendo un single point of failure
+    \item \textbf{Dipendenza da Ollama}: Il sistema richiede un'istanza Ollama sempre attiva, introducendo un \textit{single point of failure}
     \item \textbf{Latenza variabile}: I tempi di risposta dipendono dalle performance dell'LLM selezionato e dal carico del sistema
     \item \textbf{Gestione degli errori}: Le interruzioni di connessione con Ollama causano terminazione del servizio
     \item \textbf{Scalabilità verticale}: Le performance sono limitate dalle risorse hardware disponibili per l'inferenza dell'LLM
-    \item \textbf{Utilizzo di modelli personalizzati}: Sebbene i modelli personalizzati migliorino significativamente le performance rispetto ai modelli base, il sistema non utilizza tecniche di fine-tuning avanzate come LoRa\footnote{LoRa (Low-Rank Adaptation) è una tecnica di fine-tuning efficiente che modifica solo un sottoinsieme dei parametri del modello e permette di creare un nuovo LLM a partire da uno già addestrato.}, che rappresenterebbe la soluzione ottimale per l'adattamento specifico al dominio dei log. Per ulteriori dettagli, si rimanda alla sezione \ref{subsec:addestramento_lora}
+    \item \textbf{Utilizzo di modelli personalizzati}: Sebbene i modelli personalizzati migliorino significativamente le performance rispetto ai modelli base, il sistema non utilizza tecniche di \textit{fine-tuning} avanzate come LoRA\footnote{LoRA (Low-Rank Adaptation) è una tecnica di fine-tuning efficiente che modifica solo un sottoinsieme dei parametri del modello e permette di creare un nuovo LLM a partire da uno già addestrato.}, che rappresenterebbe la soluzione ottimale per l'adattamento specifico al dominio dei log. Per ulteriori dettagli, si rimanda alla sezione \refwithpage{subsec:addestramento_lora}
 \end{itemize}
 
 Queste limitazioni, pur non compromettendo l'utilità operativa del sistema, rappresentano aree di miglioramento e suggeriscono direzioni per sviluppi futuri del progetto.
@@ -905,13 +962,8 @@ Queste limitazioni, pur non compromettendo l'utilità operativa del sistema, rap
 Il sistema \textit{Sensitive Data Detector} è stato sottoposto a un processo di testing e valutazione sistematico attraverso due fasi evolutive principali, corrispondenti alle prime due versioni del progetto. Ogni fase ha introdotto metodologie di test sempre più raffinate e metriche di valutazione quantitative per misurare l'efficacia del sistema nell'identificazione di dati sensibili.
 
 La terza versione del sistema, pur rappresentando un'evoluzione significativa dal punto di vista architetturale e operativo, non è stata sottoposta a un processo di testing sistematico analogo alle versioni precedenti. \\
-Questa scelta è motivata da considerazioni sia tecniche che metodologiche:
-
-\begin{itemize}
-    \item \textbf{Equivalenza algoritmica}: La logica di identificazione dei dati sensibili rimane sostanzialmente invariata rispetto alla seconda versione, mantenendo gli stessi LLM e \textit{Modelfile}
-    \item \textbf{Natura operativa}: La terza versione opera direttamente su stream di log provenienti da GrayLog, rendendo impraticabile l'utilizzo di dataset pre-annotati con ground truth
-    \item \textbf{Ambiente di produzione}: L'integrazione con sistemi reali introduce variabili ambientali che comprometterebbero la riproducibilità dei test quantitativi
-\end{itemize}
+Questa scelta è motivata da considerazioni sia tecniche che metodologiche. Da un lato, sussiste un'equivalenza algoritmica con la seconda versione: la logica di identificazione dei dati sensibili rimane sostanzialmente invariata e vengono utilizzati gli stessi LLM e i medesimi \textit{Modelfile}, riducendo il valore informativo di una nuova campagna di test controllati. Dall'altro, la natura operativa della terza versione, che elabora direttamente stream di log provenienti da GrayLog, rende impraticabile l'impiego di dataset pre-annotati con ground truth. \\
+Inoltre, l'integrazione con sistemi reali introduce variabili ambientali non controllabili che comprometterebbero la riproducibilità e l'affidabilità di misure quantitative.
 
 \section{Metodologia di test}
 \label{sec:metodologia_test}
@@ -954,25 +1006,48 @@ Il sistema di valutazione utilizza metriche standard di classificazione binaria,
 \subsection{Metriche primarie}
 \label{subsec:metriche_primarie}
 
-Le metriche principali utilizzate per la valutazione sono:
+Le metriche principali utilizzate per la valutazione sono elencate nella tabella \refwithpage{tab:metriche_primarie}.
 
-\begin{itemize}
-    \item \textbf{Veri Positivi (TP)}: Righe contenenti dati sensibili correttamente identificate dal modello
-    \item \textbf{Veri Negativi (TN)}: Righe senza dati sensibili correttamente classificate come non sensibili
-    \item \textbf{Falsi Positivi (FP)}: Righe senza dati sensibili erroneamente identificate come contenenti dati sensibili
-    \item \textbf{Falsi Negativi (FN)}: Righe contenenti dati sensibili non identificate dal modello
-\end{itemize}
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|p{0.25\textwidth}|p{0.65\textwidth}|}
+        \hline
+        \textbf{Metrica} & \textbf{Descrizione} \\
+        \hline
+        Veri Positivi (TP) & Righe contenenti dati sensibili correttamente identificate dal modello \\
+        \hline
+        Veri Negativi (TN) & Righe senza dati sensibili correttamente classificate come non sensibili \\
+        \hline
+        Falsi Positivi (FP) & Righe senza dati sensibili erroneamente identificate come contenenti dati sensibili \\
+        \hline
+        Falsi Negativi (FN) & Righe contenenti dati sensibili non identificate dal modello \\
+        \hline
+    \end{tabular}
+    \caption{Metriche primarie di classificazione}
+    \label{tab:metriche_primarie}
+\end{table}
 
 \subsection{Metriche derivate}
 \label{subsec:metriche_derivate}
 
-Dalle metriche primarie vengono calcolate le seguenti percentuali:
+Dalle metriche primarie vengono calcolate le percentuali elencate nella tabella \refwithpage{tab:metriche_derivate}.
 
-\begin{itemize}
-    \item \textbf{Accuratezza Complessiva}: $\frac{TP + TN}{TP + TN + FP + FN} \times 100$
-    \item \textbf{Percentuale di Falsi Positivi}: $\frac{FP}{TP + TN + FP + FN} \times 100$
-    \item \textbf{Percentuale di Falsi Negativi}: $\frac{FN}{TP + TN + FP + FN} \times 100$
-\end{itemize}
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|p{0.3\textwidth}|p{0.25\textwidth}|p{0.35\textwidth}|}
+        \hline
+        \textbf{Metrica} & \textbf{Formula} & \textbf{Descrizione} \\
+        \hline
+        Accuratezza Complessiva & $\frac{TP + TN}{TP + TN + FP + FN} \times 100$ & Percentuale complessiva di classificazioni corrette \\
+        \hline
+        Percentuale di Falsi Positivi & $\frac{FP}{TP + TN + FP + FN} \times 100$ & Incidenza di righe non sensibili classificate come sensibili \\
+        \hline
+        Percentuale di Falsi Negativi & $\frac{FN}{TP + TN + FP + FN} \times 100$ & Incidenza di righe sensibili non identificate \\
+        \hline
+    \end{tabular}
+    \caption{Metriche derivate di valutazione}
+    \label{tab:metriche_derivate}
+\end{table}
 
 Nel contesto applicativo, i falsi negativi rappresentano un rischio di sicurezza maggiore rispetto ai falsi positivi, in quanto comportano la mancata identificazione di dati sensibili effettivamente presenti nei log.
 
@@ -984,25 +1059,25 @@ I test sono stati condotti su architettura Apple M1 Max (32 GB di memoria unific
 \subsection{Risultati Versione 1}
 \label{subsec:risultati_v1}
 
-La prima versione ha fornito risultati promettenti ma ha evidenziato significative limitazioni hardware, come mostrato nella tabella \ref{tab:risultati_v1}.
+La prima versione ha fornito risultati promettenti ma ha evidenziato significative limitazioni hardware, come mostrato nella tabella \refwithpage{tab:risultati_v1}.
 
 \begin{table}[h!]
     \centering
     \begin{tabular}{|l|c|c|c|c|c|}
         \hline
-        \textbf{Modello} & \textbf{Righe} & \textbf{Righe/msg} & \textbf{Msg/chat} & \textbf{Tempo} & \textbf{Falsi pos.} \\ \hline
-        Llama3 8b & 100 & 3 & 1 & 01m 42s & $\approx$15\% \\ \hline
-        Llama3 8b & 1000 & 3 & 1 & 14m 05s & $\approx$5\% \\ \hline
-        Llama3.1 8b & 100 & 3 & 1 & 02m 27s & $\approx$5\% \\ \hline
-        Llama3.1 8b & 1000 & 3 & 1 & 20m 26s & $\approx$5\% \\ \hline
-        Llama3 70b & \multicolumn{5}{c|}{\textit{Memoria non sufficiente}} \\ \hline
-        Llama3.1 70b & \multicolumn{5}{c|}{\textit{Memoria non sufficiente}} \\ \hline
-        Command-R 35b & \multicolumn{5}{c|}{\textit{Memoria non sufficiente}} \\ \hline
+        \textbf{Modello} & \textbf{Righe}                                        & \textbf{Righe/msg} & \textbf{Msg/chat} & \textbf{Tempo} & \textbf{Falsi pos.} \\ \hline
+        Llama3 8b        & 100                                                   & 3                  & 1                 & 01m 42s        & $\approx$15\%       \\ \hline
+        Llama3 8b        & 1000                                                  & 3                  & 1                 & 14m 05s        & $\approx$5\%        \\ \hline
+        Llama3.1 8b      & 100                                                   & 3                  & 1                 & 02m 27s        & $\approx$5\%        \\ \hline
+        Llama3.1 8b      & 1000                                                  & 3                  & 1                 & 20m 26s        & $\approx$5\%        \\ \hline
+        Llama3 70b       & \multicolumn{5}{c|}{\textit{Memoria non sufficiente}}                                                                                 \\ \hline
+        Llama3.1 70b     & \multicolumn{5}{c|}{\textit{Memoria non sufficiente}}                                                                                 \\ \hline
+        Command-R 35b    & \multicolumn{5}{c|}{\textit{Memoria non sufficiente}}                                                                                 \\ \hline
     \end{tabular}
     \caption{Risultati della versione 1 su Apple M1 Max}
     \label{tab:risultati_v1}
 \end{table}
-\todo{TODO verificare correttezza tabella}
+\todo{TODO ri-verificare tabella}
 
 I risultati mostrano che:
 \begin{itemize}
@@ -1014,27 +1089,27 @@ I risultati mostrano che:
 \subsection{Risultati Versione 2}
 \label{subsec:risultati_v2}
 
-La seconda versione ha introdotto metriche quantitative precise permettendo un confronto sistematico, come mostrato nella tabella \ref{tab:risultati_v2} e il grafico \ref{fig:grafico_risultati_v2}.
+La seconda versione ha introdotto metriche quantitative precise permettendo un confronto sistematico, come mostrato nella tabella \refwithpage{tab:risultati_v2} e il grafico \refwithpage{fig:grafico_risultati_v2}.
 
 \begin{table}[h!]
     \centering
     \begin{tabular}{|l|c|c|c|c|c|c|}
         \hline
-        \textbf{Modello} & \textbf{Righe} & \textbf{Tempo} & \textbf{VN} & \textbf{VP} & \textbf{FN} & \textbf{FP} \\ \hline
-        llama3.1:8b & 100 & 00m 57s & $\approx$70\% & $\approx$14\% & $\approx$10\% & $\approx$6\% \\ \hline
-        llama3.1:8b & 1000 & 09m 05s & $\approx$68\% & $\approx$14\% & $\approx$5\% & $\approx$13\% \\ \hline
-        llama3.2:3b & 100 & 01m 08s & $\approx$64\% & $\approx$21\% & $\approx$3\% & $\approx$12\% \\ \hline
-        llama3.2:3b & 1000 & 07m 15s & $\approx$59\% & $\approx$16\% & $\approx$2\% & $\approx$23\% \\ \hline
-        mistral:7b & 100 & 06m 48s & $\approx$0\% & $\approx$24\% & $\approx$0\% & $\approx$76\% \\ \hline
-        mistral:7b & 1000 & 72m 58s & $\approx$0\% & $\approx$19\% & $\approx$0\% & $\approx$81\% \\ \hline
-        mistral-nemo:12b & 100 & 04m 10s & $\approx$45\% & $\approx$13\% & $\approx$11\% & $\approx$31\% \\ \hline
-        mistral-nemo:12b & 1000 & 35m 15s & $\approx$48\% & $\approx$12\% & $\approx$7\% & $\approx$33\% \\ \hline
-        qwen2.5:7b & 100 & 01m 45s & $\approx$76\% & $\approx$21\% & $\approx$3\% & $\approx$0\% \\ \hline
-        qwen2.5:7b & 1000 & 16m 44s & $\approx$68\% & $\approx$18\% & $\approx$1\% & $\approx$13\% \\ \hline
-        gemma3:4b & 100 & 01m 17s & $\approx$58\% & $\approx$21\% & $\approx$3\% & $\approx$18\% \\ \hline
-        gemma3:12b & 100 & 03m 18s & $\approx$74\% & $\approx$23\% & $\approx$1\% & $\approx$2\% \\ \hline
-        deepseek & todo & todo & todo & todo & todo & todo \\ \hline
-        deepseek & todo & todo & todo & todo & todo & todo \\ \hline
+        \textbf{Modello} & \textbf{Righe} & \textbf{Tempo} & \textbf{VN}   & \textbf{VP}   & \textbf{FN}   & \textbf{FP}   \\ \hline
+        llama3.1:8b      & 100            & 00m 57s        & $\approx$70\% & $\approx$14\% & $\approx$10\% & $\approx$6\%  \\ \hline
+        llama3.1:8b      & 1000           & 09m 05s        & $\approx$68\% & $\approx$14\% & $\approx$5\%  & $\approx$13\% \\ \hline
+        llama3.2:3b      & 100            & 01m 08s        & $\approx$64\% & $\approx$21\% & $\approx$3\%  & $\approx$12\% \\ \hline
+        llama3.2:3b      & 1000           & 07m 15s        & $\approx$59\% & $\approx$16\% & $\approx$2\%  & $\approx$23\% \\ \hline
+        mistral:7b       & 100            & 06m 48s        & $\approx$0\%  & $\approx$24\% & $\approx$0\%  & $\approx$76\% \\ \hline
+        mistral:7b       & 1000           & 72m 58s        & $\approx$0\%  & $\approx$19\% & $\approx$0\%  & $\approx$81\% \\ \hline
+        mistral-nemo:12b & 100            & 04m 10s        & $\approx$45\% & $\approx$13\% & $\approx$11\% & $\approx$31\% \\ \hline
+        mistral-nemo:12b & 1000           & 35m 15s        & $\approx$48\% & $\approx$12\% & $\approx$7\%  & $\approx$33\% \\ \hline
+        qwen2.5:7b       & 100            & 01m 45s        & $\approx$76\% & $\approx$21\% & $\approx$3\%  & $\approx$0\%  \\ \hline
+        qwen2.5:7b       & 1000           & 16m 44s        & $\approx$68\% & $\approx$18\% & $\approx$1\%  & $\approx$13\% \\ \hline
+        gemma3:4b        & 100            & 01m 17s        & $\approx$58\% & $\approx$21\% & $\approx$3\%  & $\approx$18\% \\ \hline
+        gemma3:12b       & 100            & 03m 18s        & $\approx$74\% & $\approx$23\% & $\approx$1\%  & $\approx$2\%  \\ \hline
+        deepseek         & todo           & todo           & todo          & todo          & todo          & todo          \\ \hline
+        deepseek         & todo           & todo           & todo          & todo          & todo          & todo          \\ \hline
     \end{tabular}
     \caption{Risultati della versione 2 con metriche quantitative}
     \label{tab:risultati_v2}
@@ -1047,47 +1122,47 @@ La seconda versione ha introdotto metriche quantitative precise permettendo un c
     \centering
     \begin{tikzpicture}
         \begin{axis}[
-            ybar,
-            width=\textwidth,
-            height=8cm,
-            xlabel={Modelli LLM},
-            ylabel={Accuratezza (\%)},
-            symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek:7b, deepseek:8b},
-            xtick=data,
-            x tick label style={rotate=45, anchor=east},
-            legend pos=north west,
-            bar width=15pt,
-            ymin=0,
-            ymax=100
-        ]
+                ybar,
+                width=\textwidth,
+                height=8cm,
+                xlabel={Modelli LLM},
+                ylabel={Accuratezza (\%)},
+                symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek:7b, deepseek:8b},
+                xtick=data,
+                x tick label style={rotate=45, anchor=east},
+                legend pos=north west,
+                bar width=15pt,
+                ymin=0,
+                ymax=100
+            ]
 
-                % Accuratezza su 100 righe (VN% + VP%)
-        \addplot coordinates {
-            (llama3.1:8b, 84)      % 70+14
-            (llama3.2:3b, 85)      % 64+21
-            (mistral:7b, 24)       % 0+24
-            (mistral-nemo:12b, 58) % 45+13
-            (qwen2.5:7b, 97)       % 76+21
-            (gemma3:4b, 79)        % 58+21
-            (gemma3:12b, 97)       % 74+23
-            (deepseek:7b, 1)       % TODO: placeholder
-            (deepseek:8b, 1)       % TODO: placeholder
-        };
+            % Accuratezza su 100 righe (VN% + VP%)
+            \addplot coordinates {
+                    (llama3.1:8b, 84)      % 70+14
+                    (llama3.2:3b, 85)      % 64+21
+                    (mistral:7b, 24)       % 0+24
+                    (mistral-nemo:12b, 58) % 45+13
+                    (qwen2.5:7b, 97)       % 76+21
+                    (gemma3:4b, 79)        % 58+21
+                    (gemma3:12b, 97)       % 74+23
+                    (deepseek:7b, 1)       % TODO: placeholder
+                    (deepseek:8b, 1)       % TODO: placeholder
+                };
 
-        % Accuratezza su 1000 righe (VN% + VP%) dove disponibile
-        \addplot coordinates {
-            (llama3.1:8b, 82)      % 68+14
-            (llama3.2:3b, 75)      % 59+16
-            (mistral:7b, 19)       % 0+19
-            (mistral-nemo:12b, 60) % 48+12
-            (qwen2.5:7b, 86)       % 68+18
-            (gemma3:4b, 0)         % Non testato su 1000
-            (gemma3:12b, 0)        % Non testato su 1000
-            (deepseek:7b, 1)       % TODO: placeholder
-            (deepseek:8b, 1)       % TODO: placeholder
-        };
+            % Accuratezza su 1000 righe (VN% + VP%) dove disponibile
+            \addplot coordinates {
+                    (llama3.1:8b, 82)      % 68+14
+                    (llama3.2:3b, 75)      % 59+16
+                    (mistral:7b, 19)       % 0+19
+                    (mistral-nemo:12b, 60) % 48+12
+                    (qwen2.5:7b, 86)       % 68+18
+                    (gemma3:4b, 0)         % Non testato su 1000
+                    (gemma3:12b, 0)        % Non testato su 1000
+                    (deepseek:7b, 1)       % TODO: placeholder
+                    (deepseek:8b, 1)       % TODO: placeholder
+                };
 
-        \legend{100 righe, 1000 righe}
+            \legend{100 righe, 1000 righe}
         \end{axis}
     \end{tikzpicture}
     \caption{Confronto dell'accuratezza dei modelli LLM sui dataset di test}
@@ -1118,7 +1193,7 @@ Alcuni modelli hanno mostrato comportamenti problematici:
 \subsection{Modelli reasoning}
 \label{subsec:modelli_reasoning}
 
-Alcuni modelli testati includono capacità di reasoning avanzate, utilizzando tag speciali per mostrare il processo di ragionamento interno. I modelli DeepSeek R1 (7B e 8B) utilizzano tag \texttt{<think>...</think>} per mostrare il ragionamento prima della risposta finale.
+Alcuni modelli testati includono capacità di reasoning avanzate, utilizzando tag speciali per mostrare il processo di ragionamento interno. I modelli DeepSeek R1 (7B e 8B) utilizzano tag \texttt{<think>...</think>} per visualizzare il ragionamento prima della risposta finale.
 
 Il sistema implementa un meccanismo di post-processing per rimuovere automaticamente questi tag di reasoning e considerare solo la risposta finale, garantendo compatibilità con il formato di output atteso.
 
@@ -1140,12 +1215,8 @@ Contrariamente alle aspettative, i modelli più grandi non sempre offrono perfor
 \subsection{Efficienza computazionale}
 \label{subsec:efficienza_computazionale}
 
-I risultati mostrano variazioni significative nell'efficienza computazionale:
-\begin{itemize}
-    \item \textbf{Modelli veloci}: Llama3.2:3b, Qwen2.5:7b, Gemma3:4b (< 2 minuti per 100 righe)
-    \item \textbf{Modelli lenti}: Mistral:7b (> 6 minuti per 100 righe)
-    \item \textbf{Relazione performance-velocità}: Non sempre i modelli più veloci sono meno accurati
-\end{itemize}
+I risultati mostrano variazioni significative nell'efficienza computazionale. In particolare, modelli come Llama3.2:3b, Qwen2.5:7b e Gemma3:4b completano l'elaborazione di 100 righe in meno di due minuti, mentre Mistral:7b richiede oltre sei minuti per lo stesso carico. Da ciò si evince che una maggiore velocità non si traduce necessariamente in minore accuratezza.
+\todo{TODO aggiungere più confronti}
 
 \todosubsection{Limitazioni hardware}{subsec:limitazioni_hardware}{Rivalutare in seguito a test con altro hw}
 
@@ -1176,9 +1247,9 @@ Questo progesso ci ha permesso di confermare l'utilizzo di LLM per l'identificaz
 \subsection{Addestramento di LoRA}
 \label{subsec:addestramento_lora}
 
-LoRa (Low-Rank Adaptation) è una tecnica di fine-tuning efficiente che modifica solo un sottoinsieme dei parametri del modello e permette di creare un nuovo LLM a partire da uno già addestrato.
+LoRA (Low-Rank Adaptation) è una tecnica di fine-tuning efficiente che modifica solo un sottoinsieme dei parametri del modello e permette di creare un nuovo LLM a partire da uno già addestrato.
 
-Tramite questa tecnica è possibile addestrare un modello per un dominio specifico, ad esempio il dominio dei log di sicurezza, senza dover addestrare completamente un nuovo modello da zero, operazione praticamente impossibile per progetti di ricerca accademica a causa dei costi computazionali elevati, dei tempi di sviluppo estremamente lunghi, delle competenze multidisciplinari richieste e della necessità di dataset di addestramento di dimensioni enormi.
+Tramite questa tecnica è possibile addestrare un modello per un dominio specifico, ad esempio il dominio dei log, senza dover addestrare un nuovo modello completamente da zero, operazione estremamente complicata da eseguire nei progetti di ricerca accademica a causa dei costi computazionali elevati, dei tempi di sviluppo estremamente lunghi, delle competenze multidisciplinari richieste e della necessità di dataset di addestramento di dimensioni elevate.
 
 In seguito a un periodo prolungato di utilizzo del sistema in ambiente di produzione e di raccolta sistematica dei dati e dei report generati, sarebbe possibile utilizzare questi dati come dataset di training per addestrare un LoRA specificamente ottimizzato per questo caso d'uso. \\
 Il fine-tuning potrebbe partire da uno dei modelli LLM attualmente utilizzati che ha dimostrato le performance migliori durante la fase di testing.
@@ -1191,7 +1262,7 @@ Un possibile sviluppo futuro consiste nella generalizzazione delle integrazioni 
 
 Questa evoluzione permetterebbe di:
 \begin{itemize}
-    \item Estendere la compatibilità del sistema a piattaforme alternative come Elasticsearch, Splunk, o Fluentd
+    \item Estendere la compatibilità del sistema a piattaforme alternative come Elasticsearch\footnote{Elasticsearch \url{https://www.elastic.co/elasticsearch}}, Splunk\footnote{Splunk \url{https://www.splunk.com}}, o Fluentd\footnote{Fluentd \url{https://www.fluentd.org}}
     \item Standardizzare le interfacce di comunicazione tra il sistema di analisi e i sistemi di logging
     \item Semplificare la distribuzione del sistema in ambienti enterprise eterogenei
     \item Migliorare la tracciabilità e la gestione delle notifiche attraverso un framework unificato
@@ -1247,17 +1318,17 @@ Un protocollo di integrazione standardizzato ridurrebbe significativamente la co
 \section{Versione 1: Proof of Concept}
 
 \lstinputlisting[
-  caption=Codice sorgente della versione 1,
-label=app:code_ver1,
-  language=Python,
-  literate={è}{{\`e}}1 {à}{{\`a}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {ì}{{\`i}}1
+caption=Codice sorgente della versione 1,
+label=lst:code_ver1,
+language=Python,
+literate={è}{{\`e}}1 {à}{{\`a}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {ì}{{\`i}}1
 ]{"../ollama extractor v1/main.py"}
 
 
 \lstinputlisting[
-  caption=Prompt usato nella versione 1,
-label=app:prompt_ver1,
-  literate={è}{{\`e}}1 {à}{{\`a}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {ì}{{\`i}}1
+caption=Prompt usato nella versione 1,
+label=lst:prompt_ver1,
+literate={è}{{\`e}}1 {à}{{\`a}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {ì}{{\`i}}1
 ]{"../ollama extractor v1/prompt.txt"}
 \todo{sistemare testo che esce dai confini del box}
 
@@ -1266,10 +1337,10 @@ label=app:prompt_ver1,
 \section{Versione 2: Elaborazione di batch di log}
 
 \lstinputlisting[
-  caption=Codice sorgente della versione 2,
-label=app:code_ver2,
-  language=Python,
-  literate={è}{{\`e}}1 {à}{{\`a}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {ì}{{\`i}}1
+caption=Codice sorgente della versione 2,
+label=lst:code_ver2,
+language=Python,
+literate={è}{{\`e}}1 {à}{{\`a}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {ì}{{\`i}}1
 ]{"../ollama extractor v2/main.py"}
 
 \clearpage
@@ -1277,10 +1348,10 @@ label=app:code_ver2,
 \section{Versione 3: Integrazione con GrayLog}
 
 \lstinputlisting[
-  caption=Codice sorgente della versione 3,
-label=app:code_ver3,
-  language=Python,
-  literate={è}{{\`e}}1 {à}{{\`a}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {ì}{{\`i}}1
+caption=Codice sorgente della versione 3,
+label=lst:code_ver3,
+language=Python,
+literate={è}{{\`e}}1 {à}{{\`a}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {ì}{{\`i}}1
 ]{"../ollama extractor v3/main.py"}
 
 \clearpage
@@ -1290,9 +1361,9 @@ label=app:code_ver3,
 
 \lstinputlisting[
 caption=\textit{Modelfile} di partenza usato per generare i modelli personalizzati,
-label=app:modelfile,
-  language=Python,
-  literate={è}{{\`e}}1 {à}{{\`a}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {ì}{{\`i}}1
+label=lst:modelfile,
+language=Python,
+literate={è}{{\`e}}1 {à}{{\`a}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {ì}{{\`i}}1
 ]{"../modelfiles/sensitive-data-detector-BASE.modelfile"}
 \todo{sistemare testo che esce dai confini del box}
 
@@ -1307,7 +1378,6 @@ label=app:modelfile,
 \beforebibliography
 \bibliographystyle{unsrt}
 \bibliography{bibliografia}
-https://mistral.ai/news/mixtral-of-experts
 
 % Pagina di chiusura tesi
 % \closingpage
