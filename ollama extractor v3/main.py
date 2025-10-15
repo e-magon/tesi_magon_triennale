@@ -1,8 +1,8 @@
-'''
+"""
 Script che chiama il modello llama3 (4.7 GB) tramite le API REST ollama e cerca
 di estrarre tutti i dati privati presenti in un estratto dei log.
 Questa versione (v3) ascolta sulla porta TCP 24367 dalla quale legge righe di log in formato GELF.
-'''
+"""
 
 import asyncio
 import json

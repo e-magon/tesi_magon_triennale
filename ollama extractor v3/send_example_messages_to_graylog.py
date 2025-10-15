@@ -1,7 +1,7 @@
-'''
+"""
 Semplice script per inviare i messaggi di esempio a GrayLog,
 in modo da testare tutto il flusso di analisi dei log.
-'''
+"""
 import socket
 import time
 

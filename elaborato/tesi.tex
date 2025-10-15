@@ -604,7 +604,6 @@ Il file \texttt{graylog\_setup.py} automatizza la configurazione iniziale di Gra
 In particolare, lo script provvede alla definizione degli input \texttt{TCP} per i log in ingresso e per le notifiche di ritorno, alla creazione di stream per il routing intelligente dei messaggi, alla configurazione di output GELF per la comunicazione con il \textit{Sensitive Data Detector} e all'impostazione di pipeline con regole regex per l'identificazione rapida di pattern comuni.
 
 Il codice completo dello script è disponibile nell'appendice \refwithpage{lst:code_graylog_script}.
-\todo{TODO aggiungere script graylog in appendice}
 
 \subsection{Docker}
 \label{subsec:docker}
@@ -621,7 +620,6 @@ La configurazione Docker Compose definisce un ambiente completo che include:
 \end{itemize}
 
 Il codice completo della configurazione del container è disponibile nell'appendice \refwithpage{lst:code_container_config}.
-\todo{TODO aggiungere script graylog in appendice}
 
 \subsubsection{Configurazione di rete e persistenza}
 L'ambiente Docker implementa:
@@ -1431,6 +1429,29 @@ language=Python,
 literate={è}{{\`e}}1 {à}{{\`a}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {ì}{{\`i}}1
 ]{"../modelfiles/sensitive-data-detector-BASE.modelfile"}
 \todo{sistemare testo che esce dai confini del box}
+
+\clearpage
+
+\section{Script di configurazione GrayLog}
+\label{sec:code_graylog_script}
+
+\lstinputlisting[
+caption=Script Python per la configurazione automatica di GrayLog,
+label=lst:code_graylog_script,
+language=Python,
+literate={è}{{\`e}}1 {à}{{\`a}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {ì}{{\`i}}1
+]{"../graylog docker/graylog_setup.py"}
+
+\clearpage
+
+\section{Configurazione Docker Compose}
+\label{sec:code_container_config}
+
+\lstinputlisting[
+caption=File Docker Compose per l'ambiente di test con GrayLog,
+label=lst:code_container_config,
+literate={è}{{\`e}}1 {à}{{\`a}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {ì}{{\`i}}1
+]{"../graylog docker/docker-compose.yml"}
 
 
 %

@@ -1,7 +1,7 @@
-'''
+"""
 Script che chiama il modello llama3 (4.7 GB) tramite le API REST ollama e cerca di estrarre tutti i dati privati presenti
 in un estratto dei log.
-'''
+"""
 import datetime
 import os
 import sys

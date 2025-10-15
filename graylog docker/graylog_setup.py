@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-'''
+"""
 Script per automatizzare la configurazione di Graylog usando le API REST.
 Questo script:
 1. Crea input TCP per l'acquisizione dei log
 2. Crea stream per l'elaborazione
 3. Crea regole pipeline per il matching delle regex
 4. Collega tutti i componenti tra loro
-'''
+"""
 
 import requests
 import time
@@ -211,9 +211,6 @@ def main():
         # Crea gli input
         input_log = setup.create_input('Raw tcp 5555: input log', 5555)
         input_sensitive = setup.create_input('Raw tcp 5556: input segnalazioni log sensibili', 5556)
-
-        # Attende che gli input siano pronti
-        # time.sleep(2)
 
         # Crea gli stream
         stream_log = setup.create_stream(
