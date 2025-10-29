@@ -555,7 +555,7 @@ Il prompt di sistema incorpora linee guida specifiche per:
     \item Formato di output standardizzato per facilità di parsing
 \end{itemize}
 
-Per ulteriori dettagli riguardanti i \textit{Modelfile} e la configurazione dei LLM si rimanda alla sezione \refwithpage{subsec:ver2_prompt_engineering}.
+Per ulteriori dettagli riguardanti i \textit{Modelfile} e la configurazione dei LLM si rimanda alla sezione \refwithpage{subsubsec:ver2_prompt_engineering}.
 
 
 \section{Codice}
@@ -677,8 +677,8 @@ Ulteriori dettagli sono disponibili nella sezione \refwithpage{sec:ver3}.
 La prima versione del \textit{Sensitive Data Detector} rappresenta un proof of concept sviluppato per dimostrare la fattibilità dell'utilizzo di Large Language Models nell'identificazione automatica di dati sensibili all'interno dei file di log. \\
 Questa versione costituisce la base concettuale dell'intero progetto, implementando un approccio diretto e semplificato per l'analisi di file di log di dimensioni contenute.
 
-\subsection{Obiettivi e scopo}
-\label{subsec:ver1_obiettivi}
+\subsubsection{Obiettivi e scopo}
+\label{subsubsec:ver1_obiettivi}
 
 L'obiettivo principale di questa prima implementazione è verificare l'efficacia dei modelli LLM nell'identificazione di informazioni sensibili presenti nei log di sistema. La versione si concentra sull'analisi di file di log pre-esistenti, utilizzando un approccio batch che processa il contenuto in modo sequenziale.
 
@@ -690,8 +690,8 @@ Il sistema è progettato per riconoscere diverse tipologie di dati sensibili, tr
     \item Chiavi crittografiche e certificati
 \end{itemize}
 
-\subsection{Architettura e funzionamento}
-\label{subsec:ver1_architettura}
+\subsubsection{Architettura e funzionamento}
+\label{subsubsec:ver1_architettura}
 
 Il sistema è implementato tramite linguaggio Python e utilizza la libreria \texttt{ollama}\footnote{\texttt{ollama} \url{https://pypi.org/project/ollama}} per interfacciarsi con diversi modelli LLM tramite API REST. L'architettura segue un paradigma client-server dove lo script Python agisce come client che invia richieste al server Ollama locale. L'implementazione completa è disponibile nell'appendice \refwithpage{lst:code_ver1}.
 
@@ -705,13 +705,13 @@ Il flusso di elaborazione si articola nelle seguenti fasi:
     \item \textbf{Salvataggio output}: I risultati vengono salvati in file per consentire tracciabilità e analisi successive
 \end{enumerate}
 
-\subsection{Gestione del context window}
-\label{subsec:ver1_context_window}
+\subsubsection{Gestione del context window}
+\label{subsubsec:ver1_context_window}
 
 Un aspetto critico dell'implementazione riguarda la gestione del context window limitato dei modelli LLM. Il sistema implementa due strategie principali: \textbf{Segmentazione dei dati}, in cui i file di log vengono suddivisi in blocchi di dimensioni adattive basate sulle capacità del modello, e \textbf{Ripristino periodico della conversazione}, per cui, dopo un numero predefinito di messaggi, la cronologia della chat viene ripristinata per evitare il superamento dei limiti di token. Questo approccio garantisce che il modello mantenga sempre accesso al prompt iniziale e alle linee guida per l'identificazione dei dati sensibili.
 
-\subsection{Prompt engineering}
-\label{subsec:ver1_prompt_engineering}
+\subsubsection{Prompt engineering}
+\label{subsubsec:ver1_prompt_engineering}
 
 Il prompt di sistema è stato progettato per guidare il modello nell'identificazione precisa dei dati sensibili, fornendo:
 
@@ -726,8 +726,8 @@ Il prompt di sistema è stato progettato per guidare il modello nell'identificaz
 Il prompt include inoltre istruzioni per la gestione di oggetti JSON, richiedendo al modello di estrarre solo i dati sensibili contenuti all'interno di essi e non l'intero oggetto. \\
 Il prompt completo è disponibile nell'appendice \refwithpage{lst:prompt_ver1}.
 
-\subsection{Modelli supportati e configurazione}
-\label{subsec:ver1_modelli_supportati}
+\subsubsection{Modelli supportati e configurazione}
+\label{subsubsec:ver1_modelli_supportati}
 
 La prima versione supporta cinque diversi modelli LLM, ognuno con parametri di configurazione ottimizzati, come mostrato nella tabella \refwithpage{tab:modelli_llm_ver1}.
 
@@ -751,8 +751,8 @@ La prima versione supporta cinque diversi modelli LLM, ognuno con parametri di c
 
 La distinzione dei parametri riflette le diverse capacità computazionali e di context window dei modelli. I modelli più grandi (70B parametri) possono processare blocchi più ampi di dati e mantenere conversazioni più lunghe prima del ripristino del contesto.
 
-\subsection{Output e tracciabilità}
-\label{subsec:ver1_output}
+\subsubsection{Output e tracciabilità}
+\label{subsubsec:ver1_output}
 
 Il sistema genera file di output timestampati che includono:
 \begin{itemize}
@@ -764,8 +764,8 @@ Il sistema genera file di output timestampati che includono:
 
 Questa struttura consente la tracciabilità completa del processo di analisi e facilita il confronto tra diversi modelli e configurazioni.
 
-\subsection{Limitazioni della versione}
-\label{subsec:ver1_limitazioni}
+\subsubsection{Limitazioni della versione}
+\label{subsubsec:ver1_limitazioni}
 
 La prima versione presenta alcune limitazioni significative:
 
@@ -784,8 +784,8 @@ La seconda versione del \textit{Sensitive Data Detector} rappresenta un'evoluzio
 
 Questa versione si concentra sull'elaborazione efficiente di file di log di dimensioni maggiori tramite streaming delle righe e implementa metriche di valutazione quantitative.
 
-\subsection{Obiettivi e scopo}
-\label{subsec:ver2_obiettivi}
+\subsubsection{Obiettivi e scopo}
+\label{subsubsec:ver2_obiettivi}
 
 L'obiettivo principale di questa seconda implementazione è duplice: da un lato migliorare la scalabilità del sistema per gestire volumi di log più elevati, dall'altro introdurre un framework di valutazione automatica per misurare obiettivamente le performance dei modelli LLM.
 
@@ -797,8 +797,8 @@ La versione introduce diversi miglioramenti sostanziali:
     \item Calcolo di metriche di classificazione binaria (veri/falsi positivi/negativi e accuratezza)
 \end{itemize}
 
-\subsection{Architettura e funzionamento}
-\label{subsec:ver2_architettura}
+\subsubsection{Architettura e funzionamento}
+\label{subsubsec:ver2_architettura}
 
 L'architettura della seconda versione mantiene il paradigma client-server della versione precedente e al contempo introduce ottimizzazioni nel flusso di elaborazione. \\
 Il sistema utilizza modelli LLM personalizzati creati tramite \textit{Modelfile}, una funzionalità di Ollama, che incorporano prompt specifici e configurazioni ottimizzate per l'identificazione di dati sensibili.\\
@@ -817,8 +817,8 @@ Il flusso di elaborazione ottimizzato si articola nelle seguenti fasi:
     \item \textbf{Gestione della memoria}: Il contesto viene ripristinato periodicamente per mantenere performance ottimali indefinitamente, anche su file di log di grandi dimensioni
 \end{enumerate}
 
-\subsection{Prompt engineering}
-\label{subsec:ver2_prompt_engineering}
+\subsubsection{Prompt engineering}
+\label{subsubsec:ver2_prompt_engineering}
 
 La seconda versione introduce un approccio di prompt engineering più sofisticato attraverso l'utilizzo di modelli personalizzati. \\
 A differenza della prima versione, dove il prompt veniva inviato ad ogni interazione, i modelli personalizzati incorporano le istruzioni direttamente nella loro configurazione tramite \textit{Modelfile}, una funzionalità di Ollama.
@@ -833,8 +833,8 @@ Questa strategia offre diversi vantaggi:
 
 Il sistema implementa anche un meccanismo di post-processing per gestire le risposte dei modelli reasoning, rimuovendo automaticamente i tag \texttt{<think>...</think>} che contengono il processo di ragionamento interno del modello, considerando solamente la risposta finale.
 
-\subsection{Modelli supportati e configurazione}
-\label{subsec:ver2_modelli_supportati}
+\subsubsection{Modelli supportati e configurazione}
+\label{subsubsec:ver2_modelli_supportati}
 
 La seconda versione espande significativamente il supporto per diversi modelli LLM, introducendo nove modelli personalizzati ottimizzati specificamente per l'identificazione di dati sensibili. \\
 Tutti i modelli condividono una configurazione unificata ottimizzata per l'elaborazione sequenziale di singole righe di log, come mostrato nella tabella \refwithpage{tab:modelli_llm_ver2}.
@@ -863,8 +863,8 @@ A differenza della prima versione, tutti i modelli utilizzano una configurazione
 Inoltre, l'elaborazione di singole righe consente una valutazione immediata dell'accuratezza delle classificazioni prodotte dal modello.
 \todo{TODO spiegare che gestendo una riga alla volta si ottiene una risposta "decisa" dall'LLM per ogni singola riga. Mandando più righe alla volta bisogna parsare la risposta per capire quali righe l'LLM reputa sensibili. Inoltre aumenta il rischio che l'LLM non risponda correttamente o che salti qualche riga}
 
-\subsection{Output e tracciabilità}
-\label{subsec:ver2_output}
+\subsubsection{Output e tracciabilità}
+\label{subsubsec:ver2_output}
 
 La seconda versione introduce un sistema di output e tracciabilità migliorato, con particolare focus sulle metriche di valutazione quantitative. Il sistema genera report dettagliati che includono sia le informazioni di base dell'esecuzione che analisi statistiche delle performance di classificazione.
 
@@ -895,8 +895,8 @@ I file di output contengono le seguenti informazioni:
 Il sistema calcola e visualizza in tempo reale le metriche di performance durante l'elaborazione, fornendo feedback immediato sull'efficacia del modello. \\
 Questa funzionalità è particolarmente utile per confronti comparativi tra diversi modelli e per l'ottimizzazione dei parametri di configurazione.
 
-\subsection{Limitazioni della versione}
-\label{subsec:ver2_limitazioni}
+\subsubsection{Limitazioni della versione}
+\label{subsubsec:ver2_limitazioni}
 
 Nonostante i significativi miglioramenti rispetto alla prima versione, la seconda implementazione presenta ancora alcune limitazioni che hanno guidato lo sviluppo della versione successiva:
 
@@ -915,8 +915,8 @@ La terza versione del \textit{Sensitive Data Detector} rappresenta l'evoluzione 
 Questa versione si interfaccia direttamente con GrayLog, creando un sistema \\
 end-to-end per il monitoraggio continuo dei log.
 
-\subsection{Obiettivi e scopo}
-\label{subsec:ver3_obiettivi}
+\subsubsection{Obiettivi e scopo}
+\label{subsubsec:ver3_obiettivi}
 
 L'obiettivo principale della terza versione è fornire una soluzione pronta per il rilascio in produzione per l'identificazione automatica di dati sensibili in ambienti operativi reali. Questa implementazione affronta le principali limitazioni delle versioni precedenti, introducendo:
 
@@ -928,8 +928,8 @@ L'obiettivo principale della terza versione è fornire una soluzione pronta per 
     \item \textbf{Configurazione centralizzata}: Gestione unificata di input, processing pipeline e output attraverso l'interfaccia GrayLog
 \end{itemize}
 
-\subsection{Architettura e funzionamento}
-\label{subsec:ver3_architettura}
+\subsubsection{Architettura e funzionamento}
+\label{subsubsec:ver3_architettura}
 
 L'architettura della terza versione introduce un cambio del paradigma rispetto alle versioni precedenti, passando da un modello client-server a un sistema basato su stream processing. Il sistema opera come un micro-servizio che si posiziona tra GrayLog e i modelli LLM, fungendo da ponte per l'analisi dei log. \\
 L'implementazione completa è disponibile nell'appendice \refwithpage{lst:code_ver3}.
@@ -949,8 +949,8 @@ La comunicazione avviene tramite protocollo GELF, che garantisce la preservazion
 
 \todo{TODO: esempio di messaggio GELF (vedere se magari spostare in capitolo 4)}
 
-\subsection{Integrazione con GrayLog}
-\label{subsec:ver3_integrazione}
+\subsubsection{Integrazione con GrayLog}
+\label{subsubsec:ver3_integrazione}
 
 L'integrazione con GrayLog avviene attraverso una configurazione di input, stream e output che crea un pipeline completo di elaborazione:
 
@@ -963,16 +963,16 @@ L'integrazione con GrayLog avviene attraverso una configurazione di input, strea
 
 Questa architettura permette di mantenere separati i log originali dalle notifiche di sicurezza, facilitando la creazione di dashboard specializzate e la configurazione di alert specifici per la conformità ai regolamenti sulla privacy.
 
-\subsection{Modelli supportati e configurazione}
-\label{subsec:ver3_modelli_supportati}
+\subsubsection{Modelli supportati e configurazione}
+\label{subsubsec:ver3_modelli_supportati}
 
 La terza versione eredita il supporto completo per tutti i modelli personalizzati della versione precedente, mantenendo la stessa configurazione unificata e ottimizzata per l'elaborazione in tempo reale, come mostrato nella tabella \refwithpage{tab:modelli_llm_ver2}.
 
 La configurazione real-time mantiene l'elaborazione di un messaggio per volta per semplificare il processo di rilevazione della correttezza delle risposte. \\
 L'analisi di un messaggio alla volta permette inoltre di ottimizzare la latenza di risposta, aspetto critico in ambienti di produzione dove la velocità di identificazione delle vulnerabilità può essere determinante per la sicurezza del sistema.
 
-\subsection{Programmazione asincrona e scalabilità}
-\label{subsec:ver3_asincrona}
+\subsubsection{Programmazione asincrona e scalabilità}
+\label{subsubsec:ver3_asincrona}
 
 La terza versione introduce l'uso di programmazione asincrona tramite \texttt{asyncio}, permettendo la gestione concorrente di multiple connessioni senza bloccare l'elaborazione. Questa architettura offre diversi vantaggi:
 
@@ -983,8 +983,8 @@ La terza versione introduce l'uso di programmazione asincrona tramite \texttt{as
     \item \textbf{Scalabilità orizzontale}: Possibilità di deployment di multiple istanze per load balancing
 \end{itemize}
 
-\subsection{Output e tracciabilità}
-\label{subsec:ver3_output}
+\subsubsection{Output e tracciabilità}
+\label{subsubsec:ver3_output}
 
 Il sistema di output della terza versione è progettato per l'integrazione operativa, producendo messaggi strutturati che vengono inviati direttamente in GrayLog:
 
@@ -998,8 +998,8 @@ Il sistema di output della terza versione è progettato per l'integrazione opera
 Le notifiche seguono il formato: \\
 \texttt{<log\_id>: <tipo\_dato\_sensibile> <contenuto\_identificato>}, facilitando la correlazione con i log originali e l'automazione delle azioni correttive.
 
-\subsection{Limitazioni e considerazioni operative}
-\label{subsec:ver3_limitazioni}
+\subsubsection{Limitazioni e considerazioni operative}
+\label{subsubsec:ver3_limitazioni}
 
 Nonostante rappresenti una soluzione pronta per ambienti di produzione, la terza versione presenta alcune considerazioni operative importanti:
 
@@ -1008,7 +1008,7 @@ Nonostante rappresenti una soluzione pronta per ambienti di produzione, la terza
     \item \textbf{Latenza variabile}: I tempi di risposta dipendono dalle performance dell'LLM selezionato e dal carico del sistema
     \item \textbf{Gestione degli errori}: Le interruzioni di connessione con Ollama causano terminazione del servizio
     \item \textbf{Scalabilità verticale}: Le performance sono limitate dalle risorse hardware disponibili per l'inferenza dell'LLM
-    \item \textbf{Utilizzo di modelli personalizzati}: Sebbene i modelli personalizzati migliorino significativamente le performance rispetto ai modelli base, il sistema non utilizza tecniche di \textit{fine-tuning} avanzate come LoRA\footnote{LoRA (Low-Rank Adaptation) è una tecnica di fine-tuning efficiente che modifica solo un sottoinsieme dei parametri del modello e permette di creare un nuovo LLM a partire da uno già addestrato.}, che rappresenterebbe la soluzione ottimale per l'adattamento specifico al dominio dei log. Per ulteriori dettagli, si rimanda alla sezione \refwithpage{subsec:addestramento_lora}
+    \item \textbf{Utilizzo di modelli personalizzati}: Sebbene i modelli personalizzati migliorino significativamente le performance rispetto ai modelli base, il sistema non utilizza tecniche di \textit{fine-tuning} avanzate come LoRA\footnote{LoRA (Low-Rank Adaptation) è una tecnica di fine-tuning efficiente che modifica solo un sottoinsieme dei parametri del modello e permette di creare un nuovo LLM a partire da uno già addestrato.}, che rappresenterebbe la soluzione ottimale per l'adattamento specifico al dominio dei log. Per ulteriori dettagli, si rimanda alla sezione \refwithpage{subsubsec:addestramento_lora}
 \end{itemize}
 
 Queste limitazioni, pur non compromettendo l'utilità operativa del sistema, rappresentano aree di miglioramento e suggeriscono direzioni per sviluppi futuri del progetto.
@@ -1033,8 +1033,8 @@ Inoltre, l'integrazione con sistemi reali introduce variabili ambientali non con
 
 La metodologia di test si è evoluta significativamente tra le due versioni principali del sistema, passando da un approccio qualitativo basato su osservazione manuale a un sistema quantitativo automatizzato.
 
-\subsection{Versione 1: Testing esplorativo}
-\label{subsec:metodologia_v1}
+\subsubsection{Versione 1: Testing esplorativo}
+\label{subsubsec:metodologia_v1}
 
 La prima versione ha utilizzato un approccio esplorativo per validare la fattibilità dell'utilizzo di Large Language Models nell'identificazione di dati sensibili. Il testing si è concentrato su:
 
@@ -1047,8 +1047,8 @@ La prima versione ha utilizzato un approccio esplorativo per validare la fattibi
 
 L'approccio della prima versione ha evidenziato problematiche critiche legate alla gestione del context window limitato dei modelli LLM, portando allo sviluppo di strategie di segmentazione e ripristino delle conversazioni.
 
-\subsection{Versione 2: Testing quantitativo}
-\label{subsec:metodologia_v2}
+\subsubsection{Versione 2: Testing quantitativo}
+\label{subsubsec:metodologia_v2}
 
 La seconda versione ha introdotto un framework di testing quantitativo basato su ground truth annotato manualmente. La metodologia include:
 
@@ -1066,8 +1066,8 @@ Questa evoluzione metodologica ha permesso un confronto oggettivo e riproducibil
 
 Il sistema di valutazione utilizza metriche standard di classificazione binaria, adattate al contesto specifico dell'identificazione di dati sensibili nei log.
 
-\subsection{Metriche primarie}
-\label{subsec:metriche_primarie}
+\subsubsection{Metriche primarie}
+\label{subsubsec:metriche_primarie}
 
 Le metriche principali utilizzate per la valutazione sono elencate nella tabella \refwithpage{tab:metriche_primarie}.
 
@@ -1090,8 +1090,8 @@ Le metriche principali utilizzate per la valutazione sono elencate nella tabella
     \label{tab:metriche_primarie}
 \end{table}
 
-\subsection{Metriche derivate}
-\label{subsec:metriche_derivate}
+\subsubsection{Metriche derivate}
+\label{subsubsec:metriche_derivate}
 
 Dalle metriche primarie vengono calcolate le percentuali elencate nella tabella \refwithpage{tab:metriche_derivate}.
 
@@ -1119,8 +1119,8 @@ Nel contesto applicativo, i falsi negativi rappresentano un rischio di sicurezza
 
 I test sono stati condotti su architettura Apple M1 Max (32 GB di memoria unificata, 32 GPU Core) utilizzando il framework Ollama per l'esecuzione locale dei modelli LLM.
 
-\subsection{Risultati Versione 1}
-\label{subsec:risultati_v1}
+\subsubsection{Risultati Versione 1}
+\label{subsubsec:risultati_v1}
 
 La prima versione ha fornito risultati promettenti ma ha evidenziato significative limitazioni hardware, come mostrato nella tabella \refwithpage{tab:risultati_v1}.
 
@@ -1149,8 +1149,8 @@ I risultati mostrano che:
     \item I modelli più grandi (70b+ parametri) superano i limiti hardware disponibili
 \end{itemize}
 
-\subsection{Risultati Versione 2}
-\label{subsec:risultati_v2}
+\subsubsection{Risultati Versione 2}
+\label{subsubsec:risultati_v2}
 
 La seconda versione ha introdotto metriche quantitative precise permettendo un confronto sistematico, come mostrato nella tabella \refwithpage{tab:risultati_v2} e il grafico \refwithpage{fig:grafico_risultati_v2}.
 
@@ -1233,8 +1233,8 @@ La seconda versione ha introdotto metriche quantitative precise permettendo un c
 \end{figure}
 
 
-\subsection{Confronto dei modelli LLM utilizzati}
-\label{sec:confronto_modelli}
+\subsubsection{Confronto dei modelli LLM utilizzati}
+\label{subsubsec:confronto_modelli}
 
 \subsubsection{Modelli ad alte performance}
 I modelli che hanno mostrato le migliori performance complessive sono:
@@ -1253,8 +1253,8 @@ Alcuni modelli hanno mostrato comportamenti problematici:
     \item \textbf{Mistral-nemo:12b}: Performance mediocri nonostante le dimensioni maggiori
 \end{itemize}
 
-\subsection{Modelli reasoning}
-\label{subsec:modelli_reasoning}
+\subsubsection{Modelli reasoning}
+\label{subsubsec:modelli_reasoning}
 
 Alcuni modelli testati includono capacità di reasoning avanzate, utilizzando tag speciali per mostrare il processo di ragionamento interno. I modelli DeepSeek R1 (7B e 8B) utilizzano tag \texttt{<think>...</think>} per visualizzare il ragionamento prima della risposta finale.
 
@@ -1263,8 +1263,8 @@ Il sistema implementa un meccanismo di post-processing per rimuovere automaticam
 \section{Analisi delle performance}
 \label{sec:analisi_performance}
 
-\subsection{Relazione dimensioni-accuratezza}
-\label{subsec:relazione_dimensioni_accuratezza}
+\subsubsection{Relazione dimensioni-accuratezza}
+\label{subsubsec:relazione_dimensioni_accuratezza}
 
 L'analisi delle performance evidenzia diversi fattori critici per l'efficacia del sistema.
 
@@ -1275,13 +1275,15 @@ Contrariamente alle aspettative, i modelli più grandi non sempre offrono perfor
     \item La qualità del fine-tuning sembra essere più importante delle dimensioni del modello
 \end{itemize}
 
-\subsection{Efficienza computazionale}
-\label{subsec:efficienza_computazionale}
+\subsubsection{Efficienza computazionale}
+\label{subsubsec:efficienza_computazionale}
 
 I risultati mostrano variazioni significative nell'efficienza computazionale. In particolare, modelli come Llama3.2:3b, Qwen2.5:7b e Gemma3:4b completano l'elaborazione di 100 righe in meno di due minuti, mentre Mistral:7b richiede oltre sei minuti per lo stesso carico. Da ciò si evince che una maggiore velocità non si traduce necessariamente in minore accuratezza.
 \todo{TODO aggiungere più confronti}
 
-\todosubsection{Limitazioni hardware}{subsec:limitazioni_hardware}{Rivalutare in seguito a test con altro hw}
+\subsubsection{Limitazioni hardware}
+\label{subsubsec:limitazioni_hardware}
+\todo{TODO Rivalutare in seguito a test con altro hw}
 
 L'hardware utilizzato (Apple M1 Max, 32GB RAM) ha posto vincoli significativi:
 \begin{itemize}
@@ -1307,8 +1309,8 @@ Questo progesso ci ha permesso di confermare l'utilizzo di LLM per l'identificaz
 \section{Sviluppi futuri}
 \label{sec:sviluppi_futuri}
 
-\subsection{Addestramento di LoRA}
-\label{subsec:addestramento_lora}
+\subsubsection{Addestramento di LoRA}
+\label{subsubsec:addestramento_lora}
 
 LoRA (Low-Rank Adaptation) è una tecnica di fine-tuning efficiente che modifica solo un sottoinsieme dei parametri del modello e permette di creare un nuovo LLM a partire da uno già addestrato.
 
@@ -1317,8 +1319,8 @@ Tramite questa tecnica è possibile addestrare un modello per un dominio specifi
 In seguito a un periodo prolungato di utilizzo del sistema in ambiente di produzione e di raccolta sistematica dei dati e dei report generati, sarebbe possibile utilizzare questi dati come dataset di training per addestrare un LoRA specificamente ottimizzato per questo caso d'uso. \\
 Il fine-tuning potrebbe partire da uno dei modelli LLM attualmente utilizzati che ha dimostrato le performance migliori durante la fase di testing.
 
-\subsection{Integrazione con altri sistemi}
-\label{subsec:integrazione_sistemi}
+\subsubsection{Integrazione con altri sistemi}
+\label{subsubsec:integrazione_sistemi}
 
 La versione finale del progetto è stata sviluppata specificamente per l'integrazione con GrayLog e lo script di setup dell'ambiente è stato scritto per interagire con questa piattaforma. \\
 Un possibile sviluppo futuro consiste nella generalizzazione delle integrazioni attraverso lo sviluppo di un protocollo standard che consenta la creazione di adattatori modulari per diversi sistemi di gestione dei log.
