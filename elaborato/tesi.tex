@@ -1233,6 +1233,22 @@ Questa evoluzione permetterebbe di:
 
 Un protocollo di integrazione standardizzato ridurrebbe significativamente la complessità di deployment e aumenterebbe l'adozione del sistema in contesti operativi diversificati.
 
+\subsubsection{Rassegna delle alternative a GrayLog}
+\label{subsubsec:alternative_graylog}
+
+Tra le alternative più rilevanti si distinguono diverse categorie di strumenti.\\
+\textbf{SigNoz}\footnote{SigNoz \url{https://signoz.io}} rappresenta una soluzione moderna open source focalizzata sull'osservabilità completa, offrendo un pannello unificato per visualizzare traces, metriche e log provenienti da OpenTelemetry. Utilizza ClickHouse\footnote{ClickHouse \url{https://clickhouse.com}} come database per garantire performance elevate e supporta l'ingestione di dati da oltre 50 sorgenti diverse, rendendolo particolarmente adatto ad ambienti cloud-native dove l'integrazione con standard aperti è prioritaria. La piattaforma offre inoltre correlazione automatica tra i diversi segnali telemetrici per un debugging più efficace.
+
+\textbf{Logstash}\footnote{Logstash \url{https://www.elastic.co/logstash}} si configura come una pipeline di data processing server-side altamente flessibile con un framework estensibile che conta oltre 200 plugin. Il sistema implementa code persistenti per garantire delivery at-least-once degli eventi e supporta monitoraggio centralizzato delle pipeline attraverso un'interfaccia unificata, risultando ideale in scenari dove è necessaria una pre-elaborazione complessa dei dati.
+
+\textbf{FluentD}\footnote{FluentD \url{https://www.fluentd.org}} emerge come un data collector open source caratterizzato da un'architettura basata su plugin che conta oltre 500 estensioni disponibili. Progetto della Cloud Native Computing Foundation (CNCF)\footnote{CNCF \url{https://www.cncf.io}}, fornisce un layer di logging unificato che consente di raccogliere log da sorgenti eterogenee e inoltrarli a destinazioni multiple, disaccoppiando le sorgenti dati dai sistemi backend.
+
+\textbf{Syslog-ng}\footnote{Syslog-ng \url{https://www.syslog-ng.com}}, implementazione avanzata del protocollo syslog\footnote{Syslog è un protocollo standard per il logging di sistema definito dall'RFC 3164 (\url{https://datatracker.ietf.org/doc/html/rfc3164})}, fornisce funzionalità di raccolta, elaborazione e salvataggio dei log con particolare enfasi sulla compatibilità con sistemi legacy e sulla conformità agli standard di compliance.
+
+Infine, \textbf{Apache Flume}\footnote{Apache Flume \url{https://flume.apache.org}} si posiziona come un servizio distribuito specializzato nel raccoglimento, aggregazione e spostamento di grandi volumi di streaming event data attraverso un modello basato su data flows.
+
+L'integrazione del \textit{Sensitive Data Detector} con queste piattaforme alternative richiederebbe l'adattamento del layer di comunicazione e la definizione delle pipeline di elaborazione, mantenendo invariata la logica di analisi basata su LLM e regex.
+
 
 
 \chapter{da organizzare (TODO DA RIMUOVERE)}
@@ -1251,20 +1267,6 @@ Un protocollo di integrazione standardizzato ridurrebbe significativamente la co
     arx-deidentifier          & OSS per l'anonimizzazione di dati personali                                                                                                & FOSS offerto sia come sw completo che libreria Java. È stato sviluppato come ricerca universitaria e ha paper associati                                                                                       & Supporta solo dati tabulari                                                                                                                                                                                                                         \\ \hline
     loganalyzer               & FOSS software che trova e rimuove pattern pre-definiti da file di log                                                                      & Permette sia di rimuovere dati che di riportarli in un report, aiutando quindi la compilazione di un "punteggio" di sicurezza dei log. Scritto in C e quindi più veloce delle alternative in Angular o Python & Scritto in C, quindi il codice è più difficile da modificare. Non sembra essere offerto come libreria, quindi difficilmente integrabile in altri SW. Supporta solo ambienti grafici QT quindi la compilazione potrebbe dare problemi in base all'OS \\ \hline
 \end{tabular}
-
-\subsection*{Strumenti di raccoglimento e trattamento di log alternativi a Graylog}
-
-\begin{tabular}{|p{0.3\textwidth}|p{0.7\textwidth}|}
-    \hline
-    \textbf{Strumento} & \textbf{Descrizione}                                                                  \\ \hline
-    SigNoz             & Pannello per visualizzare traces, metriche e log di OpenTelemetry                     \\ \hline
-    Logstash           & Pipeline di data processing che permette di trasformare log in ingresso               \\ \hline
-    FluentD )          & Data collector da multiple sorgenti, OSS, supporta plugin                             \\ \hline
-    Syslog-ng          & Implementazione FOSS di syslog, raccoglie, elabora e salva log da multiple sorgenti   \\ \hline
-    Apache Flume       & Servizio per raccoglimento, aggregazione e spostamento di log. Basato su data streams \\ \hline
-\end{tabular}
-
-
 
 \clearpage
 
