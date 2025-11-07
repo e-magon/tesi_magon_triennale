@@ -655,13 +655,7 @@ Questa versione costituisce la base concettuale dell'intero progetto, implementa
 
 L'obiettivo principale di questa prima implementazione è verificare l'efficacia dei modelli LLM nell'identificazione di informazioni sensibili presenti nei log di sistema. La versione si concentra sull'analisi di file di log pre-esistenti, utilizzando un approccio batch che processa il contenuto in modo sequenziale.
 
-Il sistema è progettato per riconoscere diverse tipologie di dati sensibili, tra cui:
-\begin{itemize}
-    \item Informazioni personali identificabili (PII)
-    \item Credenziali di accesso e token di autenticazione
-    \item Indirizzi email e informazioni di contatto
-    \item Chiavi crittografiche e certificati
-\end{itemize}
+Il sistema è progettato per riconoscere diverse tipologie di dati sensibili, tra i quali \textbf{informazioni personali identificabili} come i PII, \textbf{credenziali di accesso e token di autenticazione}, \textbf{indirizzi email e informazioni di contatto}, e \textbf{chiavi crittografiche e certificati}.
 
 \subsubsection{Architettura e funzionamento}
 \label{subsubsec:ver1_architettura}
@@ -686,15 +680,7 @@ Un aspetto critico dell'implementazione riguarda la gestione del context window 
 \subsubsection{Prompt engineering}
 \label{subsubsec:ver1_prompt_engineering}
 
-Il prompt di sistema è stato progettato per guidare il modello nell'identificazione precisa dei dati sensibili, fornendo:
-
-\begin{itemize}
-    \item Definizioni chiare di cosa costituisce un dato sensibile
-    \item Esempi specifici di dati da identificare (token, credenziali, informazioni personali)
-    \item Esclusioni esplicite per dati non sensibili (username, ID, timestamp)
-    \item Formato di output strutturato in bullet point
-    \item Esempio pratico con input e output atteso
-\end{itemize}
+Il prompt di sistema è stato progettato per guidare il modello nell'identificazione precisa dei dati sensibili, fornendo \textbf{definizioni chiare} di cosa costituisce un dato sensibile, \textbf{esempi specifici} di dati da identificare come token, credenziali e informazioni personali, \textbf{esclusioni esplicite} per dati non sensibili (quali username, ID e timestamp), un \textbf{formato di output strutturato} in bullet point e un \textbf{esempio pratico} con input e output atteso.
 
 Il prompt include inoltre istruzioni per la gestione di oggetti JSON, richiedendo al modello di estrarre solo i dati sensibili contenuti all'interno di essi e non l'intero oggetto. \\
 Il prompt completo è disponibile nell'appendice \refwithpage{lst:prompt_ver1}.
@@ -722,31 +708,19 @@ La prima versione supporta cinque diversi modelli LLM, ognuno con parametri di c
 
 \todo{TODO spiegare che il numero di righe per messaggio e reset chat è stato deciso a tentativi, notando che tenendolo troppo alto gli LLM perdevano il prompt iniziale e quindi finivano a non rispettare più la richiesta originale Con riferimento a sottosezione subsec metodologia\_v1}
 
-La distinzione dei parametri riflette le diverse capacità computazionali e di context window dei modelli. I modelli più grandi (70B parametri) possono processare blocchi più ampi di dati e mantenere conversazioni più lunghe prima del ripristino del contesto.
+La distinzione dei parametri riflette le diverse capacità computazionali e di context window dei modelli. I modelli più grandi con 70 miliardi di parametri possono processare blocchi più ampi di dati e mantenere conversazioni più lunghe prima del ripristino del contesto.
 
 \subsubsection{Output e tracciabilità}
 \label{subsubsec:ver1_output}
 
-Il sistema genera file di output timestampati che includono:
-\begin{itemize}
-    \item Metadati dell'esecuzione (timestamp, modello utilizzato, file di log analizzato)
-    \item Prompt iniziale utilizzato
-    \item Risposte complete dell'LLM
-    \item Statistiche di elaborazione (righe processate, tempo di esecuzione)
-\end{itemize}
+Il sistema genera file di output timestampati che includono \textbf{metadati dell'esecuzione} come timestamp, modello utilizzato e file di log analizzato, il \textbf{prompt iniziale utilizzato}, le \textbf{risposte complete dell'LLM} e \textbf{statistiche di elaborazione} quali righe processate e tempo di esecuzione.
 
 Questa struttura consente la tracciabilità completa del processo di analisi e facilita il confronto tra diversi modelli e configurazioni.
 
 \subsubsection{Limitazioni della versione}
 \label{subsubsec:ver1_limitazioni}
 
-La prima versione presenta alcune limitazioni significative:
-
-\begin{itemize}
-    \item \textbf{Scalabilità limitata}: Il processamento batch sequenziale non è ottimale per file di log di grandi dimensioni
-    \item \textbf{Mancanza di integrazione real-time}: Il sistema opera solo su file pre-esistenti, senza capacità di elaborazione in tempo reale
-    \item \textbf{Assenza di metriche di valutazione}: Non sono implementati meccanismi automatici per valutare l'accuratezza delle identificazioni
-\end{itemize}
+La prima versione presenta alcune limitazioni che hanno orientato lo sviluppo delle versioni successive. La \textbf{scalabilità limitata} costituisce una criticità significativa, poiché il processamento batch sequenziale non è ottimale per file di log di grandi dimensioni. Inoltre, la \textbf{mancanza di integrazione real-time} rappresenta un vincolo funzionale rilevante, dato che il sistema opera esclusivamente su file pre-esistenti senza capacità di elaborazione in tempo reale. Infine, l'\textbf{assenza di metriche di valutazione} impedisce una valutazione oggettiva delle performance, non essendo implementati meccanismi automatici per misurare l'accuratezza delle identificazioni.
 
 Nonostante queste limitazioni, la prima versione ha fornito risultati promettenti che hanno giustificato lo sviluppo delle versioni successive più avanzate.
 
@@ -762,13 +736,7 @@ Questa versione si concentra sull'elaborazione efficiente di file di log di dime
 
 L'obiettivo principale di questa seconda implementazione è duplice: da un lato migliorare la scalabilità del sistema per gestire volumi di log più elevati, dall'altro introdurre un framework di valutazione automatica per misurare obiettivamente le performance dei modelli LLM.
 
-La versione introduce diversi miglioramenti sostanziali:
-\begin{itemize}
-    \item Elaborazione riga per riga per ottimizzare l'uso della memoria e semplificare il processo di rilevazione della correttezza delle risposte
-    \item Utilizzo di modelli personalizzati con prompt engineering avanzato
-    \item Sistema di ground truth per la valutazione automatica
-    \item Calcolo di metriche di classificazione binaria (veri/falsi positivi/negativi e accuratezza)
-\end{itemize}
+La versione introduce diversi miglioramenti sostanziali: l'\textbf{elaborazione riga per riga} per ottimizzare l'uso della memoria e semplificare il processo di rilevazione della correttezza delle risposte, l'\textbf{utilizzo di modelli personalizzati} con prompt engineering avanzato, un \textbf{sistema di ground truth} per la valutazione automatica e il \textbf{calcolo di metriche di classificazione binaria} quali veri/falsi positivi/negativi e accuratezza.
 
 \subsubsection{Architettura e funzionamento}
 \label{subsubsec:ver2_architettura}
@@ -794,15 +762,9 @@ Il flusso di elaborazione ottimizzato si articola nelle seguenti fasi:
 \label{subsubsec:ver2_prompt_engineering}
 
 La seconda versione introduce un approccio di prompt engineering più sofisticato attraverso l'utilizzo di modelli personalizzati. \\
-A differenza della prima versione, dove il prompt veniva inviato ad ogni interazione, i modelli personalizzati incorporano le istruzioni direttamente nella loro configurazione tramite \textit{Modelfile}, una funzionalità di Ollama.
+A differenza della prima versione, dove il prompt veniva inviato ad ogni interazione, i modelli personalizzati incorporano le istruzioni direttamente nella loro configurazione tramite \textit{Modelfile}.
 
-Questa strategia offre diversi vantaggi:
-\begin{itemize}
-    \item \textbf{Consistenza}: Il prompt è sempre presente nel contesto del modello, eliminando la variabilità dovuta alla gestione manuale
-    \item \textbf{Efficienza}: Riduzione della lunghezza dei messaggi inviati, ottimizzando l'utilizzo del context window
-    \item \textbf{Specializzazione}: Ogni modello può essere ottimizzato con prompt specifici per le sue caratteristiche architetturali
-    \item \textbf{Reasoning avanzato}: Supporto per modelli con capacità di reasoning che utilizzano tag speciali come \texttt{<think>}
-\end{itemize}
+Questa strategia offre vantaggi significativi: garantisce \textbf{consistenza} mantenendo il prompt sempre presente nel contesto del modello ed eliminando la variabilità dovuta alla gestione manuale, migliora l'\textbf{efficienza} riducendo la lunghezza dei messaggi inviati e ottimizzando l'utilizzo del context window, permette la \textbf{specializzazione} ottimizzando ogni modello con prompt specifici per le sue caratteristiche architetturali e supporta il \textbf{reasoning avanzato} per modelli con capacità di ragionamento che utilizzano tag speciali come \texttt{<think>}.
 
 Il sistema implementa anche un meccanismo di post-processing per gestire le risposte dei modelli reasoning, rimuovendo automaticamente i tag \texttt{<think>...</think>} che contengono il processo di ragionamento interno del modello, considerando solamente la risposta finale.
 
@@ -844,24 +806,24 @@ La seconda versione introduce un sistema di output e tracciabilità migliorato, 
 I file di output contengono le seguenti informazioni:
 \begin{itemize}
     \item \textbf{Metadati dell'esecuzione}:
-          \begin{itemize}
-              \item timestamp
-              \item modello utilizzato
-              \item file di log analizzato
-              \item numero totale di righe processate
-          \end{itemize}
+        \begin{itemize}
+            \item timestamp
+            \item modello utilizzato
+            \item file di log analizzato
+            \item numero totale di righe processate
+        \end{itemize}
     \item \textbf{Metriche di classificazione}:
-          \begin{itemize}
-              \item veri positivi
-              \item veri negativi
-              \item falsi positivi
-              \item falsi negativi
-          \end{itemize}
+        \begin{itemize}
+            \item veri positivi
+            \item veri negativi
+            \item falsi positivi
+            \item falsi negativi
+        \end{itemize}
     \item \textbf{Statistiche di accuratezza}:
-          \begin{itemize}
-              \item percentuale di risposte corrette
-              \item percentuale di risposte errate
-          \end{itemize}
+        \begin{itemize}
+            \item percentuale di risposte corrette
+            \item percentuale di risposte errate
+        \end{itemize}
     \item \textbf{Log dettagliato}: traccia completa di tutte le interazioni con l'LLM
 \end{itemize}
 
@@ -871,12 +833,9 @@ Questa funzionalità è particolarmente utile per confronti comparativi tra dive
 \subsubsection{Limitazioni della versione}
 \label{subsubsec:ver2_limitazioni}
 
-Nonostante i significativi miglioramenti rispetto alla prima versione, la seconda implementazione presenta ancora alcune limitazioni che hanno guidato lo sviluppo della versione successiva:
+Nonostante i significativi miglioramenti rispetto alla prima versione, la seconda implementazione presenta ancora alcune limitazioni che hanno guidato lo sviluppo della versione successiva.
 
-\begin{itemize}
-    \item \textbf{Dipendenza da dataset pre-annotati}: Il sistema di valutazione richiede file di log manualmente etichettati, limitando la scalabilità dell'approccio di testing
-    \item \textbf{Elaborazione offline}: Il sistema opera esclusivamente su file pre-esistenti, senza capacità di integrazione con sistemi di logging in tempo reale
-\end{itemize}
+La principale criticità riguarda la \textbf{dipendenza da dataset pre-annotati}, in quanto il sistema di valutazione richiede file di log manualmente etichettati, limitando la scalabilità dell'approccio di testing. Inoltre, la modalità di \textbf{elaborazione offline} rappresenta un vincolo significativo, poiché il sistema opera esclusivamente su file pre-esistenti senza capacità di integrazione con sistemi di logging in tempo reale.
 
 Queste limitazioni, sebbene non compromettano l'utilità della versione per scopi di ricerca e testing, evidenziano la necessità di un'integrazione più robusta con sistemi di produzione, obiettivo che viene affrontato nella terza versione del progetto.
 
@@ -891,15 +850,9 @@ end-to-end per il monitoraggio continuo dei log.
 \subsubsection{Obiettivi e scopo}
 \label{subsubsec:ver3_obiettivi}
 
-L'obiettivo principale della terza versione è fornire una soluzione pronta per il rilascio in produzione per l'identificazione automatica di dati sensibili in ambienti operativi reali. Questa implementazione affronta le principali limitazioni delle versioni precedenti, introducendo:
+L'obiettivo principale della terza versione è fornire una soluzione pronta per il rilascio in produzione per l'identificazione automatica di dati sensibili in ambienti operativi reali. Questa implementazione affronta le principali limitazioni delle versioni precedenti introducendo funzionalità chiave per contesti enterprise.
 
-\begin{itemize}
-    \item \textbf{Elaborazione in tempo reale}: Analisi immediata dei log non appena vengono generati dai sistemi
-    \item \textbf{Integrazione enterprise}: Interfacciamento nativo con GrayLog per inserimento immediato negli stack tecnologici esistenti
-    \item \textbf{Scalabilità operativa}: Architettura asincrona progettata per gestire volumi elevati di log in produzione
-    \item \textbf{Feedback loop}: Sistema di notifica automatica che rimanda i risultati delle analisi a GrayLog, in modo da poter visualizzare i risultati tramite un'interfaccia integrata
-    \item \textbf{Configurazione centralizzata}: Gestione unificata di input, processing pipeline e output attraverso l'interfaccia GrayLog
-\end{itemize}
+Il sistema implementa innanzitutto l'\textbf{elaborazione in tempo reale}, permettendo l'analisi immediata dei log non appena vengono generati dai sistemi. L'interfacciamento nativo con GrayLog consente l'inserimento immediato negli stack tecnologici esistenti, mentre l'architettura asincrona garantisce la \textbf{scalabilità operativa} necessaria per gestire volumi elevati di log in produzione. Il sistema include inoltre un \textbf{feedback loop} attraverso il quale i risultati delle analisi vengono automaticamente rimandati a GrayLog, permettendo di visualizzarli tramite interfaccia integrata. Infine, la \textbf{configurazione centralizzata} consente la gestione unificata di input, processing pipeline e output direttamente attraverso l'interfaccia GrayLog.
 
 \subsubsection{Architettura e funzionamento}
 \label{subsubsec:ver3_architettura}
@@ -925,7 +878,7 @@ La comunicazione avviene tramite protocollo GELF, che garantisce la preservazion
 \subsubsection{Integrazione con GrayLog}
 \label{subsubsec:ver3_integrazione}
 
-L'integrazione con GrayLog avviene attraverso una configurazione di input, stream e output che crea un pipeline completo di elaborazione:
+L'integrazione con GrayLog avviene attraverso una configurazione di input, stream e output che crea una pipeline completa di elaborazione:
 
 \begin{itemize}
     \item \textbf{Input \texttt{TCP 5555}}: Riceve i log originali dai sistemi sorgente
@@ -947,26 +900,16 @@ L'analisi di un messaggio alla volta permette inoltre di ottimizzare la latenza 
 \subsubsection{Programmazione asincrona e scalabilità}
 \label{subsubsec:ver3_asincrona}
 
-La terza versione introduce l'uso di programmazione asincrona tramite \texttt{asyncio}, permettendo la gestione concorrente di multiple connessioni senza bloccare l'elaborazione. Questa architettura offre diversi vantaggi:
+La terza versione introduce l'uso di programmazione asincrona tramite \texttt{asyncio}\footnote{\texttt{asyncio} \url{https://docs.python.org/3/library/asyncio.html}}, permettendo la gestione concorrente di multiple connessioni senza bloccare l'elaborazione. Questa architettura offre vantaggi significativi in termini di performance e affidabilità.
 
-\begin{itemize}
-    \item \textbf{Gestione concorrente}: Elaborazione parallela di log provenienti da fonti multiple
-    \item \textbf{Resilienza}: Isolamento degli errori per singola connessione senza impatto sul sistema globale
-    \item \textbf{Efficienza delle risorse}: Utilizzo ottimale della CPU attraverso I/O non bloccante
-    \item \textbf{Scalabilità orizzontale}: Possibilità di deployment di multiple istanze per load balancing
-\end{itemize}
+Il sistema implementa \textbf{gestione concorrente} per elaborazione parallela di log provenienti da fonti multiple, garantisce \textbf{resilienza} attraverso isolamento degli errori per singola connessione senza impatto sul sistema globale, ottimizza l'\textbf{efficienza delle risorse} mediante utilizzo ottimale della CPU attraverso I/O non bloccante, e permette \textbf{scalabilità orizzontale} con possibilità di deployment di multiple istanze per load balancing.
 
 \subsubsection{Output e tracciabilità}
 \label{subsubsec:ver3_output}
 
-Il sistema di output della terza versione è progettato per l'integrazione operativa, producendo messaggi strutturati che vengono inviati direttamente in GrayLog:
+Il sistema di output della terza versione è progettato per l'integrazione operativa, producendo messaggi strutturati che vengono inviati direttamente in GrayLog.
 
-\begin{itemize}
-    \item \textbf{Notifiche real-time}: Ogni identificazione di dato sensibile genera immediatamente una notifica a GrayLog
-    \item \textbf{Preservazione degli identificatori}: I risultati mantengono il collegamento con i log originali tramite ID univoci
-    \item \textbf{Formato standardizzato}: Output strutturato compatibile con pipeline di processing esistenti
-    \item \textbf{Logging delle operazioni}: Tracciatura completa delle operazioni per audit e debugging
-\end{itemize}
+Il sistema genera \textbf{notifiche real-time} in cui ogni identificazione di dato sensibile produce immediatamente una notifica a GrayLog, garantisce la \textbf{preservazione degli identificatori} mantenendo il collegamento con i log originali tramite ID univoci, utilizza un \textbf{formato standardizzato} con output strutturato compatibile con pipeline di processing esistenti e implementa il \textbf{logging delle operazioni} per tracciatura completa delle attività ai fini di audit e debugging.
 
 Le notifiche seguono il formato: \\
 \texttt{<log\_id>: <tipo\_dato\_sensibile> <contenuto\_identificato>}, facilitando la correlazione con i log originali e l'automazione delle azioni correttive.
@@ -974,15 +917,11 @@ Le notifiche seguono il formato: \\
 \subsubsection{Limitazioni e considerazioni operative}
 \label{subsubsec:ver3_limitazioni}
 
-Nonostante rappresenti una soluzione pronta per ambienti di produzione, la terza versione presenta alcune considerazioni operative importanti:
+Nonostante rappresenti una soluzione pronta per ambienti di produzione, la terza versione presenta alcune considerazioni operative importanti.
 
-\begin{itemize}
-    \item \textbf{Dipendenza da Ollama}: Il sistema richiede un'istanza Ollama sempre attiva, introducendo un \textit{single point of failure}
-    \item \textbf{Latenza variabile}: I tempi di risposta dipendono dalle performance dell'LLM selezionato e dal carico del sistema
-    \item \textbf{Gestione degli errori}: Le interruzioni di connessione con Ollama causano terminazione del servizio
-    \item \textbf{Scalabilità verticale}: Le performance sono limitate dalle risorse hardware disponibili per l'inferenza dell'LLM
-    \item \textbf{Utilizzo di modelli personalizzati}: Sebbene i modelli personalizzati migliorino significativamente le performance rispetto ai modelli base, il sistema non utilizza tecniche di \textit{fine-tuning} avanzate come LoRA\footnote{LoRA (Low-Rank Adaptation) è una tecnica di fine-tuning efficiente che modifica solo un sottoinsieme dei parametri del modello e permette di creare un nuovo LLM a partire da uno già addestrato.}, che rappresenterebbe la soluzione ottimale per l'adattamento specifico al dominio dei log. Per ulteriori dettagli, si rimanda alla sezione \refwithpage{subsubsec:addestramento_lora}
-\end{itemize}
+Il sistema è \textbf{dipendente da Ollama}, richiedendo un'istanza sempre attiva che introduce un \textit{single point of failure}. La \textbf{latenza variabile} rappresenta un'altra criticità, poiché i tempi di risposta dipendono dalle performance dell'LLM selezionato e dal carico del sistema. Inoltre, la \textbf{scalabilità verticale} è limitata dalle risorse hardware disponibili per l'inferenza dell'LLM.
+
+Relativamente all'\textbf{utilizzo di modelli personalizzati}, sebbene questi migliorino significativamente le performance rispetto ai modelli base, il sistema non utilizza tecniche di \textit{fine-tuning} avanzate come LoRA\footnote{LoRA (Low-Rank Adaptation) è una tecnica di fine-tuning efficiente che modifica solo un sottoinsieme dei parametri del modello e permette di creare un nuovo LLM a partire da uno già addestrato.}, che rappresenterebbe la soluzione ottimale per l'adattamento specifico al dominio dei log. Per ulteriori dettagli, si rimanda alla sezione \refwithpage{subsubsec:addestramento_lora}.
 
 Queste limitazioni, pur non compromettendo l'utilità operativa del sistema, rappresentano aree di miglioramento e suggeriscono direzioni per sviluppi futuri del progetto.
 
@@ -1009,28 +948,14 @@ La metodologia di test si è evoluta significativamente tra le due versioni prin
 \subsubsection{Versione 1: Testing esplorativo}
 \label{subsubsec:metodologia_v1}
 
-La prima versione ha utilizzato un approccio esplorativo per validare la fattibilità dell'utilizzo di Large Language Models nell'identificazione di dati sensibili. Il testing si è concentrato su:
-
-\begin{itemize}
-    \item \textbf{Analisi qualitativa delle risposte}: Ogni output del modello LLM veniva analizzato manualmente per identificare la presenza di falsi positivi e falsi negativi
-    \item \textbf{Ottimizzazione delle configurazioni}: Test di diverse combinazioni di parametri (righe per messaggio, messaggi per chat) per massimizzare l'efficacia
-    \item \textbf{Gestione delle limitazioni hardware}: Valutazione dei vincoli di memoria e performance sull'architettura hardware utilizzata
-    \item \textbf{Test di scalabilità}: Analisi del comportamento del sistema su dataset di dimensioni crescenti (100, 1000 righe)
-\end{itemize}
+La prima versione ha utilizzato un approccio esplorativo per validare la fattibilità dell'utilizzo di Large Language Models nell'identificazione di dati sensibili. Il testing si è concentrato sull'\textbf{analisi qualitativa delle risposte}, dove ogni output del modello LLM veniva analizzato manualmente per identificare la presenza di falsi positivi e falsi negativi. Parallelamente, sono stati condotti test di diverse combinazioni di parametri, come il numero di righe per messaggio e i messaggi per chat, per l'\textbf{ottimizzazione delle configurazioni} e massimizzare l'efficacia del sistema. La valutazione dei vincoli di memoria e performance sull'architettura hardware utilizzata ha permesso di \textbf{gestire le limitazioni hardware}, mentre l'analisi del comportamento del sistema su dataset di dimensioni crescenti (100 e 1000 righe) ha fornito indicazioni sulla \textbf{scalabilità} della soluzione.
 
 L'approccio della prima versione ha evidenziato problematiche critiche legate alla gestione del context window limitato dei modelli LLM, portando allo sviluppo di strategie di segmentazione e ripristino delle conversazioni.
 
 \subsubsection{Versione 2: Testing quantitativo}
 \label{subsubsec:metodologia_v2}
 
-La seconda versione ha introdotto un framework di testing quantitativo basato su ground truth annotato manualmente. La metodologia include:
-
-\begin{itemize}
-    \item \textbf{Preparazione del dataset}: Annotazione manuale di file di log con etichette binarie (Y/N) per ogni riga, indicando la presenza o assenza di dati sensibili
-    \item \textbf{Elaborazione automatizzata}: Implementazione di un sistema di confronto automatico tra le risposte del modello e il ground truth
-    \item \textbf{Calcolo delle metriche}: Calcolo real-time di veri positivi, veri negativi, falsi positivi e falsi negativi
-    \item \textbf{Test comparativi}: Valutazione sistematica di nove modelli LLM diversi con configurazioni standardizzate
-\end{itemize}
+La seconda versione ha introdotto un framework di testing quantitativo basato su ground truth annotato manualmente. La metodologia prevede innanzitutto la \textbf{preparazione del dataset} attraverso l'annotazione manuale di file di log con etichette binarie (Y/N) per ogni riga, indicando la presenza o assenza di dati sensibili. Successivamente, l'\textbf{elaborazione automatizzata} permette l'implementazione di un sistema di confronto automatico tra le risposte del modello e il ground truth, consentendo il \textbf{calcolo real-time delle metriche} di veri positivi, veri negativi, falsi positivi e falsi negativi. Infine, i \textbf{test comparativi} permettono la valutazione sistematica di modelli LLM differenti con configurazioni standardizzate.
 
 Questa evoluzione metodologica ha permesso un confronto oggettivo e riproducibile delle performance tra diversi modelli e configurazioni.
 
@@ -1299,12 +1224,12 @@ La versione finale del progetto è stata sviluppata specificamente per l'integra
 Un possibile sviluppo futuro consiste nella generalizzazione delle integrazioni attraverso lo sviluppo di un protocollo standard che consenta la creazione di adattatori modulari per diversi sistemi di gestione dei log.
 
 Questa evoluzione permetterebbe di:
-\begin{itemize}
+\begin{enumerate}
     \item Estendere la compatibilità del sistema a piattaforme alternative come Elasticsearch\footnote{Elasticsearch \url{https://www.elastic.co/elasticsearch}}, Splunk\footnote{Splunk \url{https://www.splunk.com}}, o Fluentd\footnote{Fluentd \url{https://www.fluentd.org}}
     \item Standardizzare le interfacce di comunicazione tra il sistema di analisi e i sistemi di logging
     \item Semplificare la distribuzione del sistema in ambienti enterprise eterogenei
     \item Migliorare la tracciabilità e la gestione delle notifiche attraverso un framework unificato
-\end{itemize}
+\end{enumerate}
 
 Un protocollo di integrazione standardizzato ridurrebbe significativamente la complessità di deployment e aumenterebbe l'adozione del sistema in contesti operativi diversificati.
 
