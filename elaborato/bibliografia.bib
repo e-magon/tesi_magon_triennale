@@ -6,11 +6,12 @@
 	journal={arXiv:2503.07137},
 	year={2025},
 	doi={10.48550/arXiv.2503.07137},
-	note={Version 3, last revised 18 Apr 2025}
+	note={Version 3, last revised 18 Apr 2025},
+	abstract={Artificial intelligence (AI) has achieved astonishing successes in many domains, especially with the recent breakthroughs in the development of foundational large models. These large models, leveraging their extensive training data, provide versatile solutions for a wide range of downstream tasks. However, as modern datasets become increasingly diverse and complex, the development of large AI models faces two major challenges: (1) the enormous consumption of computational resources and deployment difficulties, and (2) the difficulty in fitting heterogeneous and complex data, which limits the usability of the models. Mixture of Experts (MoE) models has recently attracted much attention in addressing these challenges, by dynamically selecting and activating the most relevant sub-models to process input data. It has been shown that MoEs can significantly improve model performance and efficiency with fewer resources, particularly excelling in handling large-scale, multimodal data. Given the tremendous potential MoE has demonstrated across various domains, it is urgent to provide a comprehensive summary of recent advancements of MoEs in many important fields. Existing surveys on MoE have their limitations, e.g., being outdated or lacking discussion on certain key areas, and we aim to address these gaps. In this paper, we first introduce the basic design of MoE, including gating functions, expert networks, routing mechanisms, training strategies, and system design. We then explore the algorithm design of MoE in important machine learning paradigms such as continual learning, meta-learning, multi-task learning, and reinforcement learning. Additionally, we summarize theoretical studies aimed at understanding MoE and review its applications in computer vision and natural language processing. Finally, we discuss promising future research directions.}
 }
 
 @misc{ibm_moe,
-  author = {Dave Bergmann},
+  author = {Bergmann, Dave},
 	title = {What is mixture of experts?},
 	howpublished = {\url{https://www.ibm.com/think/topics/mixture-of-experts}},
 	note = {Accessed: 2025-06-01}
@@ -23,6 +24,84 @@
 	note = {Accessed: 2025-06-01}
 }
 
+@inproceedings{shinde2018review_ml_dl,
+	title={A review of machine learning and deep learning applications},
+	author={Shinde, Pramila P and Shah, Seema},
+	booktitle={2018 Fourth International Conference on Computing Communication Control and Automation (ICCUBEA)},
+	year={2018},
+	organization={IEEE},
+	doi={10.1109/ICCUBEA.2018.8697857},
+	abstract={Machine learning is one of the fields in the modern computing world. A plenty of research has been undertaken to make machines intelligent. Learning is a natural human behavior which has been made an essential aspect of the machines as well. There are various techniques devised for the same. Traditional machine learning algorithms have been applied in many application areas. Researchers have put many efforts to improve the accuracy of that machinelearning algorithms. Another dimension was given thought which leads to deep learning concept. Deep learning is a subset of machine learning. So far few applications of deep learning have been explored. This is definitely going to cater to solving issues in several new application domains, sub-domains using deep learning. A review of these past and future application domains, sub-domains, and applications of machine learning and deep learning are illustrated in this paper.}
+}
+
+@article{ji2024adapting_llm_log,
+	title={Adapting Large Language Models to Log Analysis with Interpretable Domain Knowledge},
+	author={Ji, Yuhe and Liu, Yilun and Yao, Feiyu and He, Minggui and Tao, Shimin and Zhao, Xiaofeng and Chang, Su and Yang, Xinhua and Meng, Weibin and others},
+	journal={arXiv:2412.01377},
+	year={2024},
+	doi={10.48550/arXiv.2412.01377},
+	note={Accepted by CIKM 2025. Version 2, last revised 26 Aug 2025},
+	abstract={Log analysis represents a critical sub-domain within AI applications that facilitates automatic approaches to fault and error management of large-scaled software systems, saving labors of traditional manual methods. While existing solutions using large language models (LLMs) show promise, they are limited by a significant domain gap between natural and log languages (the latter contains rich domain-specific tokens such as status codes, IP addresses, resource pathes), which restricts their effectiveness in real-world applications. However, directly adapting general-purpose LLMs to log analysis using raw logs may degrade their performance due to inconsistent token distribution. In this paper, we present a domain adaptation approach that addresses these limitations by integrating interpretable domain knowledge into open-source LLMs through continual pre-training (CPT), which bridges this domain gap by adapting LLMs on interpretable natural texts with log knowledge (instead of raw logs) to reduce distribution discrepancy. To achieve this, we developed NLPLog, a comprehensive dataset containing over 250,000 question-answer pairs on log-related knowledge. Our resulting model, SuperLog, achieves the best performance across four log analysis tasks, with an average accuracy improvement of 12.01% over the second-best model. Ablation study also suggests advantages of domain adaption using interpretable log knowledge over using raw logs.}
+}
+
+@article{beck2025system_log_parsing,
+	title={System Log Parsing with Large Language Models: A Review},
+	author={Beck, Viktor and Landauer, Max and Wurzenberger, Markus and Skopik, Florian and Rauber, Andreas},
+	journal={arXiv:2504.04877},
+	year={2025},
+	doi={10.48550/arXiv.2504.04877},
+	note={Version 2, last revised 15 May 2025},
+	abstract={Log data provides crucial insights for tasks like monitoring, root cause analysis, and anomaly detection. Due to the vast volume of logs, automated log parsing is essential to transform semi-structured log messages into structured representations. Recent advances in large language models (LLMs) have introduced the new research field of LLM-based log parsing. Despite promising results, there is no structured overview of the approaches in this relatively new research field with the earliest advances published in late 2023. This work systematically reviews 29 LLM-based log parsing methods. We benchmark seven of them on public datasets and critically assess their comparability and the reproducibility of their reported results. Our findings summarize the advances of this new research field, with insights on how to report results, which data sets, metrics and which terminology to use, and which inconsistencies to avoid, with code and results made publicly available for transparency.}
+}
+
+@inproceedings{ma2024llmparser,
+	title={LLMParser: An Exploratory Study on Using Large Language Models for Log Parsing},
+	author={Ma, Zeyang and Chen, An Ran and Kim, Dong Jae and Chen, Tse-Hsun and Wang, Shaowei},
+	booktitle={Proceedings of the 46th International Conference on Software Engineering},
+	year={2024},
+	publisher={ACM},
+	doi={10.48550/arXiv.2404.18001},
+	abstract={Logs are important in modern software development with runtime information. Log parsing is the first step in many log-based analyses, that involve extracting structured information from unstructured log data. Traditional log parsers face challenges in accurately parsing logs due to the diversity of log formats, which directly impacts the performance of downstream log-analysis tasks. In this paper, we explore the potential of using Large Language Models (LLMs) for log parsing and propose LLMParser, an LLM-based log parser based on generative LLMs and few-shot tuning. We leverage four LLMs, Flan-T5-small, Flan-T5-base, LLaMA-7B, and ChatGLM-6B in LLMParsers. Our evaluation of 16 open-source systems shows that LLMParser achieves statistically significantly higher parsing accuracy than state-of-the-art parsers (a 96% average parsing accuracy). We further conduct a comprehensive empirical analysis on the effect of training size, model size, and pre-training LLM on log parsing accuracy. We find that smaller LLMs may be more effective than more complex LLMs; for instance where Flan-T5-base achieves comparable results as LLaMA-7B with a shorter inference time. We also find that using LLMs pre-trained using logs from other systems does not always improve parsing accuracy. While using pre-trained Flan-T5-base shows an improvement in accuracy, pre-trained LLaMA results in a decrease (decrease by almost 55% in group accuracy). In short, our study provides empirical evidence for using LLMs for log parsing and highlights the limitations and future research direction of LLM-based log parsers.
+}
+}
+
+@article{kostina2025llm_text_classification,
+	title={Large Language Models For Text Classification: Case Study And Comprehensive Review},
+	author={Kostina, Arina and Dikaiakos, Marios D. and Stefanidis, Dimosthenis and Pallis, George},
+	journal={arXiv:2501.08457},
+	year={2025},
+	doi={10.48550/arXiv.2501.08457},
+	note={Version 1, last revised 14 Jan 2025},
+	abstract={Unlocking the potential of Large Language Models (LLMs) in data classification represents a promising frontier in natural language processing. In this work, we evaluate the performance of different LLMs in comparison with state-of-the-art deep-learning and machine-learning models, in two different classification scenarios: i) the classification of employees' working locations based on job reviews posted online (multiclass classification), and 2) the classification of news articles as fake or not (binary classification). Our analysis encompasses a diverse range of language models differentiating in size, quantization, and architecture. We explore the impact of alternative prompting techniques and evaluate the models based on the weighted F1-score. Also, we examine the trade-off between performance (F1-score) and time (inference response time) for each language model to provide a more nuanced understanding of each model's practical applicability. Our work reveals significant variations in model responses based on the prompting strategies. We find that LLMs, particularly Llama3 and GPT-4, can outperform traditional methods in complex classification tasks, such as multiclass classification, though at the cost of longer inference times. In contrast, simpler ML models offer better performance-to-time trade-offs in simpler binary classification tasks.}
+}
+
+@article{elkhatiba2024performance_benchmarking,
+	title={Performance Benchmarking of Traditional Machine Learning and Transformer Models for Multi-Class Text Classification},
+	author={El Khatiba, Omar and Alkhatib, Nabeel},
+	journal={International Journal of Computer (IJC)},
+	volume={55},
+	number={1},
+	pages={102--116},
+	year={2025},
+	url={https://ijcjournal.org/InternationalJournalOfComputer/article/view/2404},
+	note={Published: 2025-07-14. Loyola University New Orleans},
+	abstract={Text classification is a fundamental task in natural language processing (NLP), widely applied in areas such as spam detection, sentiment analysis, and text categorization. This study presents a comparative analysis of three distinct machine learning paradigms—traditional machine learning algorithms (like Random Forest, XGBoost, support vector machine and Naive Bayes), a custom-built transformer architecture, and transfer learning or pre-trained transformer models (BERT, DistilBERT, RoBERTa, ELECTRA)—on the multi-class news classification dataset. While traditional models provided competitive baselines with up to 90.47% accuracy, modern transformer architecture surpassed them, achieving 91% accuracy when trained from scratch. The highest performance was observed with transfer learning using pre-trained models, where RoBERTa achieved 94.54% accuracy, DistillBERT achieved 94.32% accuracy, BERT achieved 94.07% accuracy and ELECTRA achieved 93.66%. These findings highlight the significance of contextual embeddings and large-scale pretraining in advancing text classification performance.}
+}
+
+@inproceedings{zhu2024can_llm_context,
+	title={Can Large Language Models Understand Context?},
+	author={Zhu, Yilun and Moniz, Joel Ruben Antony and Bhargava, Shruti and Lu, Jiarui and Piraviperumal, Dhivya and Li, Site and Zhang, Yuan and Yu, Hong and Tseng, Bo-Hsiang},
+	booktitle={Findings of the Association for Computational Linguistics: EACL 2024},
+	pages={2004--2018},
+	year={2024},
+	publisher={Association for Computational Linguistics},
+	address={St. Julian's, Malta},
+	url={https://aclanthology.org/2024.findings-eacl.135/},
+	abstract={Understanding context is key to understanding human language, an ability which Large Language Models (LLMs) have been increasingly seen to demonstrate to an impressive extent. However, though the evaluation of LLMs encompasses various domains within the realm of Natural Language Processing, limited attention has been paid to probing their linguistic capability of understanding contextual features. This paper introduces a context understanding benchmark by adapting existing datasets to suit the evaluation of generative models. This benchmark comprises of four distinct tasks and nine datasets, all featuring prompts designed to assess the models’ ability to understand context. First, we evaluate the performance of LLMs under the in-context learning pretraining scenario. Experimental results indicate that pre-trained dense models struggle with understanding more nuanced contextual features when compared to state-of-the-art fine-tuned models. Second, as LLM compression holds growing significance in both research and real-world applications, we assess the context understanding of quantized models under in-context-learning settings. We find that 3-bit post-training quantization leads to varying degrees of performance reduction on our benchmark. We conduct an extensive analysis of these scenarios to substantiate our experimental results.}
+}
+
+
+
 %%%%%%%%%% Esempi %%%%%%%%%%
 @article{esempio_articolo,
 	title={A multi-layered, time-based music description approach based on XML},
@@ -30,14 +109,13 @@
 	journal={Computer Music Journal},
 	volume={29},
 	number={1},
-	pages={70--85},
 	year={2005},
 	publisher={MIT Press}
 }
 
 @book{esempio_libro,
   title = {Research methods in {Human-Computer Interaction}},
-  author = {Jonathan Lazar and Jijuan Heidi Feng and Harry Hochheiser},
+  author = {Lazar, Jonathan and Feng, Jijuan Heidi and Hochheiser, Harry},
   publisher = {Morgan Kaufmann},
   year = {2017},
   edition = {Second},
