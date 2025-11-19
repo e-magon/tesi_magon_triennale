@@ -66,7 +66,8 @@
 \title{Tesi}
 % Questo comando (opzionale) sovrascrive \title per quanto riguarda la copertina
 % Può essere usato per stampare caratteri speciali, tenendo i metadati puliti
-\printedtitle{(TODO NON DEFINITIVO) Identificazione automatica di dati sensibili all'interno di log di sistemi complessi tramite analisi statica e Large Language Models}
+\printedtitle{(TODO: NON DEFINITIVO) \\
+Identificazione automatica di dati sensibili all'interno di log di sistemi complessi tramite analisi statica e Large Language Models}
 
 %   AUTORE:
 \author{Emanuele Magon}
@@ -77,7 +78,7 @@
 
 %   RELATORE E CORRELATORE:
 \relatore{Prof. Marco Anisetti}
-\correlatore{Antongiacomo Polimeno}
+\correlatore{Dott. Antongiacomo Polimeno}
 
 %   LABORATORIO:
 % Questa sezione crea una pagina di chiusura della tesi con
@@ -238,6 +239,18 @@ TODO da scrivere
 \todosection{Identificazione di dati sensibili nei log}{sec:identificazione_dati_sensibili}{finire}
 
 \todosection{Soluzioni esistenti per l'analisi dei log}{sec:soluzioni_esistenti}{finire}
+
+\section{Large Language Models}
+\label{sec:llm}
+
+I Large Language Models (LLM) rappresentano una delle applicazioni più avanzate e innovative del \textit{deep learning} nel campo dell'elaborazione del linguaggio naturale. Il \textit{deep learning} costituisce un sottoinsieme del machine learning che si basa su reti neurali artificiali con molteplici livelli di elaborazione, capaci di apprendere rappresentazioni gerarchiche sempre più complesse dei dati~\cite{shinde2018review_ml_dl}. Mentre le applicazioni tradizionali del \textit{deep learning} includono il riconoscimento di immagini (\textit{computer vision}), il riconoscimento vocale e l'analisi predittiva, i Large Language Models si sono affermati come strumenti particolarmente potenti per la comprensione e generazione di testo~\cite{shinde2018review_ml_dl}.
+
+Gli LLM sono modelli di intelligenza artificiale addestrati su enormi quantità di testo per apprendere le strutture linguistiche, i pattern semantici e le relazioni contestuali presenti nel linguaggio umano. La loro architettura si basa tipicamente su reti neurali \textit{transformer}\footnote{Transformers \url{https://aws.amazon.com/what-is/transformers-in-artificial-intelligence}}, introdotte nel 2017, che rappresentano un'innovazione fondamentale nel campo del \textit{deep learning}. I \textit{transformer} utilizzano un meccanismo di auto-attenzione (\textit{self-attention}) che permette al modello di valutare l'importanza relativa di ogni parola rispetto alle altre in una frase, indipendentemente dalla loro posizione. Questo consente di elaborare sequenze di testo in parallelo anziché sequenzialmente, migliorando significativamente l'efficienza computazionale e la capacità di comprendere le relazioni tra parole anche distanti tra loro nel testo.
+
+Prima di utilizzare un LLM, il testo viene convertito in \textbf{token}, che rappresentano le unità base di elaborazione. Un token può corrispondere a una parola intera, una porzione di parola (come una sillaba), o anche singoli caratteri, a seconda del metodo di \textit{tokenizzazione} adottato. Il \textbf{\textit{context window}} definisce il numero massimo di token che il modello può elaborare in una singola interazione: ad esempio, un \textit{context window} di 8.192 token consente al modello di analizzare circa 6.000-8.000 parole contemporaneamente, a seconda della lingua e della complessità del testo. Questo limite determina quanta informazione il modello può considerare nel contesto della conversazione o del documento in esame.
+
+Il numero di \textbf{parametri} di un modello, espresso tipicamente in miliardi (\textit{B}), rappresenta invece la quantità di connessioni neurali che il modello ha appreso durante la fase di addestramento. Un modello con 7 miliardi di parametri (7B) ha memorizzato 7 miliardi di \textit{pesi} che determinano come elaborare e interpretare il testo. Modelli con più parametri sono generalmente più adatti a comprendere sfumature linguistiche complesse ed a gestire compiti diversificati, ma richiedono anche maggiori risorse di memoria e potenza di calcolo per funzionare.
+
 \subsection{Machine learning}
 \label{subsec:machine_learning}
 
@@ -250,6 +263,34 @@ Nel corso del tempo il machine learning si è affermato come strumento fondament
 L'avvento del deep learning negli ultimi anni ha segnato una svolta nel campo dell'intelligenza artificiale~\cite{shinde2018review_ml_dl}. Questa evoluzione del machine learning si basa su reti neurali artificiali con molteplici livelli di elaborazione, capaci di apprendere rappresentazioni gerarchiche sempre più complesse dei dati. I modelli di deep learning eccellono particolarmente nell'elaborazione di linguaggio naturale, nel riconoscimento di immagini e nella comprensione contestuale, superando significativamente le prestazioni degli approcci tradizionali in task che richiedono una comprensione semantica profonda~\cite{elkhatiba2024performance_benchmarking}.
 
 I Large Language Models rappresentano l'applicazione più avanzata di questa tecnologia nel dominio dell'elaborazione del linguaggio, dimostrando capacità notevolmente superiori nella comprensione e generazione di testo rispetto ai metodi tradizionali, specialmente in compiti di classificazione complessi~\cite{kostina2025llm_text_classification}. Tuttavia, la loro efficacia dipende fortemente dalla capacità di comprendere feature contestuali, un aspetto che può variare significativamente tra modelli pre-addestrati e modelli fine-tuned~\cite{zhu2024can_llm_context}.
+
+\subsection{Modelli proprietari e modelli open weight}
+\label{subsec:modelli_proprietari_openweight}
+
+I Large Language Model possono essere suddivisi in due categorie principali: modelli proprietari e modelli \textit{open weight}.
+
+I modelli proprietari sono sviluppati e mantenuti da aziende tecnologiche di rilievo internazionale, come, per esempio, da \textbf{OpenAI}\footnote{OpenAI \url{https://openai.com}}, che offre i modelli GPT (Generative Pre-trained Transformer); \textbf{Anthropic}\footnote{Anthropic \url{https://www.anthropic.com}}, che offre i modelli Claude; \textbf{Google}\footnote{Google AI \url{https://ai.google}}, che offre i modelli Gemini e \textbf{Meta}\footnote{Meta AI \url{https://ai.meta.com}}, che offre i modelli Llama.
+
+Questi modelli vengono eseguiti su server appositi e gli utenti possono accedervi tramite interfacce web, applicazioni desktop o mobile, oppure attraverso \textit{API} per l'integrazione programmatica in applicazioni personalizzate. L'accesso ai modelli proprietari comporta generalmente costi basati sul numero di token elaborati o su sottoscrizioni mensili, con diversi LLM a disposizione in base alle esigenze di utilizzo.
+
+I modelli \textit{open weight}, al contrario, sono resi disponibili pubblicamente con i pesi pre-addestrati. Questo approccio permette agli utenti di scaricare i modelli e eseguirli sul proprio hardware o su server dedicati, utilizzando software specializzati come Ollama\footnote{Ollama \url{https://ollama.com}}, llama.cpp\footnote{llama.cpp \url{https://github.com/ggerganov/llama.cpp}}, o LM Studio\footnote{LM Studio \url{https://lmstudio.ai}}~\cite{bendiouis2024deploying_opensource}.
+
+L'esecuzione locale di modelli \textit{open weight} offre vantaggi significativi in termini di privacy, eliminando la necessità di trasmettere dati sensibili a servizi esterni, e di costi operativi, evitando le tariffe per token tipiche dei servizi cloud~\cite{bendiouis2024deploying_opensource}. Tuttavia, questa modalità richiede hardware adeguato in termini di memoria (RAM e VRAM) e capacità di calcolo, specialmente per modelli di grandi dimensioni.~\cite{bendiouis2024deploying_opensource}.
+
+È importante distinguere tra diversi livelli di apertura nel contesto dei modelli linguistici. I modelli \textit{open source} forniscono accesso completo al codice sorgente, ai dati di addestramento e all'architettura del modello, permettendo modifiche complete e ridistribuzione. I modelli \textit{open weight}, pur fornendo i pesi pre-addestrati, non sempre includono i dataset di addestramento o documentazione completa sui processi di training. I modelli \textit{open data} condividono i dataset utilizzati per l'addestramento, facilitando la riproducibilità della ricerca ma non necessariamente i pesi del modello finale.
+
+Alcuni provider di modelli proprietari, come Google\footnote{Google Gemma \url{https://deepmind.google/models/gemma}} e Meta\footnote{Meta Llama \url{https://www.llama.com}}, rilasciano anche modelli \textit{open weight}, permettendo agli utenti di eseguire localmente versioni ridotte o specifiche dei loro modelli principali. \\
+Questo approccio ibrido consente di beneficiare delle capacità avanzate dei modelli proprietari, pur mantenendo il controllo sui dati e i costi associati all'esecuzione.
+
+La ricerca accademica ha evidenziato che, sebbene i modelli proprietari tendano a mostrare performance superiori in benchmark generali, modelli \textit{open weight} opportunamente ottimizzati possono raggiungere risultati comparabili in task specifici come la comprensione di testi~\cite{alassan2024comparison_opensource_proprietary}. La valutazione delle performance deve inoltre considerare non solo l'accuratezza, ma anche aspetti pratici come la riproducibilità dei risultati e la trasparenza dei processi di valutazione~\cite{white2024livebench}. In particolare, benchmark come LiveBench sono stati sviluppati per fornire valutazioni più eque e resistenti alla contaminazione del test set, problematica che può favorire artificialmente modelli addestrati su dataset che includono i dati di test~\cite{white2024livebench}. Per una comparativa dei modelli proprietari e open weight, si rimanda alla Figura~\refwithpage{fig:livebench_comparison}.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.9\textwidth]{immagini/white2024livebench-1.png}
+	\caption{Confronto delle performance di modelli proprietari e open weight su LiveBench~\cite{white2024livebench}}
+	\label{fig:livebench_comparison}
+\end{figure}
+
 
 \todosection{Large Language Models nell'analisi dei testi}{sec:llm_analisi_testi}{finire}
 

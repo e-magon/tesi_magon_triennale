@@ -10,30 +10,6 @@
 	abstract={Artificial intelligence (AI) has achieved astonishing successes in many domains, especially with the recent breakthroughs in the development of foundational large models. These large models, leveraging their extensive training data, provide versatile solutions for a wide range of downstream tasks. However, as modern datasets become increasingly diverse and complex, the development of large AI models faces two major challenges: (1) the enormous consumption of computational resources and deployment difficulties, and (2) the difficulty in fitting heterogeneous and complex data, which limits the usability of the models. Mixture of Experts (MoE) models has recently attracted much attention in addressing these challenges, by dynamically selecting and activating the most relevant sub-models to process input data. It has been shown that MoEs can significantly improve model performance and efficiency with fewer resources, particularly excelling in handling large-scale, multimodal data. Given the tremendous potential MoE has demonstrated across various domains, it is urgent to provide a comprehensive summary of recent advancements of MoEs in many important fields. Existing surveys on MoE have their limitations, e.g., being outdated or lacking discussion on certain key areas, and we aim to address these gaps. In this paper, we first introduce the basic design of MoE, including gating functions, expert networks, routing mechanisms, training strategies, and system design. We then explore the algorithm design of MoE in important machine learning paradigms such as continual learning, meta-learning, multi-task learning, and reinforcement learning. Additionally, we summarize theoretical studies aimed at understanding MoE and review its applications in computer vision and natural language processing. Finally, we discuss promising future research directions.}
 }
 
-@misc{ibm_moe,
-  author = {Bergmann, Dave},
-	title = {What is mixture of experts?},
-	howpublished = {\url{https://www.ibm.com/think/topics/mixture-of-experts}},
-	note = {Accessed: 2025-06-01}
-}
-
-@misc{mistral_moe,
-  author = {Mistral AI team},
-	title = {Mixtral of experts: A high quality Sparse Mixture-of-Experts},
-	howpublished = {\url{https://mistral.ai/news/mixtral-of-experts}},
-	note = {Accessed: 2025-06-01}
-}
-
-@inproceedings{shinde2018review_ml_dl,
-	title={A review of machine learning and deep learning applications},
-	author={Shinde, Pramila P and Shah, Seema},
-	booktitle={2018 Fourth International Conference on Computing Communication Control and Automation (ICCUBEA)},
-	year={2018},
-	organization={IEEE},
-	doi={10.1109/ICCUBEA.2018.8697857},
-	abstract={Machine learning is one of the fields in the modern computing world. A plenty of research has been undertaken to make machines intelligent. Learning is a natural human behavior which has been made an essential aspect of the machines as well. There are various techniques devised for the same. Traditional machine learning algorithms have been applied in many application areas. Researchers have put many efforts to improve the accuracy of that machinelearning algorithms. Another dimension was given thought which leads to deep learning concept. Deep learning is a subset of machine learning. So far few applications of deep learning have been explored. This is definitely going to cater to solving issues in several new application domains, sub-domains using deep learning. A review of these past and future application domains, sub-domains, and applications of machine learning and deep learning are illustrated in this paper.}
-}
-
 @article{ji2024adapting_llm_log,
 	title={Adapting Large Language Models to Log Analysis with Interpretable Domain Knowledge},
 	author={Ji, Yuhe and Liu, Yilun and Yao, Feiyu and He, Minggui and Tao, Shimin and Zhao, Xiaofeng and Chang, Su and Yang, Xinhua and Meng, Weibin and others},
@@ -52,17 +28,6 @@
 	doi={10.48550/arXiv.2504.04877},
 	note={Version 2, last revised 15 May 2025},
 	abstract={Log data provides crucial insights for tasks like monitoring, root cause analysis, and anomaly detection. Due to the vast volume of logs, automated log parsing is essential to transform semi-structured log messages into structured representations. Recent advances in large language models (LLMs) have introduced the new research field of LLM-based log parsing. Despite promising results, there is no structured overview of the approaches in this relatively new research field with the earliest advances published in late 2023. This work systematically reviews 29 LLM-based log parsing methods. We benchmark seven of them on public datasets and critically assess their comparability and the reproducibility of their reported results. Our findings summarize the advances of this new research field, with insights on how to report results, which data sets, metrics and which terminology to use, and which inconsistencies to avoid, with code and results made publicly available for transparency.}
-}
-
-@inproceedings{ma2024llmparser,
-	title={LLMParser: An Exploratory Study on Using Large Language Models for Log Parsing},
-	author={Ma, Zeyang and Chen, An Ran and Kim, Dong Jae and Chen, Tse-Hsun and Wang, Shaowei},
-	booktitle={Proceedings of the 46th International Conference on Software Engineering},
-	year={2024},
-	publisher={ACM},
-	doi={10.48550/arXiv.2404.18001},
-	abstract={Logs are important in modern software development with runtime information. Log parsing is the first step in many log-based analyses, that involve extracting structured information from unstructured log data. Traditional log parsers face challenges in accurately parsing logs due to the diversity of log formats, which directly impacts the performance of downstream log-analysis tasks. In this paper, we explore the potential of using Large Language Models (LLMs) for log parsing and propose LLMParser, an LLM-based log parser based on generative LLMs and few-shot tuning. We leverage four LLMs, Flan-T5-small, Flan-T5-base, LLaMA-7B, and ChatGLM-6B in LLMParsers. Our evaluation of 16 open-source systems shows that LLMParser achieves statistically significantly higher parsing accuracy than state-of-the-art parsers (a 96% average parsing accuracy). We further conduct a comprehensive empirical analysis on the effect of training size, model size, and pre-training LLM on log parsing accuracy. We find that smaller LLMs may be more effective than more complex LLMs; for instance where Flan-T5-base achieves comparable results as LLaMA-7B with a shorter inference time. We also find that using LLMs pre-trained using logs from other systems does not always improve parsing accuracy. While using pre-trained Flan-T5-base shows an improvement in accuracy, pre-trained LLaMA results in a decrease (decrease by almost 55% in group accuracy). In short, our study provides empirical evidence for using LLMs for log parsing and highlights the limitations and future research direction of LLM-based log parsers.
-}
 }
 
 @article{kostina2025llm_text_classification,
@@ -88,6 +53,58 @@
 	abstract={Text classification is a fundamental task in natural language processing (NLP), widely applied in areas such as spam detection, sentiment analysis, and text categorization. This study presents a comparative analysis of three distinct machine learning paradigms—traditional machine learning algorithms (like Random Forest, XGBoost, support vector machine and Naive Bayes), a custom-built transformer architecture, and transfer learning or pre-trained transformer models (BERT, DistilBERT, RoBERTa, ELECTRA)—on the multi-class news classification dataset. While traditional models provided competitive baselines with up to 90.47% accuracy, modern transformer architecture surpassed them, achieving 91% accuracy when trained from scratch. The highest performance was observed with transfer learning using pre-trained models, where RoBERTa achieved 94.54% accuracy, DistillBERT achieved 94.32% accuracy, BERT achieved 94.07% accuracy and ELECTRA achieved 93.66%. These findings highlight the significance of contextual embeddings and large-scale pretraining in advancing text classification performance.}
 }
 
+@article{alassan2024comparison_opensource_proprietary,
+	title={Comparison of Open-Source and Proprietary LLMs for Machine Reading Comprehension: A Practical Analysis for Industrial Applications},
+	author={Alassan, Mahaman Sanoussi Yahaya and Espejel, Jessica López and Bouhandi, Merieme and Dahhane, Walid and Ettifouri, El Hassane},
+	journal={arXiv:2406.13713},
+	year={2024},
+	doi={10.48550/arXiv.2406.13713},
+	note={Version 2, last revised 6 Dec 2024},
+	abstract={Large Language Models (LLMs) have recently demonstrated remarkable performance in various Natural Language Processing (NLP) applications, such as sentiment analysis, content generation, and personalized recommendations. Despite their impressive capabilities, there remains a significant need for systematic studies concerning the practical application of LLMs in industrial settings, as well as the specific requirements and challenges related to their deployment in these contexts. This need is particularly critical for Machine Reading Comprehension (MCR), where factual, concise, and accurate responses are required. To date, most MCR rely on Small Language Models (SLMs) or Recurrent Neural Networks (RNNs) such as Long Short-Term Memory (LSTM). This article presents a comparative analysis between open-source LLMs and proprietary models on this task, aiming to identify light and open-source alternatives that offer comparable performance to proprietary models.}
+}
+
+@article{bendiouis2024deploying_opensource,
+	title={Deploying Open-Source Large Language Models: A performance Analysis},
+	author={Bendi-Ouis, Yannis and Dutartre, Dan and Hinaut, Xavier},
+	journal={arXiv:2409.14887},
+	year={2024},
+	doi={10.48550/arXiv.2409.14887},
+	note={Version 4, last revised 12 Jun 2025},
+	abstract={Since the release of ChatGPT in November 2022, large language models (LLMs) have seen considerable success, including in the open-source community, with many open-weight models available. However, the requirements to deploy such a service are often unknown and difficult to evaluate in advance. To facilitate this process, we conducted numerous tests at the Centre Inria de l'Université de Bordeaux. In this article, we propose a comparison of the performance of several models of different sizes (mainly Mistral and LLaMa) depending on the available GPUs, using vLLM, a Python library designed to optimize the inference of these models. Our results provide valuable information for private and public groups wishing to deploy LLMs, allowing them to evaluate the performance of different models based on their available hardware. This study thus contributes to facilitating the adoption and use of these large language models in various application domains.}
+}
+
+@article{white2024livebench,
+	title={LiveBench: A Challenging, Contamination-Limited LLM Benchmark},
+	author={White, Colin and Dooley, Samuel and Roberts, Manley and Pal, Arka and Feuer, Ben and Jain, Siddhartha and Shwartz-Ziv, Ravid and Jain, Neel and Saifullah, Khalid and Pandas, Siddartha and Hay, Neel and Hegde, Chinmay and Tenenbaum, Jonas and Frankle, Jonathan and Goldblum, Micah and Goldstein, Tom},
+	journal={arXiv:2406.19314},
+	year={2024},
+	doi={10.48550/arXiv.2406.19314},
+	note={Version 2, last revised 18 Apr 2025. ICLR 2025 Spotlight},
+	abstract={Test set contamination, wherein test data from a benchmark ends up in a newer model's training set, is a well-documented obstacle for fair LLM evaluation and can quickly render benchmarks obsolete. To mitigate this, many recent benchmarks crowdsource new prompts and evaluations from human or LLM judges; however, these can introduce significant biases, and break down when scoring hard questions. In this work, we introduce a new benchmark for LLMs designed to be resistant to both test set contamination and the pitfalls of LLM judging and human crowdsourcing. We release LiveBench, the first benchmark that (1) contains frequently-updated questions from recent information sources, (2) scores answers automatically according to objective ground-truth values, and (3) contains a wide variety of challenging tasks, spanning math, coding, reasoning, language, instruction following, and data analysis. To achieve this, LiveBench contains questions that are based on recently-released math competitions, arXiv papers, news articles, and datasets, and it contains harder, contamination-limited versions of tasks from previous benchmarks such as Big-Bench Hard, AMPS, and IFEval. We evaluate many prominent closed-source models, as well as dozens of open-source models ranging from 0.5B to 405B in size. LiveBench is difficult, with top models achieving below 70% accuracy. We release all questions, code, and model answers. Questions are added and updated on a monthly basis, and we release new tasks and harder versions of tasks over time so that LiveBench can distinguish between the capabilities of LLMs as they improve in the future. We welcome community engagement and collaboration for expanding the benchmark tasks and models.}
+}
+
+
+
+@inproceedings{shinde2018review_ml_dl,
+	title={A review of machine learning and deep learning applications},
+	author={Shinde, Pramila P and Shah, Seema},
+	booktitle={2018 Fourth International Conference on Computing Communication Control and Automation (ICCUBEA)},
+	year={2018},
+	organization={IEEE},
+	doi={10.1109/ICCUBEA.2018.8697857},
+	abstract={Machine learning is one of the fields in the modern computing world. A plenty of research has been undertaken to make machines intelligent. Learning is a natural human behavior which has been made an essential aspect of the machines as well. There are various techniques devised for the same. Traditional machine learning algorithms have been applied in many application areas. Researchers have put many efforts to improve the accuracy of that machinelearning algorithms. Another dimension was given thought which leads to deep learning concept. Deep learning is a subset of machine learning. So far few applications of deep learning have been explored. This is definitely going to cater to solving issues in several new application domains, sub-domains using deep learning. A review of these past and future application domains, sub-domains, and applications of machine learning and deep learning are illustrated in this paper.}
+}
+
+@inproceedings{ma2024llmparser,
+	title={LLMParser: An Exploratory Study on Using Large Language Models for Log Parsing},
+	author={Ma, Zeyang and Chen, An Ran and Kim, Dong Jae and Chen, Tse-Hsun and Wang, Shaowei},
+	booktitle={Proceedings of the 46th International Conference on Software Engineering},
+	year={2024},
+	publisher={ACM},
+	doi={10.48550/arXiv.2404.18001},
+	abstract={Logs are important in modern software development with runtime information. Log parsing is the first step in many log-based analyses, that involve extracting structured information from unstructured log data. Traditional log parsers face challenges in accurately parsing logs due to the diversity of log formats, which directly impacts the performance of downstream log-analysis tasks. In this paper, we explore the potential of using Large Language Models (LLMs) for log parsing and propose LLMParser, an LLM-based log parser based on generative LLMs and few-shot tuning. We leverage four LLMs, Flan-T5-small, Flan-T5-base, LLaMA-7B, and ChatGLM-6B in LLMParsers. Our evaluation of 16 open-source systems shows that LLMParser achieves statistically significantly higher parsing accuracy than state-of-the-art parsers (a 96% average parsing accuracy). We further conduct a comprehensive empirical analysis on the effect of training size, model size, and pre-training LLM on log parsing accuracy. We find that smaller LLMs may be more effective than more complex LLMs; for instance where Flan-T5-base achieves comparable results as LLaMA-7B with a shorter inference time. We also find that using LLMs pre-trained using logs from other systems does not always improve parsing accuracy. While using pre-trained Flan-T5-base shows an improvement in accuracy, pre-trained LLaMA results in a decrease (decrease by almost 55% in group accuracy). In short, our study provides empirical evidence for using LLMs for log parsing and highlights the limitations and future research direction of LLM-based log parsers.}
+}
+
 @inproceedings{zhu2024can_llm_context,
 	title={Can Large Language Models Understand Context?},
 	author={Zhu, Yilun and Moniz, Joel Ruben Antony and Bhargava, Shruti and Lu, Jiarui and Piraviperumal, Dhivya and Li, Site and Zhang, Yuan and Yu, Hong and Tseng, Bo-Hsiang},
@@ -98,6 +115,22 @@
 	address={St. Julian's, Malta},
 	url={https://aclanthology.org/2024.findings-eacl.135/},
 	abstract={Understanding context is key to understanding human language, an ability which Large Language Models (LLMs) have been increasingly seen to demonstrate to an impressive extent. However, though the evaluation of LLMs encompasses various domains within the realm of Natural Language Processing, limited attention has been paid to probing their linguistic capability of understanding contextual features. This paper introduces a context understanding benchmark by adapting existing datasets to suit the evaluation of generative models. This benchmark comprises of four distinct tasks and nine datasets, all featuring prompts designed to assess the models’ ability to understand context. First, we evaluate the performance of LLMs under the in-context learning pretraining scenario. Experimental results indicate that pre-trained dense models struggle with understanding more nuanced contextual features when compared to state-of-the-art fine-tuned models. Second, as LLM compression holds growing significance in both research and real-world applications, we assess the context understanding of quantized models under in-context-learning settings. We find that 3-bit post-training quantization leads to varying degrees of performance reduction on our benchmark. We conduct an extensive analysis of these scenarios to substantiate our experimental results.}
+}
+
+
+
+@misc{ibm_moe,
+  author = {Bergmann, Dave},
+	title = {What is mixture of experts?},
+	howpublished = {\url{https://www.ibm.com/think/topics/mixture-of-experts}},
+	note = {Accessed: 2025-06-01}
+}
+
+@misc{mistral_moe,
+  author = {Mistral AI team},
+	title = {Mixtral of experts: A high quality Sparse Mixture-of-Experts},
+	howpublished = {\url{https://mistral.ai/news/mixtral-of-experts}},
+	note = {Accessed: 2025-06-01}
 }
 
 
