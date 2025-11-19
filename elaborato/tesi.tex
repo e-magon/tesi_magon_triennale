@@ -340,7 +340,7 @@ In questo approccio si identificano diverse sfide significative:
     \item \textbf{Manutenzione complessa}: La gestione di un insieme crescente di regex specializzate comporta complessità di manutenzione significative
 \end{itemize}
 
-Queste considerazioni vengono in parte affrontate dalla scelta di un sistema ibrido, descritto nella sezione \refwithpage{subsec:ibrido_llm_regex}, che mantiene i vantaggi delle espressioni regolari integrandoli con le capacità di comprensione contestuale degli LLM.
+Queste considerazioni vengono in parte affrontate dalla scelta di un sistema ibrido, descritto nella sezione~\refwithpage{subsec:ibrido_llm_regex}, che mantiene i vantaggi delle espressioni regolari integrandoli con le capacità di comprensione contestuale degli LLM.
 \todo{TODO migliorare questo paragrafo}
 
 \subsection{Integrazione ibrida di LLM e regex per l'identificazione in tempo reale}
@@ -437,8 +437,8 @@ Inoltre, la natura composta, le dimensioni e la provenienza da fornitori terzi d
 \subsection{Formato dei log}
 \label{subsec:formato_log}
 
-I log del sistema seguono il formato strutturato definito nella tabella \refwithpage{tab:formato_log}. \\
-Il sorgente \refwithpage{lst:esempio_log} presenta un campione di cinque righe di log rappresentativo della struttura dati utilizzata.
+I log del sistema seguono il formato strutturato definito nella tabella~\refwithpage{tab:formato_log}. \\
+Il sorgente~\refwithpage{lst:esempio_log} presenta un campione di cinque righe di log rappresentativo della struttura dati utilizzata.
 
 \begin{table}[h!]
     \centering
@@ -519,7 +519,7 @@ Ollama offre un'architettura client-server che include:
     \item \textbf{Server locale}: Processo daemon che gestisce il caricamento e l'esecuzione dei modelli LLM
     \item \textbf{API REST}: Interfaccia HTTP standardizzata per l'interazione con i modelli caricati
     \item \textbf{Gestione dei modelli}: Comandi per il download, l'aggiornamento e la configurazione di modelli da repository pubblici
-    \item \textit{\textbf{Modelfile}}: Formato di configurazione che permette la creazione di modelli personalizzati (a partire da modelli già esistenti) con prompt di sistema ad-hoc incorporati. Per ulteriori dettagli riguardanti i \textit{Modelfile} si rimanda alla sezione \refwithpage{subsec:llm}.
+    \item \textit{\textbf{Modelfile}}: Formato di configurazione che permette la creazione di modelli personalizzati (a partire da modelli già esistenti) con prompt di sistema ad-hoc incorporati. Per ulteriori dettagli riguardanti i \textit{Modelfile} si rimanda alla sezione~\refwithpage{subsec:llm}.
     \item \textbf{Ottimizzazioni hardware}: Supporto per accelerazione GPU e ottimizzazioni specifiche per diverse architetture (CPU, Metal\footnote{Metal è l'API grafica e di calcolo di Apple per macOS e iOS.} su macOS, CUDA\footnote{CUDA è la piattaforma di calcolo parallelo di NVIDIA per GPU.}/ROCM\footnote{ROCM è la piattaforma open-source di AMD per calcolo su GPU.} su Windows e GNU/Linux)
 \end{itemize}
 
@@ -539,7 +539,7 @@ La scelta di Ollama ha portato diversi vantaggi architetturali:
 Il sistema utilizza un approccio multi-modello per massimizzare l'accuratezza nell'identificazione di dati sensibili. La strategia prevede l'utilizzo di modelli personalizzati ottimizzati specificamente per il dominio dei log di sistema.
 
 \subsubsection{Modelli supportati}
-Il progetto supporta nove diversi modelli LLM selezionati per bilanciare performance, accuratezza e requisiti computazionali. I modelli sono elencati nella tabella \refwithpage{tab:modelli_llm}.
+Il progetto supporta nove diversi modelli LLM selezionati per bilanciare performance, accuratezza e requisiti computazionali. I modelli sono elencati nella tabella~\refwithpage{tab:modelli_llm}.
 
 \begin{table}[h!]
     \centering
@@ -581,7 +581,7 @@ Il prompt di sistema incorpora linee guida specifiche per:
     \item Formato di output standardizzato per facilità di parsing
 \end{itemize}
 
-Per ulteriori dettagli riguardanti i \textit{Modelfile} e la configurazione dei LLM si rimanda alla sezione \refwithpage{subsubsec:ver2_prompt_engineering}.
+Per ulteriori dettagli riguardanti i \textit{Modelfile} e la configurazione dei LLM si rimanda alla sezione~\refwithpage{subsubsec:ver2_prompt_engineering}.
 
 
 \section{Codice}
@@ -622,14 +622,14 @@ La \textbf{seconda versione} introduce sistemi di valutazione quantitativa e mod
 
 La \textbf{terza versione} implementa l'integrazione real-time con GrayLog per deployment in ambiente di produzione.
 
-Per una descrizione completa dell'architettura, delle funzionalità e dei risultati di ogni versione si rimanda al capitolo \refwithpage{chap:sensitive_data_detector}.
+Per una descrizione completa dell'architettura, delle funzionalità e dei risultati di ogni versione si rimanda al capitolo~\refwithpage{chap:sensitive_data_detector}.
 
 \subsubsection{Script di inizializzazione GrayLog}
 Il file \texttt{graylog\_setup.py} automatizza la configurazione iniziale di GrayLog tramite le API REST per la creazione programmatica di input, stream, output e pipeline; adotta una configurazione idempotente che consente esecuzioni ripetute senza effetti collaterali; include meccanismi di gestione degli errori con validazione delle configurazioni e, dove previsto, rollback automatico; e supporta template personalizzabili per adattare le configurazioni a diversi ambienti.
 
 In particolare, lo script provvede alla definizione degli input \texttt{TCP} per i log in ingresso e per le notifiche di ritorno, alla creazione di stream per il routing intelligente dei messaggi, alla configurazione di output GELF per la comunicazione con il \textit{Sensitive Data Detector} e all'impostazione di pipeline con regole regex per l'identificazione rapida di pattern comuni.
 
-Il codice completo dello script è disponibile nell'appendice \refwithpage{lst:code_graylog_script}.
+Il codice completo dello script è disponibile nell'appendice~\refwithpage{lst:code_graylog_script}.
 
 \subsection{Docker}
 \label{subsec:docker}
@@ -645,7 +645,7 @@ La configurazione Docker Compose definisce un ambiente completo che include:
     \item \textbf{GrayLog Enterprise}: Server principale con interfaccia web e API REST
 \end{itemize}
 
-Il codice completo della configurazione del container è disponibile nell'appendice \refwithpage{lst:code_container_config}.
+Il codice completo della configurazione del container è disponibile nell'appendice~\refwithpage{lst:code_container_config}.
 
 \subsubsection{Configurazione di rete e persistenza}
 L'ambiente Docker implementa:
@@ -679,14 +679,14 @@ Questa versione utilizza un'architettura sincrona con elaborazione batch, interf
 
 L'output viene salvato su file per consentire analisi offline e tracciabilità del processo.
 
-Ulteriori dettagli sono disponibili nella sezione \refwithpage{sec:ver1}.
+Ulteriori dettagli sono disponibili nella sezione~\refwithpage{sec:ver1}.
 
 \textbf{Versione 2: Streaming e valutazione} \\
 La seconda versione rappresenta un'evoluzione significativa con focus sulla scalabilità e la valutazione quantitativa delle performance. Introduce l'elaborazione riga per riga dei log per ottimizzare l'uso della memoria e utilizza modelli LLM personalizzati creati tramite \textit{Modelfile} di Ollama, che incorporano prompt specifici per l'identificazione di dati sensibili.
 
 Un aspetto fondamentale di questa versione è l'implementazione di un sistema di ground truth\footnote{Ground truth indica i dati di riferimento considerati corretti e utilizzati come standard per valutare la precisione di un sistema di classificazione. Nel contesto di questo progetto, consiste in etichette manuali che indicano se ogni riga di log contiene o meno dati sensibili.} per la valutazione automatica, che consente il calcolo real-time di metriche di classificazione binaria (veri/falsi positivi/negativi) e l'analisi comparativa di diversi modelli LLM.
 
-Ulteriori dettagli sono disponibili nella sezione \refwithpage{sec:ver2}.
+Ulteriori dettagli sono disponibili nella sezione~\refwithpage{sec:ver2}.
 
 \textbf{Versione 3: Integrazione enterprise} \\
 La terza versione costituisce la soluzione \textit{production-ready} del progetto, implementando un'architettura asincrona completa per l'integrazione real-time con GrayLog. \\
@@ -694,7 +694,7 @@ Utilizza programmazione asincrona con \texttt{asyncio} per gestione concorrente 
 
 Il sistema implementa un feedback loop bidirezionale che reinvia automaticamente i risultati delle analisi a GrayLog, permettendo la visualizzazione unificata di log originali e notifiche di rilevamento di dati sensibili attraverso le sue dashboard specializzate.
 
-Ulteriori dettagli sono disponibili nella sezione \refwithpage{sec:ver3}.
+Ulteriori dettagli sono disponibili nella sezione~\refwithpage{sec:ver3}.
 
 
 \section{Versione 1: Proof of Concept}
@@ -713,7 +713,7 @@ Il sistema è progettato per riconoscere diverse tipologie di dati sensibili, tr
 \subsubsection{Architettura e funzionamento}
 \label{subsubsec:ver1_architettura}
 
-Il sistema è implementato tramite linguaggio Python e utilizza la libreria \texttt{ollama}\footnote{\texttt{ollama} \url{https://pypi.org/project/ollama}} per interfacciarsi con diversi modelli LLM tramite API REST. L'architettura segue un paradigma client-server dove lo script Python agisce come client che invia richieste al server Ollama locale. L'implementazione completa è disponibile nell'appendice \refwithpage{lst:code_ver1}.
+Il sistema è implementato tramite linguaggio Python e utilizza la libreria \texttt{ollama}\footnote{\texttt{ollama} \url{https://pypi.org/project/ollama}} per interfacciarsi con diversi modelli LLM tramite API REST. L'architettura segue un paradigma client-server dove lo script Python agisce come client che invia richieste al server Ollama locale. L'implementazione completa è disponibile nell'appendice~\refwithpage{lst:code_ver1}.
 
 Il flusso di elaborazione si articola nelle seguenti fasi:
 
@@ -736,12 +736,12 @@ Un aspetto critico dell'implementazione riguarda la gestione del context window 
 Il prompt di sistema è stato progettato per guidare il modello nell'identificazione precisa dei dati sensibili, fornendo \textbf{definizioni chiare} di cosa costituisce un dato sensibile, \textbf{esempi specifici} di dati da identificare come token, credenziali e informazioni personali, \textbf{esclusioni esplicite} per dati non sensibili (quali username, ID e timestamp), un \textbf{formato di output strutturato} in bullet point e un \textbf{esempio pratico} con input e output atteso.
 
 Il prompt include inoltre istruzioni per la gestione di oggetti JSON, richiedendo al modello di estrarre solo i dati sensibili contenuti all'interno di essi e non l'intero oggetto. \\
-Il prompt completo è disponibile nell'appendice \refwithpage{lst:prompt_ver1}.
+Il prompt completo è disponibile nell'appendice~\refwithpage{lst:prompt_ver1}.
 
 \subsubsection{Modelli supportati e configurazione}
 \label{subsubsec:ver1_modelli_supportati}
 
-La prima versione supporta cinque diversi modelli LLM, ognuno con parametri di configurazione ottimizzati, come mostrato nella tabella \refwithpage{tab:modelli_llm_ver1}.
+La prima versione supporta cinque diversi modelli LLM, ognuno con parametri di configurazione ottimizzati, come mostrato nella tabella~\refwithpage{tab:modelli_llm_ver1}.
 
 \begin{table}[h!]
     \centering
@@ -796,7 +796,7 @@ La versione introduce diversi miglioramenti sostanziali: l'\textbf{elaborazione 
 
 L'architettura della seconda versione mantiene il paradigma client-server della versione precedente e al contempo introduce ottimizzazioni nel flusso di elaborazione. \\
 Il sistema utilizza modelli LLM personalizzati creati tramite \textit{Modelfile}, una funzionalità di Ollama, che incorporano prompt specifici e configurazioni ottimizzate per l'identificazione di dati sensibili.\\
-L'implementazione completa è disponibile nell'appendice \refwithpage{lst:code_ver2}.
+L'implementazione completa è disponibile nell'appendice~\refwithpage{lst:code_ver2}.
 \todo{TODO specificare meglio cosa sono i modelfile, assicurarsi che "funzionalità di Ollama" non sia presente altrove. In caso, spostare la spiegazione in quel punto}
 
 Il flusso di elaborazione ottimizzato si articola nelle seguenti fasi:
@@ -825,7 +825,7 @@ Il sistema implementa anche un meccanismo di post-processing per gestire le risp
 \label{subsubsec:ver2_modelli_supportati}
 
 La seconda versione espande significativamente il supporto per diversi modelli LLM, introducendo nove modelli personalizzati ottimizzati specificamente per l'identificazione di dati sensibili. \\
-Tutti i modelli condividono una configurazione unificata ottimizzata per l'elaborazione sequenziale di singole righe di log, come mostrato nella tabella \refwithpage{tab:modelli_llm_ver2}.
+Tutti i modelli condividono una configurazione unificata ottimizzata per l'elaborazione sequenziale di singole righe di log, come mostrato nella tabella~\refwithpage{tab:modelli_llm_ver2}.
 
 \begin{table}[h!]
     \centering
@@ -911,7 +911,7 @@ Il sistema implementa innanzitutto l'\textbf{elaborazione in tempo reale}, perme
 \label{subsubsec:ver3_architettura}
 
 L'architettura della terza versione introduce un cambio del paradigma rispetto alle versioni precedenti, passando da un modello client-server a un sistema basato su stream processing. Il sistema opera come un micro-servizio che si posiziona tra GrayLog e i modelli LLM, fungendo da ponte per l'analisi dei log. \\
-L'implementazione completa è disponibile nell'appendice \refwithpage{lst:code_ver3}.
+L'implementazione completa è disponibile nell'appendice~\refwithpage{lst:code_ver3}.
 
 Il flusso di elaborazione real-time si articola nelle seguenti fasi:
 
@@ -945,7 +945,7 @@ Questa architettura permette di mantenere separati i log originali dalle notific
 \subsubsection{Modelli supportati e configurazione}
 \label{subsubsec:ver3_modelli_supportati}
 
-La terza versione eredita il supporto completo per tutti i modelli personalizzati della versione precedente, mantenendo la stessa configurazione unificata e ottimizzata per l'elaborazione in tempo reale, come mostrato nella tabella \refwithpage{tab:modelli_llm_ver2}.
+La terza versione eredita il supporto completo per tutti i modelli personalizzati della versione precedente, mantenendo la stessa configurazione unificata e ottimizzata per l'elaborazione in tempo reale, come mostrato nella tabella~\refwithpage{tab:modelli_llm_ver2}.
 
 La configurazione real-time mantiene l'elaborazione di un messaggio per volta per semplificare il processo di rilevazione della correttezza delle risposte. \\
 L'analisi di un messaggio alla volta permette inoltre di ottimizzare la latenza di risposta, aspetto critico in ambienti di produzione dove la velocità di identificazione delle vulnerabilità può essere determinante per la sicurezza del sistema.
@@ -974,7 +974,7 @@ Nonostante rappresenti una soluzione pronta per ambienti di produzione, la terza
 
 Il sistema è \textbf{dipendente da Ollama}, richiedendo un'istanza sempre attiva che introduce un \textit{single point of failure}. La \textbf{latenza variabile} rappresenta un'altra criticità, poiché i tempi di risposta dipendono dalle performance dell'LLM selezionato e dal carico del sistema. Inoltre, la \textbf{scalabilità verticale} è limitata dalle risorse hardware disponibili per l'inferenza dell'LLM.
 
-Relativamente all'\textbf{utilizzo di modelli personalizzati}, sebbene questi migliorino significativamente le performance rispetto ai modelli base, il sistema non utilizza tecniche di \textit{fine-tuning} avanzate come LoRA\footnote{LoRA (Low-Rank Adaptation) è una tecnica di fine-tuning efficiente che modifica solo un sottoinsieme dei parametri del modello e permette di creare un nuovo LLM a partire da uno già addestrato.}, che rappresenterebbe la soluzione ottimale per l'adattamento specifico al dominio dei log. Per ulteriori dettagli, si rimanda alla sezione \refwithpage{subsubsec:addestramento_lora}.
+Relativamente all'\textbf{utilizzo di modelli personalizzati}, sebbene questi migliorino significativamente le performance rispetto ai modelli base, il sistema non utilizza tecniche di \textit{fine-tuning} avanzate come LoRA\footnote{LoRA (Low-Rank Adaptation) è una tecnica di fine-tuning efficiente che modifica solo un sottoinsieme dei parametri del modello e permette di creare un nuovo LLM a partire da uno già addestrato.}, che rappresenterebbe la soluzione ottimale per l'adattamento specifico al dominio dei log. Per ulteriori dettagli, si rimanda alla sezione~\refwithpage{subsubsec:addestramento_lora}.
 
 Queste limitazioni, pur non compromettendo l'utilità operativa del sistema, rappresentano aree di miglioramento e suggeriscono direzioni per sviluppi futuri del progetto.
 
@@ -1020,7 +1020,7 @@ Il sistema di valutazione utilizza metriche standard di classificazione binaria,
 \subsubsection{Metriche primarie}
 \label{subsubsec:metriche_primarie}
 
-Le metriche principali utilizzate per la valutazione sono elencate nella tabella \refwithpage{tab:metriche_primarie}.
+Le metriche principali utilizzate per la valutazione sono elencate nella tabella~\refwithpage{tab:metriche_primarie}.
 
 \begin{table}[h!]
     \centering
@@ -1044,7 +1044,7 @@ Le metriche principali utilizzate per la valutazione sono elencate nella tabella
 \subsubsection{Metriche derivate}
 \label{subsubsec:metriche_derivate}
 
-Dalle metriche primarie vengono calcolate le percentuali elencate nella tabella \refwithpage{tab:metriche_derivate}.
+Dalle metriche primarie vengono calcolate le percentuali elencate nella tabella~\refwithpage{tab:metriche_derivate}.
 
 \begin{table}[h!]
     \centering
@@ -1073,7 +1073,7 @@ I test sono stati condotti su architettura Apple M1 Max (32 GB di memoria unific
 \subsubsection{Risultati Versione 1}
 \label{subsubsec:risultati_v1}
 
-La prima versione ha fornito risultati promettenti ma ha evidenziato significative limitazioni hardware, come mostrato nella tabella \refwithpage{tab:risultati_v1}.
+La prima versione ha fornito risultati promettenti ma ha evidenziato significative limitazioni hardware, come mostrato nella tabella~\refwithpage{tab:risultati_v1}.
 
 \begin{table}[h!]
     \centering
@@ -1103,7 +1103,7 @@ I risultati mostrano che:
 \subsubsection{Risultati Versione 2}
 \label{subsubsec:risultati_v2}
 
-La seconda versione ha introdotto metriche quantitative precise permettendo un confronto sistematico, come mostrato nella tabella \refwithpage{tab:risultati_v2} e il grafico \refwithpage{fig:grafico_risultati_v2}.
+La seconda versione ha introdotto metriche quantitative precise permettendo un confronto sistematico, come mostrato nella tabella~\refwithpage{tab:risultati_v2} e il grafico~\refwithpage{fig:grafico_risultati_v2}.
 
 \begin{table}[h!]
     \centering
