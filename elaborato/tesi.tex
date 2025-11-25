@@ -211,7 +211,7 @@ Questa sezione, facoltativa, contiene i ringraziamenti.
 L'obiettivo di questo lavoro è sviluppare un sistema automatico per l'identificazione e la notificazione della presenza di dati sensibili all'interno di log di grandi dimensioni, fornendo agli amministratori di sistema una soluzione efficace per il monitoraggio della conformità alla privacy. \\
 Sebbene il sistema sia progettato per essere generico e applicabile a diverse tipologie di log, il presente lavoro è stato sviluppato e testato specificamente per l'integrazione nel mondo dell'\textit{IoT}, nello specifico per una piattaforma complessa di gestione domotica di \textit{smart city}, composta da svariati micro-servizi eterogenei.
 
-L'approccio progettuale adottato integra un sistema ibrido che combina due metodologie complementari per l'identificazione di dati sensibili nei log. La soluzione utilizza espressioni regolari per l'identificazione efficiente di dati sensibili strutturati e ben definiti (come codici fiscali, numeri di telefono, indirizzi email, JWT\footnote{JWT (JSON Web Token) è uno standard RFC 7519 per la trasmissione sicura di informazioni tra parti come in file JSON firmati digitalmente. In genere è utilizzato per l'autenticazione e l'autorizzazione di utenti.}, coordinate geografiche etc.) insieme a Large Language Models che, con la loro capacità di comprensione contestuale, permettono il rilevamento di informazioni sensibili non strutturate o espresse in linguaggio naturale. \\
+L'approccio progettuale adottato integra un sistema ibrido che combina due metodologie complementari per l'identificazione di dati sensibili nei log. La soluzione utilizza espressioni regolari per l'identificazione efficiente di dati sensibili strutturati e ben definiti (come codici fiscali, numeri di telefono, indirizzi email, JWT\footnote{JWT (JSON Web Token) è uno standard (RFC 7519) per la trasmissione sicura di informazioni codificate file JSON firmati digitalmente. In genere è utilizzato per l'autenticazione e l'autorizzazione di utenti.}, coordinate geografiche etc.) insieme a Large Language Models che, con la loro capacità di comprensione contestuale, permettono il rilevamento di informazioni sensibili non strutturate o espresse in linguaggio naturale. \\
 Inoltre, gli LLM sono stati impiegati durante la fase di sviluppo per assistere nell'identificazione di dati sensibili all'interno di campioni di log, facilitando la progettazione di espressioni regolari specifiche e ottimizzate per i pattern identificati.
 
 Questa architettura ibrida permette di sfruttare i vantaggi di entrambe le tecnologie: l'efficienza computazionale e il determinismo delle espressioni regolari per pattern ricorrenti e la flessibilità semantica degli LLM per l'analisi di contenuti più complessi che potrebbero sfuggire a un approccio puramente basato su regex.
@@ -234,7 +234,7 @@ TODO da scrivere
     \item Vedere se si trova nello stato dell'arte soluzioni già presenti, simili o diverse
 \end{itemize}
 
-\todosection{Sicurezza nei log}{sec:sicurezza_log}{finire}
+\todosection{Sicurezza e storia dei log}{sec:sicurezza_log}{finire}
 
 \todosection{Identificazione di dati sensibili nei log}{sec:identificazione_dati_sensibili}{finire}
 
