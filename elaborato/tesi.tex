@@ -206,15 +206,16 @@ Questa sezione, facoltativa, contiene i ringraziamenti.
 %			CAPITOLO: Introduzione o Abstract
 %
 
-\todochapter{Introduzione}{chap:introduzione}{inserire riassunto che spiega velocemente ogni capitolo cosa contiene}
+\chapter{Introduzione}
+\label{chap:introduzione}
 
-L'obiettivo di questo lavoro è sviluppare un sistema automatico per l'identificazione e la notificazione della presenza di dati sensibili all'interno di log di grandi dimensioni, fornendo agli amministratori di sistema una soluzione efficace per il monitoraggio della conformità alla privacy. \\
-Sebbene il sistema sia progettato per essere generico e applicabile a diverse tipologie di log, il presente lavoro è stato sviluppato e testato specificamente per l'integrazione nel mondo dell'\textit{IoT}, nello specifico per una piattaforma complessa di gestione domotica di \textit{smart city}, composta da svariati micro-servizi eterogenei.
+L'obiettivo di questo lavoro è sviluppare un sistema automatico per l'identificazione e la notificazione della presenza di dati sensibili all'interno di log di grandi dimensioni, fornendo agli amministratori di sistema una soluzione efficace per il monitoraggio della conformità alla privacy, come descritto nel \textbf{Capitolo \ref{chap:stato_arte}}. \\
+Sebbene il sistema sia progettato per essere generico e applicabile a diverse tipologie di log, come illustrato nei \textbf{Capitoli \ref{chap:implementazione_tecnologie} e \ref{chap:sensitive_data_detector}} il presente lavoro è stato sviluppato e testato specificamente per l'integrazione nel mondo dell'\textit{IoT}, in particolare per una piattaforma complessa di gestione domotica di \textit{smart city}, composta da svariati micro-servizi eterogenei.
 
-L'approccio progettuale adottato integra un sistema ibrido che combina due metodologie complementari per l'identificazione di dati sensibili nei log. La soluzione utilizza espressioni regolari per l'identificazione efficiente di dati sensibili strutturati e ben definiti (come codici fiscali, numeri di telefono, indirizzi email, JWT\footnote{JWT (JSON Web Token) è uno standard (RFC 7519) per la trasmissione sicura di informazioni codificate file JSON firmati digitalmente. In genere è utilizzato per l'autenticazione e l'autorizzazione di utenti.}, coordinate geografiche etc.) insieme a Large Language Models che, con la loro capacità di comprensione contestuale, permettono il rilevamento di informazioni sensibili non strutturate o espresse in linguaggio naturale. \\
+Nel \textbf{Capitolo \ref{chap:metodologia_teorica}} viene mostrato come l'approccio progettuale adottato integri un sistema ibrido che combina due metodologie complementari per l'identificazione di dati sensibili nei log. La soluzione utilizza espressioni regolari per l'identificazione efficiente di dati sensibili strutturati e ben definiti (come codici fiscali, numeri di telefono, indirizzi email, JWT\footnote{JWT (JSON Web Token) è uno standard (RFC 7519) per la trasmissione sicura di informazioni codificate file JSON firmati digitalmente. In genere è utilizzato per l'autenticazione e l'autorizzazione di utenti.}, coordinate geografiche etc.) insieme a Large Language Models che, con la loro capacità di comprensione contestuale, permettono il rilevamento di informazioni sensibili non strutturate o espresse in linguaggio naturale. \\
 Inoltre, gli LLM sono stati impiegati durante la fase di sviluppo per assistere nell'identificazione di dati sensibili all'interno di campioni di log, facilitando la progettazione di espressioni regolari specifiche e ottimizzate per i pattern identificati.
 
-Questa architettura ibrida permette di sfruttare i vantaggi di entrambe le tecnologie: l'efficienza computazionale e il determinismo delle espressioni regolari per pattern ricorrenti e la flessibilità semantica degli LLM per l'analisi di contenuti più complessi che potrebbero sfuggire a un approccio puramente basato su regex.
+Come dimostrato nel \textbf{Capitolo \ref{chap:test}}, l'architettura ibrida sviluppata permette di sfruttare i vantaggi di entrambe le tecnologie: l'efficienza computazionale e il determinismo delle espressioni regolari per pattern ricorrenti e la flessibilità semantica degli LLM per l'analisi di contenuti più complessi che potrebbero sfuggire a un approccio basato solamente sull'analisi statica.
 
 
 %
