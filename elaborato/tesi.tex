@@ -222,17 +222,23 @@ Come dimostrato nel \textbf{Capitolo \ref{chap:test}}, l'architettura ibrida svi
 %			CAPITOLO: Stato dell'arte
 %
 
-\todochapter{Stato dell'arte}{chap:stato_arte}{finire}
+\chapter{Stato dell'arte}
+\label{chap:stato_arte}
 
-TODO da scrivere
+\section{Sicurezza dei log}
+\label{sec:sicurezza_log}
 
-\begin{itemize}
-    \item Log deformati, fare ricerca su soluzioni attuali su fonti autorevoli (paper con scholar.google.com). Se proprio non si trova si possono usare siti (se autoritevoli)
-\end{itemize}
+Con il termine \textit{log} si indica una sequenza di registrazioni cronologiche generate da sistemi software o hardware per tracciare eventi, operazioni e stati interni. Tali registrazioni rivestono un ruolo fondamentale per la ricostruzione cronologica degli avvenimenti, per il monitoraggio delle prestazioni, per la risoluzione dei problemi, per la sicurezza informatica e per il rispetto dei requisiti di conformità normativa.
 
-\todosection{Sicurezza e storia dei log}{sec:sicurezza_log}{finire}
+I log possono assumere forme eterogenee, spaziando da semplici righe di testo non strutturato a rappresentazioni complesse basate su formati standardizzati. Dal punto di vista del contenuto, le registrazioni possono limitarsi a tracciare in modo sintetico la sequenza degli eventi interni al sistema oppure possono includere descrizioni dettagliate degli stati interni, dei dati in ingresso e in uscita, delle informazioni immesse dagli utenti durante l'interazione con il sistema e dei parametri di configurazione.
 
-\todosection{Identificazione di dati sensibili nei log}{sec:identificazione_dati_sensibili}{finire}
+Nel corso del tempo sono stati definiti numerosi standard volti a uniformare la struttura dei messaggi di log e dei relativi metadati, al fine di garantire l'interoperabilità tra piattaforme eterogenee. I formati più diffusi sono il protocollo \textit{syslog}\footnote{syslog \url{https://datatracker.ietf.org/doc/html/rfc3164}}, formalizzato dall'IETF nel 2001, il \textit{Common Event Format (CEF)}\footnote{CEF \url{https://www.microfocus.com/documentation/arcsight/arcsight-smartconnectors-8.3/cef-implementation-standard/Content/CEF/Chapter\%201\%20What\%20is\%20CEF.htm}}, introdotto da ArcSight intorno al 2010, il \textit{Log Event Extended Format (LEEF)}\footnote{LEEF \url{https://www.ibm.com/docs/en/dsm?topic=leef-overview}} sviluppato da IBM per QRadar a partire dal 2011 e il \textit{Graylog Extended Log Format (GELF)}\footnote{GELF \url{https://go2docs.graylog.org/current/getting_in_log_data/gelf.html}}, definito nel 2011 per facilitare l'integrazione con la piattaforma Graylog.
+
+In genere, ogni voce di log include un \textit{timestamp}, un livello di severità (ad esempio \textit{info}, \textit{warning}, \textit{error}), un identificatore della sorgente (ad esempio il nome del servizio o del componente che ha generato il log) e un messaggio descrittivo dell'evento.
+
+Contenendo informazioni dettagliate sul funzionamento interno dei sistemi, i log rappresentano un obiettivo privilegiato per gli attaccanti. Il problema si manifesta su due fronti distinti: da un lato, pratiche di logging poco attente espongono frequentemente informazioni personali identificabili (\textit{PII}) come indirizzi email, credenziali e identificatori di dispositivo. Studi su applicazioni Android hanno rilevato che circa il 6\% delle app analizzate presenta fughe di dati personali nei log. Ciò rende i log un bersaglio appetibile per attacchi informatici finalizzati al furto di informazioni~\cite{aghili2024protecting_privacy_logs, hou2025catamaran}.
+
+Dall'altro lato, la manomissione dei log rappresenta una pratica diffusa: indagini nel campo della risposta agli incidenti riportano che il 72\% degli specialisti ha riscontrato log alterati o cancellati da parte degli attaccanti~\cite{paccagnella2020custos}. Tali attività di \textit{anti-forensics} mirano a ostacolare le indagini eliminando le tracce delle intrusioni~\cite{jena2012audit_log_hash}, mentre in ambienti IoT la compromissione dei dispositivi consente agli avversari di modificare, eliminare o iniettare eventi nei log per eludere l'attribuzione delle responsabilità~\cite{koisser2023accountability_iot_logging}.
 
 \section{Soluzioni esistenti per l'analisi dei log}
 \label{sec:soluzioni_esistenti_analisi_log}
