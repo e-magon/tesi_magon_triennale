@@ -217,6 +217,9 @@ Inoltre, gli LLM sono stati impiegati durante la fase di sviluppo per assistere 
 
 Come dimostrato nel \textbf{Capitolo \ref{chap:test}}, l'architettura ibrida sviluppata permette di sfruttare i vantaggi di entrambe le tecnologie: l'efficienza computazionale e il determinismo delle espressioni regolari per pattern ricorrenti e la flessibilità semantica degli LLM per l'analisi di contenuti più complessi che potrebbero sfuggire a un approccio basato solamente sull'analisi statica.
 
+Il codice e il materiale sviluppato per questa tesi sono disponibili su GitHub \\
+(\url{https://github.com/e-magon/tesi_magon_triennale}).
+
 
 %
 %			CAPITOLO: Stato dell'arte
@@ -296,7 +299,7 @@ Questi modelli vengono eseguiti su server appositi e gli utenti possono accederv
 
 I \textbf{modelli \textit{open weight}}, al contrario, sono resi disponibili pubblicamente con i pesi pre-addestrati. Questo approccio permette agli utenti di scaricare i modelli e eseguirli sul proprio hardware o su server dedicati, utilizzando software specializzati come Ollama\footnote{Ollama \url{https://ollama.com}}, llama.cpp\footnote{llama.cpp \url{https://github.com/ggerganov/llama.cpp}}, o LM Studio\footnote{LM Studio \url{https://lmstudio.ai}}~\cite{bendiouis2024deploying_opensource}.
 
-L'esecuzione locale di modelli \textit{open weight} offre vantaggi significativi in termini di \textbf{privacy}, eliminando la necessità di trasmettere dati sensibili a servizi esterni, e di \textbf{costi operativi} ridotti, evitando le tariffe per token tipiche dei servizi cloud~\cite{bendiouis2024deploying_opensource}. Tuttavia, questa modalità richiede hardware adeguato in termini di memoria (RAM e VRAM) e capacità di calcolo, specialmente per modelli di grandi dimensioni.~\cite{bendiouis2024deploying_opensource}.
+L'esecuzione locale di modelli \textit{open weight} offre vantaggi significativi in termini di \textbf{privacy}, eliminando la necessità di trasmettere dati sensibili a servizi esterni, e di \textbf{costi operativi} ridotti, evitando le tariffe per token tipiche dei servizi cloud~\cite{bendiouis2024deploying_opensource}. Tuttavia, questa modalità richiede hardware adeguato in termini di memoria (RAM e VRAM) e capacità di calcolo, specialmente per modelli di grandi dimensioni~\cite{bendiouis2024deploying_opensource}.
 
 È importante distinguere tra diversi livelli di apertura nel contesto dei modelli linguistici. I modelli \textbf{\textit{open source}} forniscono accesso completo al codice sorgente, ai dati di addestramento e all'architettura del modello, permettendo modifiche complete e ridistribuzione. I modelli \textbf{\textit{open weight}}, pur fornendo i pesi pre-addestrati, non sempre includono i dataset di addestramento o documentazione completa sui processi di training. I modelli \textbf{\textit{open data}} condividono i dataset utilizzati per l'addestramento, facilitando la riproducibilità della ricerca ma non necessariamente i pesi del modello finale.
 
@@ -589,9 +592,9 @@ Il progetto supporta nove diversi modelli LLM selezionati per bilanciare perform
 \end{table}
 \todo{TODO aggiungere tutti gli LLM utilizzati in tutte le versioni, con link a sito/modello e spiegazione}
 
-I modelli Mistral sono stati sviluppati seguendo l'architettura \textbf{\textit{Mixture of Experts}}, cioè un approccio di machine learning che suddivide un modello di intelligenza artificiale in sottoreti specializzate chiamate "esperti", ognuna delle quali si concentra su un sottoinsieme specifico dei dati di input.~\cite{mu2025moe_survey}~\cite{ibm_moe}
+I modelli Mistral sono stati sviluppati seguendo l'architettura \textbf{\textit{Mixture of Experts}}, cioè un approccio di machine learning che suddivide un modello di intelligenza artificiale in sottoreti specializzate chiamate "esperti", ognuna delle quali si concentra su un sottoinsieme specifico dei dati di input~\cite{mu2025moe_survey, ibm_moe}.
 
-Mistral ha implementato questo approccio utilizzando 8 gruppi distinti di parametri: a ogni livello e per ogni token, una rete di instradamento seleziona due di questi esperti per elaborare il token, permettendo di utilizzare solo 12,9 miliardi di parametri sui 46,7 miliardi totali e ottenendo prestazioni superiori con maggiore efficienza computazionale.~\cite{mistral_moe}
+Mistral ha implementato questo approccio utilizzando 8 gruppi distinti di parametri: a ogni livello e per ogni token, una rete di instradamento seleziona due di questi esperti per elaborare il token, permettendo di utilizzare solo 12,9 miliardi di parametri sui 46,7 miliardi totali e ottenendo prestazioni superiori con maggiore efficienza computazionale~\cite{mistral_moe}.
 
 I modelli DeepSeek R1 includono capacità di \textbf{reasoning}\footnote{Il reasoning negli LLM si riferisce alla capacità di generare esplicitamente il processo di ragionamento step-by-step che porta alla risposta finale. Questi modelli utilizzano tag speciali (come \texttt{<think>...</think>}) per separare il processo di ragionamento interno dalla risposta definitiva, permettendo maggiore trasparenza nel processo decisionale.} avanzate che permettono di visualizzare il processo di ragionamento interno del modello.
 
