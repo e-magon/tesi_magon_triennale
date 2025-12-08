@@ -404,9 +404,7 @@ Questa architettura metodologica rappresenta la base teorica per un sistema di i
 
 Il progetto \textit{Sensitive Data Detector} integra diverse tecnologie per creare una soluzione completa di analisi automatica dei log. L'architettura si basa su un approccio multi-componente che combina diversi strumenti.
 
-Questo capitolo descrive nel dettaglio le tecnologie scelte, motivando le decisioni architetturali e spiegando come ogni componente contribuisce al funzionamento complessivo del sistema.
-
-\todo{TODO aggiungere un diagramma del sistema}
+Questo Capitolo descrive nel dettaglio le tecnologie scelte, motivando le decisioni architetturali e spiegando come ogni componente contribuisce al funzionamento complessivo del sistema.
 
 \section{Scenario applicativo}
 \label{sec:scenario_applicativo}
@@ -466,24 +464,11 @@ Si tratta di una soluzione enterprise e open-source che fornisce funzionalità a
 
 La scelta di GrayLog è stata motivata principalmente dal fatto che questa piattaforma viene già utilizzata nell'ambiente di produzione per il quale è stato sviluppato questo progetto, rendendo quindi l'integrazione di quest'ultimo una naturale estensione dell'infrastruttura esistente.
 
-\subsubsection{Caratteristiche principali}
-Oltre al vantaggio dell'integrazione con l'ambiente esistente, le caratteristiche tecniche che rendono GrayLog ideale per questo progetto includono:
+Oltre al vantaggio dell'integrazione con l'ambiente esistente, GrayLog presenta diverse caratteristiche tecniche che lo rendono ideale per questo progetto. La piattaforma offre un sistema di \textbf{raccolta centralizzata} con supporto nativo per diversi protocolli di logging, tra cui GELF\footnote{GELF (GrayLog Extended Log Format) è un formato strutturato progettato specificamente per il trasporto di log su reti TCP/UDP, che estende il formato syslog standard con campi aggiuntivi e supporto nativo per metadati.} e Syslog\footnote{Syslog è un protocollo standard per il logging di sistema definito dall'RFC 3164 (\url{https://datatracker.ietf.org/doc/html/rfc3164}), ampiamente utilizzato per la trasmissione di messaggi di log su reti IP.}, permettendo l'integrazione con sistemi eterogenei.
 
-\begin{itemize}
-    \item \textbf{Raccolta centralizzata}: Supporto nativo per diversi protocolli di logging (GELF\footnote{GELF (GrayLog Extended Log Format) è un formato strutturato progettato specificamente per il trasporto di log su reti TCP/UDP, che estende il formato syslog standard con campi aggiuntivi e supporto nativo per metadati.}, Syslog\footnote{Syslog è un protocollo standard per il logging di sistema definito dall'RFC 3164 (\url{https://datatracker.ietf.org/doc/html/rfc3164}), ampiamente utilizzato per la trasmissione di messaggi di log su reti IP.}) che permette l'integrazione con sistemi eterogenei
-    \item \textbf{Indicizzazione real-time}: Capacità di indicizzare e rendere ricercabili i log immediatamente dopo la ricezione
-    \item \textbf{Pipeline di processing}: Sistema di regole configurabili per trasformare, filtrare e arricchire i log durante l'ingestion
-    \item \textbf{API REST complete}: Interfacce programmatiche per l'automazione della configurazione e l'integrazione con sistemi esterni
-    \item \textbf{Scalabilità orizzontale}: Architettura distribuita che supporta cluster multi-nodo per gestire volumi elevati di log
-\end{itemize}
+La capacità di \textbf{indicizzazione \textit{real-time}} consente di rendere i log immediatamente ricercabili dopo la ricezione, mentre il sistema di \textbf{\textit{pipeline} di \textit{processing}} fornisce regole configurabili per trasformare, filtrare e arricchire i log durante la fase di \textit{ingestion}. Le \textbf{API REST complete} offrono interfacce programmatiche per l'automazione della configurazione e l'integrazione con sistemi esterni. Infine, la \textbf{scalabilità orizzontale} garantita dall'architettura distribuita supporta \textit{cluster} multi-nodo per gestire volumi elevati di log.
 
-\subsubsection{Integrazione nel progetto}
-Nel contesto del \textit{Sensitive Data Detector}, GrayLog svolge un ruolo duplice:
-
-\begin{enumerate}
-    \item \textbf{Sorgente di dati}: Riceve log da sistemi di produzione tramite input configurabili sulla porta \texttt{TCP 5555}
-    \item \textbf{Destinazione per notifiche}: Riceve le segnalazioni di dati sensibili identificati dal sistema tramite la porta \texttt{TCP 5556}
-\end{enumerate}
+In \textit{Sensitive Data Detector} GrayLog svolge un ruolo duplice, fungendo sia da \textbf{sorgente di dati} che da \textbf{destinazione per notifiche}. Come sorgente, riceve log dai sistemi di produzione tramite \textit{input} configurabili sulla porta \texttt{TCP 5555}; come destinazione, accoglie le segnalazioni di dati sensibili identificati dal sistema tramite la porta \texttt{TCP 5556}.
 
 La configurazione utilizza stream e output \textbf{GELF} per creare una pipeline che instrada i log in ingresso verso il \textit{Sensitive Data Detector} tramite output GELF sulla porta \texttt{TCP 24367}, raccoglie le notifiche di ritorno per visualizzazione e alerting e applica regole regex aggiuntive per l'identificazione rapida di pattern comuni.
 
@@ -493,33 +478,17 @@ La configurazione utilizza stream e output \textbf{GELF} per creare una pipeline
 Ollama\footnote{Ollama \url{https://ollama.com}} è un framework open-source progettato per semplificare l'esecuzione \textbf{locale} di Large Language Models.\\
 Esso offre un'interfaccia uniforme per l'integrazione e l'orchestrazione di differenti modelli LLM.
 
-\subsubsection{Architettura e funzionalità}
-Ollama offre un'architettura client-server che include:
+Ollama si basa su un'architettura \textit{client-server} articolata in diverse componenti. Il \textbf{\textit{server} locale} opera come processo \textit{daemon} responsabile del caricamento e dell'esecuzione dei modelli LLM, esponendo un'\textbf{API REST} che fornisce un'interfaccia HTTP standardizzata per l'interazione con i modelli. La \textbf{gestione dei modelli} è semplificata attraverso comandi \textit{CLI} dedicati per il download, l'aggiornamento e la configurazione di modelli provenienti da \textit{repository} pubblici.
 
-\begin{itemize}
-    \item \textbf{Server locale}: Processo daemon che gestisce il caricamento e l'esecuzione dei modelli LLM
-    \item \textbf{API REST}: Interfaccia HTTP standardizzata per l'interazione con i modelli caricati
-    \item \textbf{Gestione dei modelli}: Comandi per il download, l'aggiornamento e la configurazione di modelli da repository pubblici
-    \item \textit{\textbf{Modelfile}}: Formato di configurazione che permette la creazione di modelli personalizzati (a partire da modelli già esistenti) con prompt di sistema ad-hoc incorporati. Per ulteriori dettagli riguardanti i \textit{Modelfile} si rimanda alla sezione~\refwithpage{subsec:llm}.
-    \item \textbf{Ottimizzazioni hardware}: Supporto per accelerazione GPU e ottimizzazioni specifiche per diverse architetture (CPU, Metal\footnote{Metal è l'API grafica e di calcolo di Apple per macOS e iOS.} su macOS, CUDA\footnote{CUDA è la piattaforma di calcolo parallelo di NVIDIA per GPU.}/ROCM\footnote{ROCM è la piattaforma open-source di AMD per calcolo su GPU.} su Windows e GNU/Linux)
-\end{itemize}
+Un elemento particolarmente rilevante è il formato \textit{\textbf{Modelfile}}, che consente la creazione di modelli personalizzati a partire da modelli esistenti, incorporando \textit{prompt} di sistema specifici per il dominio applicativo. Per ulteriori dettagli riguardanti i \textit{Modelfile} si rimanda alla sezione~\refwithpage{subsec:llm}. Il \textit{framework} include inoltre \textbf{ottimizzazioni \textit{hardware}} con supporto all'esecuzione sia tramite CPU che GPU, oltre a configurazioni specifiche per diverse architetture, tra cui Metal\footnote{Metal è l'API grafica e di calcolo di Apple per macOS e iOS.} su macOS, e CUDA\footnote{CUDA è la piattaforma di calcolo parallelo di NVIDIA per GPU.}/ROCM\footnote{ROCM è la piattaforma \textit{open-source} di AMD per calcolo su GPU.} su Windows e GNU/Linux.
 
-\subsubsection{Vantaggi per il progetto}
-La scelta di Ollama ha portato diversi vantaggi architetturali:
-
-\begin{itemize}
-    \item \textbf{Deployment locale}: Eliminazione della dipendenza da servizi cloud esterni, preservando la privacy dei dati ed evitando la trasmissione di informazioni sensibili a terze parti
-    \item \textbf{Costi operativi ridotti}: Assenza di costi per token o chiamate API, permettendo elaborazioni intensive
-    \item \textbf{Latenza ottimizzata}: Comunicazione locale che riduce significativamente i tempi di risposta
-    \item \textbf{Flessibilità dei modelli}: Possibilità di sperimentare con diversi modelli senza vincoli commerciali
-\end{itemize}
+La scelta di Ollama ha portato diversi vantaggi architetturali significativi. Il \textbf{\textit{deployment} locale} elimina la dipendenza da servizi \textit{cloud} esterni, preservando la \textit{privacy} dei dati ed evitando la trasmissione di informazioni sensibili a terze parti. I \textbf{costi operativi ridotti}, derivanti dall'assenza di tariffe per \textit{token} o chiamate API, permettono elaborazioni intensive senza vincoli economici. La \textbf{latenza ottimizzata} garantita dalla comunicazione locale riduce significativamente i tempi di risposta, mentre la \textbf{flessibilità dei modelli} consente di sperimentare con diverse soluzioni senza vincoli commerciali.
 
 \subsection{Large Language Models}
 \label{subsec:llm}
 
 La strategia prevede l'utilizzo di \textbf{modelli personalizzati} ottimizzati specificamente per il dominio dei log di sistema.
 
-\subsubsection{Modelli supportati}
 Il progetto supporta nove diversi modelli LLM selezionati per bilanciare performance, accuratezza e requisiti computazionali. I modelli sono elencati nella tabella~\refwithpage{tab:modelli_llm}.
 
 \begin{table}[h!]
@@ -537,7 +506,6 @@ Il progetto supporta nove diversi modelli LLM selezionati per bilanciare perform
     \caption{Modelli LLM supportati dal sistema}
     \label{tab:modelli_llm}
 \end{table}
-\todo{TODO aggiungere tutti gli LLM utilizzati in tutte le versioni, con link a sito/modello e spiegazione}
 
 I modelli Mistral sono stati sviluppati seguendo l'architettura \textbf{\textit{Mixture of Experts}}, cioè un approccio di machine learning che suddivide un modello di intelligenza artificiale in sottoreti specializzate chiamate "esperti", ognuna delle quali si concentra su un sottoinsieme specifico dei dati di input~\cite{mu2025moe_survey, ibm_moe}.
 
@@ -545,23 +513,9 @@ Mistral ha implementato questo approccio utilizzando 8 gruppi distinti di parame
 
 I modelli DeepSeek R1 includono capacità di \textbf{reasoning}\footnote{Il reasoning negli LLM si riferisce alla capacità di generare esplicitamente il processo di ragionamento step-by-step che porta alla risposta finale. Questi modelli utilizzano tag speciali (come \texttt{<think>...</think>}) per separare il processo di ragionamento interno dalla risposta definitiva, permettendo maggiore trasparenza nel processo decisionale.} avanzate che permettono di visualizzare il processo di ragionamento interno del modello.
 
-\subsubsection{Personalizzazione tramite \textit{Modelfile}}
-Ogni modello viene personalizzato attraverso dei file di configurazione \textit{Modelfile} che includono:
+Ogni modello viene personalizzato attraverso file di configurazione \textit{Modelfile} che definiscono diversi aspetti fondamentali. Il \textbf{\textit{prompt} di sistema} contiene istruzioni specifiche per l'identificazione di dati sensibili nei log, mentre i \textbf{parametri ottimizzati} configurano la temperatura\footnote{La temperatura è un parametro che controlla la casualità delle risposte dell'LLM: valori bassi (0.0-0.3) producono risposte più deterministiche e conservative, mentre valori alti (0.7-1.0) aumentano la creatività ma riducono la coerenza.} e il \textit{context window}\footnote{Il \textit{context window} rappresenta il numero massimo di \textit{token} che un LLM può processare simultaneamente in una singola conversazione, inclusi \textit{prompt}, messaggi precedenti e risposta generata.} per massimizzare la precisione. Gli \textbf{esempi di \textit{training}} guidano il modello nel formato di \textit{output} atteso, mentre le \textbf{definizioni precise} specificano in dettaglio cosa costituisce un dato sensibile e cosa escludere dall'analisi.
 
-\begin{itemize}
-    \item \textbf{Prompt di sistema}: Istruzioni specifiche per l'identificazione di dati sensibili nei log
-    \item \textbf{Parametri ottimizzati}: Configurazione di temperatura\footnote{La temperatura è un parametro che controlla la casualità delle risposte dell'LLM: valori bassi (0.0-0.3) producono risposte più deterministiche e conservative, mentre valori alti (0.7-1.0) aumentano la creatività ma riducono la coerenza.} e context window\footnote{Il context window rappresenta il numero massimo di token che un LLM può processare simultaneamente in una singola conversazione, inclusi prompt, messaggi precedenti e risposta generata.} per massimizzare la precisione
-    \item \textbf{Esempi di training}: Messaggi di esempio che guidano il modello nel formato di output atteso
-    \item \textbf{Definizioni precise}: Specifiche dettagliate su cosa costituisce un dato sensibile e cosa escludere dall'analisi
-\end{itemize}
-
-Il prompt di sistema incorpora linee guida specifiche per:
-\begin{itemize}
-    \item Identificazione di email, token di autenticazione, coordinate geografiche
-    \item Esclusione di dati non sensibili come username, ID, timestamp
-    \item Estrazione selettiva dei valori sensibili da oggetti JSON complessi
-    \item Formato di output standardizzato per facilità di parsing
-\end{itemize}
+Il \textit{prompt} di sistema incorpora linee guida specifiche per l'identificazione di email, \textit{token} di autenticazione e coordinate geografiche, per l'esclusione di dati non sensibili come \textit{username}, ID e \textit{timestamp}, per l'estrazione selettiva dei valori sensibili da oggetti JSON complessi e per la produzione di un formato di \textit{output} standardizzato che faciliti il \textit{parsing}.
 
 Per ulteriori dettagli riguardanti i \textit{Modelfile} e la configurazione dei LLM si rimanda alla sezione~\refwithpage{subsubsec:ver2_prompt_engineering}.
 
@@ -576,26 +530,10 @@ Il livello di implementazione si basa su tecnologie consolidate che garantiscono
 
 Python\footnote{Python \url{https://www.python.org}} rappresenta il linguaggio di programmazione principale del progetto, scelto per la sua versatilità e l'ampio ecosistema di librerie specializzate per l'integrazione con sistemi di AI.
 
-\subsubsection{Versione e compatibilità}
-Il progetto utilizza Python \textbf{3.12}, che garantisce:
-\begin{itemize}
-    \item Supporto completo per programmazione asincrona con \texttt{asyncio}
-    \item Ottimizzazioni di performance per applicazioni I/O intensive
-    \item Compatibilità con le librerie più recenti dell'ecosistema AI
-    \item Funzionalità avanzate di type hinting per migliorare la manutenibilità del codice
-\end{itemize}
+Il progetto utilizza Python 3.12, che garantisce supporto completo per la \textbf{programmazione asincrona} tramite il modulo \texttt{asyncio}, ottimizzazioni di \textit{performance} specifiche per applicazioni \textit{I/O intensive}, piena compatibilità con le librerie più recenti dell'ecosistema AI e funzionalità avanzate di \textit{type hinting} per migliorare la manutenibilità del codice.
 
-\subsubsection{Dipendenze principali}
-Le librerie Python utilizzate includono:
+Le librerie Python utilizzate comprendono \textbf{ollama}, la libreria ufficiale per l'interazione con il \textit{server} Ollama tramite API REST; \textbf{httpx}, un \textit{client} HTTP asincrono per comunicazioni non bloccanti; \textbf{anyio}, un \textit{framework} per programmazione asincrona \textit{cross-platform}; e \textbf{requests}, impiegata per la configurazione automatica di GrayLog tramite API REST.
 
-\begin{itemize}
-    \item \textbf{ollama}: Libreria ufficiale per l'interazione con il server Ollama tramite API REST
-    \item \textbf{httpx}: Client HTTP asincrono per comunicazioni non bloccanti
-    \item \textbf{anyio}: Framework per programmazione asincrona cross-platform
-    \item \textbf{requests}: Per configurazione automatica di GrayLog tramite API REST
-\end{itemize}
-
-\subsubsection{Il progetto \textit{Sensitive Data Detector}}
 Il core del sistema è implementato in tre versioni evolutive che rappresentano l'evoluzione del progetto dalla dimostrazione di fattibilità all'integrazione enterprise.
 
 La \textbf{prima versione} costituisce un proof of concept per validare l'uso di LLM nell'identificazione di dati sensibili.
@@ -604,9 +542,8 @@ La \textbf{seconda versione} introduce sistemi di valutazione quantitativa e mod
 
 La \textbf{terza versione} implementa l'integrazione real-time con GrayLog per deployment in ambiente di produzione.
 
-Per una descrizione completa dell'architettura, delle funzionalità e dei risultati di ogni versione si rimanda al capitolo~\refwithpage{chap:sensitive_data_detector}.
+Per una descrizione completa dell'architettura, delle funzionalità e dei risultati di ogni versione si rimanda al Capitolo~\refwithpage{chap:sensitive_data_detector}.
 
-\subsubsection{Script di inizializzazione GrayLog}
 Il file \texttt{\textbf{graylog\_setup.py}} automatizza la configurazione iniziale di GrayLog tramite le API REST per la creazione \textbf{programmatica} di input, stream, output e pipeline; adotta una configurazione \textbf{idempotente} che consente esecuzioni ripetute senza effetti collaterali; include meccanismi di gestione degli errori con validazione delle configurazioni e, dove previsto, rollback automatico; e supporta template personalizzabili per adattare le configurazioni a diversi ambienti.
 
 In particolare, lo script provvede alla definizione degli input \texttt{TCP} per i log in ingresso e per le notifiche di ritorno, alla creazione di stream per il routing intelligente dei messaggi, alla configurazione di output GELF per la comunicazione con il \textit{Sensitive Data Detector} e all'impostazione di pipeline con regole regex per l'identificazione rapida di pattern comuni.
@@ -618,28 +555,12 @@ Il codice completo dello script è disponibile nell'appendice~\refwithpage{lst:c
 
 Docker\footnote{Docker \url{https://www.docker.com}} viene utilizzato per la containerizzazione dell'ambiente GrayLog, garantendo portabilità, isolamento e semplicità di deployment.
 
-\subsubsection{Architettura multi-container}
-La configurazione \textbf{Docker Compose} definisce un ambiente completo che include:
+La configurazione \textbf{Docker Compose} definisce un ambiente completo composto da tre servizi principali: \textbf{MongoDB}\footnote{MongoDB \url{https://www.mongodb.com}}, che funge da \textit{database} per la memorizzazione dei metadati di configurazione di GrayLog; \textbf{GrayLog DataNode}, il nodo di indicizzazione responsabile dello \textit{storage} e della ricerca dei log; e \textbf{GrayLog Enterprise}, il \textit{server} principale che espone l'interfaccia \textit{web} e le API REST.
 
-\begin{itemize}
-    \item \textbf{MongoDB}\footnote{MongoDB \url{https://www.mongodb.com}}: Database per memorizzazione dei metadati di configurazione di GrayLog
-    \item \textbf{GrayLog DataNode}: Nodo di indicizzazione per storage e ricerca dei log
-    \item \textbf{GrayLog Enterprise}: Server principale con interfaccia web e API REST
-\end{itemize}
+Il codice completo della configurazione del \textit{container} è disponibile nell'appendice~\refwithpage{lst:code_container_config}.
 
-Il codice completo della configurazione del container è disponibile nell'appendice~\refwithpage{lst:code_container_config}.
+L'ambiente Docker implementa diverse soluzioni per garantire sicurezza e affidabilità. Una \textbf{rete isolata}, realizzata tramite \textit{bridge network} dedicata, assicura la comunicazione sicura tra i \textit{container}. I \textbf{volumi persistenti} garantiscono lo \textit{storage} permanente per i dati di MongoDB, gli indici di GrayLog e le configurazioni. Il \textbf{\textit{port mapping}} consente l'esposizione selettiva delle sole porte necessarie per l'integrazione con sistemi esterni. Infine, gli \textbf{\textit{health checks}} permettono il monitoraggio automatico dello stato dei servizi, attivando le \textit{restart policies} configurate in caso di malfunzionamenti.
 
-\subsubsection{Configurazione di rete e persistenza}
-L'ambiente Docker implementa:
-
-\begin{itemize}
-    \item \textbf{Rete isolata}: Bridge network dedicata per comunicazione sicura tra container
-    \item \textbf{Volumi persistenti}: Storage permanente per i dati di MongoDB, indici GrayLog e le configurazioni
-    \item \textbf{Port mapping}: Esposizione selettiva delle porte necessarie per l'integrazione esterna
-    \item \textbf{Health checks}: Monitoraggio automatico dello stato dei servizi con restart policies
-\end{itemize}
-
-\subsubsection{Vantaggi operativi}
 L'utilizzo di Docker porta diversi benefici, tra cui un \textit{deployment} semplificato che consente l'avvio dell'intero stack con un singolo comando, l'isolamento delle dipendenze per prevenire conflitti con software preesistente sull'host, la portabilità cross-platform con comportamento consistente su Windows, macOS e Linux, la scalabilità orizzontale per replicare l'ambiente a fini di testing o di deployment distribuito e una gestione puntuale delle versioni dei componenti utilizzati.
 
 
@@ -647,7 +568,7 @@ L'utilizzo di Docker porta diversi benefici, tra cui un \textit{deployment} semp
 %			CAPITOLO: Il lavoro svolto
 %
 
-\chapter{Sensitive Data Detector}
+\chapter{\textit{Sensitive Data Detector}}
 \label{chap:sensitive_data_detector}
 
 Il progetto \textit{Sensitive Data Detector} rappresenta il cuore del sistema ed è stato sviluppato attraverso un \textbf{processo iterativo} che ha portato alla realizzazione di tre versioni evolutive, ognuna con obiettivi specifici e caratteristiche tecniche distinte.
