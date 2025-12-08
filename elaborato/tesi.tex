@@ -336,124 +336,70 @@ Un ulteriore aspetto critico riguarda la lunghezza e la struttura delle sequenze
 %			CAPITOLO: Metodologia teorica
 %
 
-\todochapter{Metodologia}{chap:metodologia}{metodologia teorica}
+\chapter{Metodologia}
+\label{chap:metodologia}
 
-\todosection{Architettura proposta}{sec:architettura_proposta}{grafico di flusso dell'architettura}
+\section{Architettura proposta}
+\label{sec:architettura_proposta}
 
-TODO qua una descrizione generale della soluzione teorica, che utilizza sia llm che regex per l'analisi di log alla ricerca di dati sensibili. \\
-Spiegare come gli LLM sono stati usati sia come supporto per definire le regex per l'analisi statica, sia come strumento attivo per l'analisi di log in tempo reale.
+L'architettura proposta consiste in un sistema di analisi continua dei log, progettato per ricevere flussi di registrazioni in tempo reale, elaborarle individualmente e classificarle in base alla presenza o assenza di dati sensibili. Il sistema opera in modalità \textit{streaming}, processando ciascuna riga di log non appena questa viene acquisita, restituendo un indicatore indicante l'esito dell'analisi.
 
-\todo{TODO completare}
+Il cuore dell'architettura si basa su un \textbf{approccio ibrido} che combina due metodologie di analisi complementari. Il primo livello di elaborazione impiega tecniche di \textbf{analisi statica} basate su espressioni regolari, in grado di identificare \textit{pattern} strutturati e ricorrenti con elevata efficienza computazionale. Questo livello è ottimizzato per riconoscere dati sensibili che seguono formati ben definiti, quali indirizzi email, \textit{token} di autenticazione, coordinate geografiche e simili.
 
-\todosection{Approccio all'identificazione dei dati sensibili}{sec:approccio_identificazione}{approccio all'identificazione dei dati sensibili}
+Il secondo livello sfrutta le capacità di comprensione contestuale dei \textit{Large Language Models} per analizzare dinamicamente il contenuto testuale delle righe di log. Questa componente è progettata per intercettare informazioni sensibili espresse in linguaggio naturale o che non seguono schemi sintattici predefinibili, colmando le lacune dell'analisi statica attraverso una valutazione semantica del contenuto.
 
-L'approccio metodologico del progetto prevede l'utilizzo dei Large Language Models sia come strumento di supporto per la definizione e la validazione delle espressioni regolari, sia come componente attiva integrata nel processo di analisi in tempo reale.
+L'integrazione dei due approcci permette di ottenere una \textbf{copertura completa}: l'analisi statica garantisce prestazioni elevate e risultati deterministici per \textit{pattern} noti, mentre l'analisi dinamica tramite LLM assicura flessibilità e adattabilità a contenuti complessi e variabili. Il sistema elabora ogni riga di log in sequenza, applicando entrambi i livelli di analisi e aggregando i risultati per produrre una classificazione finale affidabile ed esaustiva.
 
-\todosubsection{Utilizzo di LLM per supportare la definizione di regex}{subsec:llm_definizione_regex}{verificare e nel caso cambiare tempi verbali}
+\section{Approccio all'identificazione dei dati sensibili}
+\label{sec:approccio_identificazione}
 
-La strategia si basa sul principio che l'identificazione di dati sensibili strutturati (come codici fiscali, numeri di telefono, indirizzi email, JWT, coordinate geografiche etc.) può essere efficacemente realizzata tramite espressioni regolari opportunamente progettate. \\
-Gli LLM, in questo contesto, svolgono un ruolo di \textit{consulenza esperta} durante la fase di sviluppo, contribuendo a identificare pattern complessi nei campioni di log, a validare e ottimizzare le espressioni regolari analizzando le righe non catturate per verificare la presenza di dati sensibili non identificati e a gestire i casi limite individuando varianti e formati \textit{edge-case} che potrebbero sfuggire alle regex iniziali.
-\todo{TODO migliorare questo paragrafo}
+L'approccio metodologico del progetto prevede l'utilizzo dei \textit{Large Language Models} sia come strumento di supporto durante lo sviluppo per la definizione e validazione delle espressioni regolari, sia come componente attiva integrata nel processo di analisi in tempo reale.
 
-\subsubsection{Processo di verifica e ottimizzazione delle regex assistito da LLM}
-Il workflow previsto per la generazione delle espressioni regolari comprende:
+La strategia si basa sul principio che l'identificazione di dati sensibili \textbf{strutturati}, quali codici fiscali, numeri di telefono, indirizzi email, JWT o coordinate geografiche, può essere efficacemente realizzata tramite espressioni regolari opportunamente progettate. In questo contesto, gli LLM svolgono un ruolo di \textit{consulenza esperta} durante la fase di sviluppo, contribuendo a identificare \textit{pattern} complessi nei campioni di log, validare e ottimizzare le espressioni regolari analizzando le righe non catturate per verificare la presenza di dati sensibili non identificati, e gestire i casi limite individuando varianti e formati \textit{edge-case} che potrebbero sfuggire alle \textit{regex} iniziali.
 
-\begin{enumerate}
-    \item \textbf{Analisi esplorativa}: Utilizzo di LLM per analizzare campioni di log e identificare potenziali dati sensibili, inclusi formati non convenzionali
-    \item \textbf{Categorizzazione}: Classificazione dei dati sensibili identificati in categorie omogenee (credenziali, PII, token, ecc.)
-    \item \textbf{Generazione iterativa}: Creazione progressiva di regex specifiche per ogni categoria, con il supporto dell'LLM per gestire variazioni e casi speciali
-    \item \textbf{Test e raffinamento}: Applicazione delle regex su dataset di test più ampi e analisi tramite LLM delle righe non catturate, con l'obiettivo di raggiungere un punto in cui l'LLM non identifichi più dati sensibili nelle righe non rilevate dalle regex
-    \item \textbf{Consolidamento}: Creazione di un set finale di espressioni regolari ottimizzate e pronte per l'utilizzo in produzione
-\end{enumerate}
+Il \textit{workflow} previsto per la generazione delle espressioni regolari si articola attraverso diverse fasi successive. Inizialmente si procede con un'\textbf{analisi esplorativa}, durante la quale gli LLM vengono impiegati per esaminare campioni di log e identificare potenziali dati sensibili, inclusi formati non convenzionali. I dati sensibili identificati vengono quindi classificati in categorie omogenee, quali credenziali, informazioni personali e \textit{token} di autenticazione.
 
-\subsubsection{Limitazioni e sfide identificate}
-In questo approccio si identificano diverse sfide significative:
+Segue una fase di \textbf{generazione iterativa}, in cui vengono create progressivamente espressioni regolari specifiche per ogni categoria, con il supporto dell'LLM per gestire variazioni e casi speciali. Le \textit{regex} vengono poi sottoposte a \textbf{test e raffinamento}, applicandole su \textit{dataset} più ampi e analizzando tramite LLM le righe non catturate, con l'obiettivo di raggiungere un punto in cui l'LLM non identifichi più dati sensibili nelle righe non rilevate dalle \textit{regex}. Infine, si procede al \textbf{consolidamento}, creando un set finale di espressioni regolari ottimizzate e pronte per l'utilizzo in produzione.
 
-\begin{itemize}
-    \item \textbf{Complessità dei pattern}: Alcuni tipi di dati sensibili, specialmente quelli espressi in linguaggio naturale, risultano difficilmente catturabili tramite regex
-    \item \textbf{Contesto semantico}: Le espressioni regolari non possono comprendere il contesto semantico in cui un dato appare, potendo generare falsi positivi
-    \item \textbf{Evoluzione continua}: La necessità di aggiornamento continuo delle regex per adattarsi a nuovi formati e variazioni nei log
-    \item \textbf{Manutenzione complessa}: La gestione di un insieme crescente di regex specializzate comporta complessità di manutenzione significative
-\end{itemize}
+In questo approccio si identificano tuttavia diverse sfide significative. Alcuni tipi di dati sensibili, specialmente quelli espressi in linguaggio naturale, risultano difficilmente catturabili tramite \textit{regex}. Le espressioni regolari non possono comprendere il contesto semantico in cui un dato appare, potendo quindi generare \textbf{falsi positivi}. Inoltre, emerge la necessità di un aggiornamento continuo delle \textit{regex} per adattarsi a nuovi formati e variazioni nei log, e la gestione di un insieme crescente di \textit{regex} specializzate comporta complessità di manutenzione significative.
 
-Queste considerazioni vengono in parte affrontate dalla scelta di un sistema ibrido, descritto nella sezione~\refwithpage{subsec:ibrido_llm_regex}, che mantiene i vantaggi delle espressioni regolari integrandoli con le capacità di comprensione contestuale degli LLM.
-\todo{TODO migliorare questo paragrafo}
+Queste considerazioni vengono in parte affrontate dalla scelta di un sistema ibrido, descritto nella sezione~\refwithpage{sec:ibrido_llm_regex}, che mantiene i vantaggi delle espressioni regolari integrandoli con le capacità di comprensione contestuale degli LLM.
 
-\subsection{Integrazione ibrida di LLM e regex per l'identificazione in tempo reale}
-\label{subsec:ibrido_llm_regex}
+\section{Integrazione ibrida di LLM e regex per l'identificazione in tempo reale}
+\label{sec:ibrido_llm_regex}
 
-L'approccio metodologico proposto integra un sistema ibrido che combina l'efficienza computazionale delle espressioni regolari con la flessibilità semantica dei Large Language Models, creando una soluzione ibrida per l'identificazione di dati sensibili in tempo reale.
+L'approccio proposto integra un sistema ibrido che combina le espressioni regolari con i \textit{Large Language Models}, creando una soluzione ibrida per l'identificazione di dati sensibili in tempo reale.
 
-\subsubsection{Principio architetturale}
+Il primo livello ha un ruolo di \textbf{analisi sintattica}, cioè di identificazione rapida e deterministica di \textit{pattern} strutturati ben definiti mediante espressioni regolari (email, \textit{token} di autenticazione, coordinate geografiche, identificatori numerici, etc.).
 
-L'architettura ibrida si basa sul principio di complementarietà tra le due tecnologie.
+Il secondo livello ha invece un ruolo di \textbf{analisi semantica}, quindi di comprensione contestuale di contenuti complessi tramite modelli linguistici, riuscendo quindi a rilevare dati sensibili espressi in linguaggio naturale o formati non convenzionali.
 
-Il primo livello ha un ruolo di analisi sintattica, cioè di identificazione rapida e deterministica di pattern strutturati ben definiti mediante espressioni regolari (email, token di autenticazione, coordinate geografiche, identificatori numerici, etc.).
+La prima fase consiste nell'\textbf{acquisizione}, durante la quale i log vengono ricevuti dal sistema centralizzato di gestione. Segue la \textbf{pre-elaborazione sintattica}, in cui un primo \textit{layer} applica espressioni regolari ottimizzate per identificare \textit{pattern} comuni e ad alta occorrenza; i log contenenti corrispondenze positive vengono immediatamente marcati come sensibili.
 
-Il secondo livello ha invece un ruolo di analisi semantica, quindi di comprensione contestuale di contenuti complessi tramite modelli linguistici, riuscendo quindi a rilevare dati sensibili espressi in linguaggio naturale o formati non convenzionali.
+Successivamente avviene la fase di \textbf{instradamento}, dove i log vengono inoltrati al sistema di analisi semantica. Quest'ultimo procede con l'\textbf{analisi contestuale}, durante la quale il modello linguistico esamina ogni unità di log per identificare dati sensibili non rilevati dall'analisi sintattica iniziale, varianti e formattazioni non standard di dati già categorizzati, informazioni sensibili espresse in linguaggio naturale, e contesti in cui dati apparentemente innocui assumono natura sensibile.
 
-\subsubsection{Modello operativo}
+La fase di \textbf{consolidamento} prevede che le identificazioni del modello linguistico vengano associate agli identificatori univoci dei log originali e strutturate per l'integrazione nel sistema di gestione. Infine, durante l'\textbf{aggregazione}, il sistema centrale combina i risultati provenienti da entrambi i \textit{layer} di analisi, creando una vista unificata di tutti i dati sensibili identificati e attivando eventuali meccanismi di notifica.
 
-Il flusso di elaborazione si articola concettualmente nelle seguenti fasi:
+L'integrazione di analisi sintattica e semantica offre diversi vantaggi rispetto a soluzioni basate su una singola tecnologia. La \textbf{copertura completa} rappresenta il beneficio principale: la combinazione delle due metodologie permette di identificare sia dati strutturati che non strutturati, garantendo al contempo una \textbf{riduzione dei falsi negativi}, poiché i dati che sfuggono all'analisi sintattica vengono catturati dalla comprensione contestuale dei modelli linguistici.
 
-\begin{enumerate}
-    \item \textbf{Acquisizione}: I log vengono acquisiti dal sistema centralizzato di gestione
+L'architettura descritta garantisce \textbf{flessibilità evolutiva} del sistema, perché rende possibile formalizzare in espressioni regolari i nuovi \textit{pattern} identificati dai modelli linguistici, ottimizzando le elaborazioni future attraverso un processo di apprendimento incrementale.
 
-    \item \textbf{Pre-elaborazione sintattica}: Un primo layer applica espressioni regolari ottimizzate per identificare pattern comuni e ad alta occorrenza. I log contenenti corrispondenze positive vengono immediatamente marcati per notifica rapida
+L'architettura offre inoltre \textbf{resilienza}, poiché il fallimento di un \textit{layer} non compromette completamente la capacità di identificazione del sistema, e \textbf{adattabilità}, consentendo di calibrare il sistema in base alle esigenze specifiche e di privilegiare velocità o accuratezza mediante la regolazione del bilanciamento tra i due \textit{layer}.
 
-    \item \textbf{Instradamento intelligente}: I log (sia quelli già marcati che quelli non catturati dalle espressioni regolari) vengono inoltrati al sistema di analisi semantica
+L'approccio ibrido proposto richiede alcune considerazioni metodologiche fondamentali per garantirne l'efficacia operativa: La chiara distinzione tra analisi sintattica e semantica costituisce un principio architetturale fondamentale che permette di ottimizzare \textbf{indipendentemente} ciascun \textit{layer} secondo le proprie caratteristiche specifiche.
 
-    \item \textbf{Analisi contestuale}: Il modello linguistico analizza ogni unità di log per identificare:
-    \begin{itemize}
-        \item Dati sensibili non rilevati dall'analisi sintattica iniziale
-        \item Varianti e formattazioni non standard di dati già categorizzati
-        \item Informazioni sensibili espresse in linguaggio naturale
-        \item Contesti in cui dati apparentemente innocui assumono natura sensibile
-    \end{itemize}
+Questa separazione consente di sostituire o aggiornare singoli componenti senza impattare il funzionamento dell'intero sistema, facilitando l'\textbf{evoluzione} tecnologica e la \textbf{manutenzione} a lungo termine. Inoltre, questo approccio modulare permette di valutare separatamente le \textit{performance} di ogni metodologia attraverso metriche appropriate e di adattare dinamicamente la distribuzione del carico computazionale in base alle risorse disponibili e ai requisiti operativi.
 
-    \item \textbf{Consolidamento}: Le identificazioni del modello linguistico vengono associate agli identificatori univoci dei log originali e strutturate per l'integrazione nel sistema di gestione
+La scelta metodologica di elaborare singolarmente ogni unità di log, anziché processarle in \textit{batch}, è motivata da diverse considerazioni architetturali. In termini di precisione, l'elaborazione unitaria garantisce che ogni riga riceva un'analisi dedicata senza interferenze da contesto irrilevante, massimizzando l'accuratezza dell'identificazione. Dal punto di vista della tracciabilità, questo approccio assicura una corrispondenza diretta e biunivoca tra \textit{input} e risultato dell'analisi, semplificando il \textit{debugging} e l'\textit{audit} dei processi. La latenza risulta inoltre controllata e uniforme, con tempi di risposta prevedibili che facilitano la pianificazione delle risorse. Infine, l'isolamento garantito dall'elaborazione unitaria previene la propagazione a cascata di eventuali errori o anomalie, aumentando la resilienza complessiva del sistema.
 
-    \item \textbf{Aggregazione}: Il sistema centrale aggrega i risultati provenienti da entrambi i layer di analisi, creando una vista unificata di tutti i dati sensibili identificati e attivando eventuali meccanismi di notifica
-\end{enumerate}
-
-\subsubsection{Vantaggi dell'approccio ibrido}
-
-L'integrazione di analisi sintattica e semantica offre diversi vantaggi rispetto a soluzioni basate su una singola tecnologia:
-
-\begin{itemize}
-    \item \textbf{Copertura completa}: La combinazione delle due metodologie permette di identificare sia dati strutturati che non strutturati
-
-    \item \textbf{Riduzione dei falsi negativi}: I dati che sfuggono all'analisi sintattica vengono catturati dalla comprensione contestuale dei modelli linguistici
-
-    \item \textbf{Scalabilità economica}: L'uso selettivo dei modelli linguistici solo per i casi complessi mantiene contenuti i costi computazionali
-
-    \item \textbf{Flessibilità evolutiva}: Nuovi pattern identificati dai modelli linguistici possono essere formalizzati in espressioni regolari per ottimizzare elaborazioni future
-
-    \item \textbf{Resilienza}: Il fallimento di un layer non compromette completamente la capacità di identificazione del sistema
-
-    \item \textbf{Adattabilità}: Il sistema può essere calibrato in base alle esigenze specifiche, privilegiando velocità o accuratezza mediante la regolazione del bilanciamento tra i due layer
-\end{itemize}
-
-\subsubsection{Considerazioni metodologiche}
-
-L'approccio ibrido proposto richiede alcune considerazioni metodologiche fondamentali per garantirne l'efficacia operativa.
-
-\paragraph{Separazione delle preoccupazioni}
-La chiara distinzione tra analisi sintattica e semantica costituisce un principio architetturale fondamentale che permette di ottimizzare indipendentemente ciascun layer secondo le proprie caratteristiche specifiche.
-
-Questa separazione consente di sostituire o aggiornare singoli componenti senza impattare il funzionamento dell'intero sistema, facilitando l'evoluzione tecnologica e la manutenzione a lungo termine. Inoltre, tale approccio modulare permette di valutare separatamente le performance di ogni metodologia attraverso metriche appropriate e di adattare dinamicamente la distribuzione del carico computazionale in base alle risorse disponibili e ai requisiti operativi.
-
-\paragraph{Granularità dell'analisi}
-La scelta metodologica di elaborare singolarmente ogni unità di log, anziché processarle in batch, è motivata da diverse considerazioni architetturali. In termini di precisione, l'elaborazione unitaria garantisce che ogni riga riceva un'analisi dedicata senza interferenze da contesto irrilevante, massimizzando l'accuratezza dell'identificazione. Dal punto di vista della tracciabilità, questo approccio assicura una corrispondenza diretta e biunivoca tra input e risultato dell'analisi, semplificando il debugging e l'audit dei processi. La latenza risulta inoltre controllata e uniforme, con tempi di risposta prevedibili che facilitano la pianificazione delle risorse. Infine, l'isolamento garantito dall'elaborazione unitaria previene la propagazione a cascata di eventuali errori o anomalie, aumentando la resilienza complessiva del sistema.
-
-Questa architettura metodologica rappresenta la base teorica per un sistema di identificazione efficace ed efficiente, bilanciando precisione, prestazioni e manutenibilità, e costituisce il fondamento concettuale di \textit{Sensitive Data Detector}, descritto approfonditamente nel Capitolo~\refwithpage{chap:implementazione_tecnologie}.
+Questa architettura metodologica rappresenta la base teorica per un sistema di identificazione efficace ed efficiente, bilanciando precisione, prestazioni e manutenibilità, e costituisce il fondamento concettuale di \textit{Sensitive Data Detector}, descritto approfonditamente nei Capitoli~\refwithpage{chap:implementazione_tecnologie}~e~\refwithpage{chap:sensitive_data_detector}.
 
 
 %
 %			CAPITOLO: Implementazione e tecnologie
 %
 
-\chapter{Implementazione e tecnologie di \textit{Sensitive Data Detector}}
+\chapter{Implementazione e tecnologie}
 \label{chap:implementazione_tecnologie}
 
 Il progetto \textit{Sensitive Data Detector} integra diverse tecnologie per creare una soluzione completa di analisi automatica dei log. L'architettura si basa su un approccio multi-componente che combina diversi strumenti.
