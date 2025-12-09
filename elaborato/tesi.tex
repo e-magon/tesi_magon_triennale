@@ -753,9 +753,9 @@ Tutti i modelli condividono una configurazione unificata ottimizzata per l'elabo
 \end{table}
 \todo{TODO: ri-verificare tabella}
 
-A differenza della prima versione, tutti i modelli utilizzano una configurazione unificata con elaborazione di una riga per messaggio e ripristino della conversazione ogni 15 messaggi. Questa standardizzazione facilita il confronto diretto delle performance tra modelli diversi e ottimizza l'utilizzo delle risorse computazionali. \\
-Inoltre, l'elaborazione di singole righe consente una valutazione immediata dell'accuratezza delle classificazioni prodotte dal modello.
-\todo{TODO spiegare che gestendo una riga alla volta si ottiene una risposta "decisa" dall'LLM per ogni singola riga. Mandando più righe alla volta bisogna parsare la risposta per capire quali righe l'LLM reputa sensibili. Inoltre aumenta il rischio che l'LLM non risponda correttamente o che salti qualche riga}
+A differenza della prima versione, tutti i modelli utilizzano una configurazione unificata con elaborazione di una riga per messaggio e ripristino della conversazione ogni 15 messaggi. Questa standardizzazione facilita il confronto diretto delle \textit{performance} tra modelli diversi e ottimizza l'utilizzo delle risorse computazionali.
+
+La scelta di elaborare una singola riga alla volta presenta vantaggi metodologici significativi. Innanzitutto, questo approccio garantisce una \textbf{risposta univoca} da parte dell'LLM per ogni unità di log analizzata: il modello produce una classificazione binaria diretta (sensibile/non sensibile) senza ambiguità interpretative. Al contrario, inviando molteplici righe in un unico messaggio, sarebbe necessario implementare meccanismi di \textit{parsing} per associare correttamente ogni porzione della risposta alla riga di log corrispondente. Inoltre, l'elaborazione \textit{batch} di più righe simultaneamente incrementa il rischio di \textbf{risposte incomplete o errate}: l'LLM potrebbe omettere involontariamente alcune righe nella sua analisi, produrre output con formattazione inconsistente, o perdere il contesto necessario per una classificazione accurata. L'approccio unitario elimina queste problematiche, garantendo al contempo una valutazione immediata dell'accuratezza delle classificazioni prodotte dal modello.
 
 \subsubsection{Output e tracciabilità}
 \label{subsubsec:ver2_output}
@@ -763,26 +763,11 @@ Inoltre, l'elaborazione di singole righe consente una valutazione immediata dell
 La seconda versione introduce un sistema di output e tracciabilità migliorato, con particolare focus sulle metriche di valutazione quantitative. Il sistema genera report dettagliati che includono sia le informazioni di base dell'esecuzione che analisi statistiche delle performance di classificazione.
 
 I file di output contengono le seguenti informazioni:
+
 \begin{itemize}
-    \item \textbf{Metadati dell'esecuzione}:
-        \begin{itemize}
-            \item timestamp
-            \item modello utilizzato
-            \item file di log analizzato
-            \item numero totale di righe processate
-        \end{itemize}
-    \item \textbf{Metriche di classificazione}:
-        \begin{itemize}
-            \item veri positivi
-            \item veri negativi
-            \item falsi positivi
-            \item falsi negativi
-        \end{itemize}
-    \item \textbf{Statistiche di accuratezza}:
-        \begin{itemize}
-            \item percentuale di risposte corrette
-            \item percentuale di risposte errate
-        \end{itemize}
+    \item \textbf{Metadati dell'esecuzione}: timestamp, modello utilizzato, file di log analizzato e numero totale di righe processate
+    \item \textbf{Metriche di classificazione}: veri positivi, veri negativi, falsi positivi, falsi negativi
+    \item \textbf{Statistiche di accuratezza}: accuratezza complessiva, percentuali di veri positivi, veri negativi, falsi positivi e falsi negativi, percentuale di risposte corrette e di risposte errate, \textit{precision}, \textit{recall}
     \item \textbf{Log dettagliato}: traccia completa di tutte le interazioni con l'LLM
 \end{itemize}
 
