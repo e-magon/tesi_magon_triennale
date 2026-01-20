@@ -46,6 +46,10 @@ risposte_corrette = None
 risposte_corrette_p = None
 risposte_errate = None
 risposte_errate_p = None
+precision = None
+precision_p = None
+recall = None
+recall_p = None
 
 
 def main() -> None:
@@ -65,6 +69,10 @@ def main() -> None:
     global risposte_corrette_p
     global risposte_errate
     global risposte_errate_p
+    global precision
+    global precision_p
+    global recall
+    global recall_p
 
     # Legge i log e li aggiunge al prompt
     n_righe_aggiunte = 0
@@ -183,6 +191,22 @@ def main() -> None:
         risposte_corrette_p = f"{risposte_corrette / num_righe * 100:.3f}"
         risposte_errate_p = f"{risposte_errate / num_righe * 100:.3f}"
 
+        # Calcola precision e recall in percentuale
+        # precision indica la percentuale di risposte positive corrette
+        # recall indica la percentuale di risposte positive trovate
+        if (veri_positivi + falsi_positivi) > 0:
+            precision = veri_positivi / (veri_positivi + falsi_positivi)
+        else:
+            precision = 0.0
+
+        if (veri_positivi + falsi_negativi) > 0:
+            recall = veri_positivi / (veri_positivi + falsi_negativi)
+        else:
+            recall = 0.0
+
+        precision_p = f"{precision * 100:.3f}"
+        recall_p = f"{recall * 100:.3f}"
+
         print(
             f'Su un totale di {num_righe} righe, il modello ha riportato:\n'
         )
@@ -195,6 +219,9 @@ def main() -> None:
               + f'{risposte_corrette} ({risposte_corrette_p}%)')
         print('Totale risposte errate: '
               + f'{risposte_errate} ({risposte_errate_p}%)')
+
+        print(f'Precision: {precision_p}%')
+        print(f'Recall: {recall_p}%')
 
     salva_output()
 
@@ -219,6 +246,8 @@ def salva_output():
         file.write(f'+ False positives: {falsi_positivi} ({falsi_positivi_p}%) +\n')
         file.write(f'+ Correct answers: {risposte_corrette} ({risposte_corrette_p}%) +\n')
         file.write(f'+ Wrong answers: {risposte_errate} ({risposte_errate_p}%) +\n')
+        file.write(f'+ Precision: {precision} ({precision_p}%) +\n')
+        file.write(f'+ Recall: {recall} ({recall_p}%) +\n')
 
         file.write('\n+ LLM answers: +\n')
         file.write(risposte_formattate)
@@ -228,8 +257,19 @@ def salva_output():
 
 if __name__ == '__main__':
     try:
+        # Permette di specificare modello e file di log da riga di comando.
+        # Uso:
+        #   python3 main.py NOME_MODELLO NOME_FILE_LOG
+        # Se non vengono passati argomenti, utilizza i valori di default
+        # definiti all'inizio del file.
+        if len(sys.argv) >= 2:
+            llm = sys.argv[1]
+        if len(sys.argv) >= 3:
+            log_filename = sys.argv[2]
+
         print('Avvio in corso. Premere Ctrl+C per interrompere in qualsiasi momento, i risultati verranno salvati.')
         print('Modello: ' + llm)
+        print('File di log: ' + log_filename)
         main()
     except KeyboardInterrupt:
         # Se l'utente interrompe il programma, salva l'output

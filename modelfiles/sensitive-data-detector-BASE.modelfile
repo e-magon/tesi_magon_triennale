@@ -40,13 +40,13 @@ I see an email address, it is sensitive data so I should output it as expected (
 email admin@revetec.it
 """
 MESSAGE user """
-eneltecService, login success: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTI0NzcxMDAsImlhdCI6MTcxMjQ0MTEwMCwiaXNzIjoibWFpbmZsdXguYXV0aCIsInN1YiI6ImFkbWluQHJldmV0ZWMuaXQiLCJpc3N1ZXJfaWQiOiI2MzNmZWRiYS1hOGE4LTRhOWUtOTU1MC0xODNlN2Y2YjBmMjkiLCJ0eXBlIjowfQ._fdS_wKnl9ARlFYc6KwbMCYSMgj0sbwcQzEZSYzttcI
+eneltecService, login success: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTI0NzcxMDAsImlhdCI6MTcxMjQ0MTEwMCwiaXNzIjoibWFpbmZsdXguYXV0aCIsInN1YiI6I-mFkbWluQHJldmV0ZWMuaXQiLCJpc3N1ZXJfaWQiOiI2MzNmZWRiYS1hOGE4LTRhOWUtOTU1MC0xODNlN2Y2Yj-BmMjkiLCJ0eXBlIjowfQ._fdS_wKnl9ARlFYc6KwbMCYSMgj0sbwcQzEZSYzttcI
 """
 MESSAGE assistant """
 <think>
 I see a token, it is sensitive data so I should output it as expected (type: value)
 </think>
-token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTI0NzcxMDAsImlhdCI6MTcxMjQ0MTEwMCwiaXNzIjoibWFpbmZsdXguYXV0aCIsInN1YiI6ImFkbWluQHJldmV0ZWMuaXQiLCJpc3N1ZXJfaWQiOiI2MzNmZWRiYS1hOGE4LTRhOWUtOTU1MC0xODNlN2Y2YjBmMjkiLCJ0eXBlIjowfQ._fdS_wKnl9ARlFYc6Kw
+token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTI0NzcxMDAsImlhdCI6MTcxMjQ0MTEwMCwiaXNzIjoibWFpbmZsdXguYXV0aCIsInN1YiI6I-mFkbWluQHJldmV0ZWMuaXQiLCJpc3N1ZXJfaWQiOiI2MzNmZWRiYS1hOGE4LTRhOWUtOTU1MC0xODNlN2Y2Yj-BmMjkiLCJ0eXBlIjowfQ._fdS_wKnl9ARlFYc6Kw
 """
 MESSAGE user """
 Method update_lamp for user: admin@revetec.it and lamp: {\"ID\":\"1287a017-2bc3-4124-98a8-942cb80a321a\",\"CityID\":\"77c4ad76-9add-4b9f-9ca1-39d72c595534\",\"LightingpointID\":\"\",\"SwitchboardID\":\"2a2280db-c3c2-455b-9d96-7a07a55dc95c\",\"LineID\":\"\",\"Label\":\"pool 5\",\"Description\":\"\",\"Lamp_type\":\"\",\"Brand\":\"\",\"Model\":\"\",\"Insulation_class\":\"\",\"Lighting_category\":\"\",\"Protection_level\":\"\",\"Optics_type\":\"\",\"Fuse_type\":\"\",\"Node_type\":\"\",\"Node_serialnumber\":\"127\",\"Node_address\":1,\"Power\":0,\"Leaks\":0,\"Latitude\":32.28024422,\"Longitude\":34.8617076,\"Installation_date\":\"\",\"Note\":\"\",\"GatewayID\":\"\",\"GatewayLabel\":\"\",\"GatewayDescription\":\"\",\"SwitchboardLabel\":\"\",\"SwitchboardDescription\":\"\",\"LightingpointLabel\":\"\",\"LineLabel\":\"\",\"Thing\":null,\"Metadata\":{\"id\":3,\"modulatorId\":2,\"name\":\"pool 5\",\"src\":\"eneltecService\"}} took: 11.262606ms to complete without errors.

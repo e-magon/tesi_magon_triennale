@@ -35,7 +35,7 @@
 % \usepackage[phd]{tesi}
 
 % Mostra i bounding box per visualizzare il layout (TODO rimuovere per versione finale)
-% \geometry{showframe}
+\geometry{showframe}
 
 % Per disabilitare i todo:
 % \usepackage[disable]{todonotes}
@@ -48,6 +48,8 @@
 % Pacchetto per grafici con dati integrati
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18} % Compatibilità con la versione 1.18 di pgfplots
+\usepackage{pgfplotstable} % Per leggere dati da CSV
+\usepackage{csvsimple} % Per creare tabelle da CSV
 
 % In caso il copia-incolla del PDF generato perda gli spazi,
 % provare a decommentare la seguente riga
@@ -125,7 +127,7 @@ Identificazione automatica di dati sensibili all'interno di log di sistemi compl
 % per specificare manualmente un anno accademico
 % NON inserire nel formato 1970-1971, ma
 % inserire solo 1970
-\academicyear{2025}
+\academicyear{2024}
 
 %   INDICI:
 % elenco delle figure (facoltativo)
@@ -406,7 +408,6 @@ Questa architettura metodologica rappresenta la base teorica per un sistema di i
 Il progetto \textit{Sensitive Data Detector} integra diverse tecnologie per creare una soluzione completa di analisi automatica dei log. L'architettura si basa su un approccio multi-componente che combina diversi strumenti.
 
 Questo Capitolo descrive nel dettaglio le tecnologie scelte, motivando le decisioni architetturali e spiegando come ogni componente contribuisce al funzionamento complessivo del sistema.
-\todo{TODO diagramma dei componenti}
 
 \section{Scenario applicativo}
 \label{sec:scenario_applicativo}
@@ -557,7 +558,7 @@ Il file \texttt{\textbf{graylog\_setup.py}} automatizza la configurazione inizia
 
 In particolare, lo script provvede alla definizione degli input \texttt{TCP} per i log in ingresso e per le notifiche di ritorno, alla creazione di stream per il routing intelligente dei messaggi, alla configurazione di output GELF per la comunicazione con il \textit{Sensitive Data Detector} e all'impostazione di pipeline con regole regex per l'identificazione rapida di pattern comuni.
 
-Il codice completo dello script è disponibile nell'appendice~\refwithpage{lst:code_graylog_script}.
+Il codice completo dello script è disponibile nel sorgente~\refwithpage{lst:code_graylog_script}.
 
 \subsection{Docker}
 \label{subsec:docker}
@@ -566,7 +567,7 @@ Docker\footnote{Docker \url{https://www.docker.com}} viene utilizzato per la con
 
 La configurazione \textbf{Docker Compose} definisce un ambiente completo composto da tre servizi principali: \textbf{MongoDB}\footnote{MongoDB \url{https://www.mongodb.com}}, che funge da \textit{database} per la memorizzazione dei metadati di configurazione di Graylog; \textbf{Graylog DataNode}, il nodo di indicizzazione responsabile dello \textit{storage} e della ricerca dei log; e \textbf{Graylog Enterprise}, il \textit{server} principale che espone l'interfaccia \textit{web} e le API REST.
 
-Il codice completo della configurazione del \textit{container} è disponibile nell'appendice~\refwithpage{lst:code_container_config}.
+Il codice completo della configurazione del \textit{container} è disponibile nel sorgente~\refwithpage{lst:code_container_config}.
 
 L'ambiente Docker implementa diverse soluzioni per garantire sicurezza e affidabilità. Una \textbf{rete isolata}, realizzata tramite \textit{bridge network} dedicata, assicura la comunicazione sicura tra i \textit{container}. I \textbf{volumi persistenti} garantiscono lo \textit{storage} permanente per i dati di MongoDB, gli indici di Graylog e le configurazioni. Il \textbf{\textit{port mapping}} consente l'esposizione selettiva delle sole porte necessarie per l'integrazione con sistemi esterni. Infine, gli \textbf{\textit{health checks}} permettono il monitoraggio automatico dello stato dei servizi, attivando le \textit{restart policies} configurate in caso di malfunzionamenti.
 
@@ -598,7 +599,7 @@ Ulteriori dettagli sono disponibili nella sezione~\refwithpage{sec:ver1}.
 
 La seconda versione rappresenta un'evoluzione significativa con focus sulla scalabilità e la valutazione \textbf{quantitativa} delle performance. Introduce l'elaborazione \textbf{riga per riga} dei log per ottimizzare l'uso della memoria e utilizza modelli LLM personalizzati creati tramite \textit{Modelfile} di Ollama, che incorporano prompt specifici per l'identificazione di dati sensibili.
 
-Un aspetto fondamentale di questa versione è l'implementazione di un sistema di \textbf{\textit{ground truth}}\footnote{Ground truth indica i dati di riferimento considerati corretti e utilizzati come standard per valutare la precisione di un sistema di classificazione. Nel contesto di questo progetto, consiste in etichette manuali che indicano se ogni riga di log contiene o meno dati sensibili.} per la valutazione automatica, che consente il calcolo real-time di metriche di classificazione \textbf{binaria} (veri/falsi positivi/negativi) e delle metriche derivate \textit{precision} e \textit{recall}, oltre all'analisi comparativa di diversi modelli LLM.
+Un aspetto fondamentale di questa versione è l'implementazione di un sistema di \textbf{\textit{ground truth}}\footnote{\textit{Ground truth} indica i dati di riferimento considerati corretti e utilizzati come standard per valutare la precisione di un sistema di classificazione. Nel contesto di questo progetto, consiste in etichette manuali che indicano se ogni riga di log contiene o meno dati sensibili.} per la valutazione automatica, che consente il calcolo real-time di metriche di classificazione \textbf{binaria} (veri/falsi positivi/negativi) e delle metriche derivate \textit{precision} e \textit{recall}, oltre all'analisi comparativa di diversi modelli LLM.
 
 Ulteriori dettagli sono disponibili nella sezione~\refwithpage{sec:ver2}.
 
@@ -628,7 +629,7 @@ Il sistema è progettato per riconoscere diverse tipologie di dati sensibili, tr
 \subsubsection{Architettura e funzionamento}
 \label{subsubsec:ver1_architettura}
 
-Il sistema è implementato tramite linguaggio Python e utilizza la libreria \texttt{ollama}\footnote{\texttt{ollama} \url{https://pypi.org/project/ollama}} per interfacciarsi con diversi modelli LLM tramite API REST. L'architettura segue un paradigma client-server dove lo script Python agisce come client che invia richieste al server Ollama locale. L'implementazione completa è disponibile nell'appendice~\refwithpage{lst:code_ver1}.
+Il sistema è implementato tramite linguaggio Python e utilizza la libreria \texttt{ollama}\footnote{\texttt{ollama} \url{https://pypi.org/project/ollama}} per interfacciarsi con diversi modelli LLM tramite API REST. L'architettura segue un paradigma client-server dove lo script Python agisce come client che invia richieste al server Ollama locale. L'implementazione completa è disponibile nel sorgente~\refwithpage{lst:code_ver1}.
 
 Il flusso di elaborazione si articola nelle seguenti fasi:
 
@@ -651,7 +652,7 @@ Un aspetto critico dell'implementazione riguarda la gestione del context window 
 Il prompt di sistema è stato progettato per guidare il modello nell'identificazione precisa dei dati sensibili, fornendo \textbf{definizioni chiare} di cosa costituisce un dato sensibile, \textbf{esempi specifici} di dati da identificare come token, credenziali e informazioni personali, \textbf{esclusioni esplicite} per dati non sensibili (quali username, ID e timestamp), un \textbf{formato di output strutturato} in bullet point e un \textbf{esempio pratico} con input e output atteso.
 
 Il prompt include inoltre istruzioni per la gestione di oggetti JSON, richiedendo al modello di estrarre solo i dati sensibili contenuti all'interno di essi e non l'intero oggetto.\\
-Il prompt completo è disponibile nell'appendice~\refwithpage{lst:prompt_ver1}.
+Il prompt completo è disponibile nel sorgente~\refwithpage{lst:prompt_ver1}.
 
 \subsubsection{Modelli supportati e configurazione}
 \label{subsubsec:ver1_modelli_supportati}
@@ -703,24 +704,24 @@ Questa versione si concentra sull'elaborazione efficiente di file di log di dime
 
 L'obiettivo principale di questa seconda implementazione è duplice: da un lato migliorare la scalabilità del sistema per gestire volumi di log più elevati, dall'altro introdurre un framework di valutazione automatica per misurare obiettivamente le performance dei modelli LLM.
 
-La versione introduce diversi miglioramenti sostanziali: l'\textbf{elaborazione riga per riga} per ottimizzare l'uso della memoria e semplificare il processo di rilevazione della correttezza delle risposte, l'\textbf{utilizzo di modelli personalizzati} con prompt engineering avanzato, un \textbf{sistema di ground truth} per la valutazione automatica e il \textbf{calcolo di metriche di classificazione binaria} quali veri/falsi positivi/negativi, accuratezza complessiva e metriche derivate come \textit{precision} e \textit{recall}.
+La versione introduce diversi miglioramenti sostanziali: l'\textbf{elaborazione riga per riga} per ottimizzare l'uso della memoria e semplificare il processo di rilevazione della correttezza delle risposte, l'\textbf{utilizzo di modelli personalizzati} con prompt engineering avanzato, un \textbf{sistema di \textit{ground truth}} per la valutazione automatica e il \textbf{calcolo di metriche di classificazione binaria} quali veri/falsi positivi/negativi, accuratezza complessiva e metriche derivate come \textit{precision} e \textit{recall}.
 
 \subsubsection{Architettura e funzionamento}
 \label{subsubsec:ver2_architettura}
 
 L'architettura della seconda versione mantiene il paradigma client-server della versione precedente e al contempo introduce ottimizzazioni nel flusso di elaborazione.\\
 Il sistema utilizza modelli LLM personalizzati creati tramite \textit{Modelfile} che incorporano prompt specifici e configurazioni ottimizzate per l'identificazione di dati sensibili. Per ulteriori informazioni riguardanti i \textit{Modelfile}, si rimanda alla sezione~\refwithpage{subsec:llm}.\\
-L'implementazione completa è disponibile nell'appendice~\refwithpage{lst:code_ver2}.
+L'implementazione completa è disponibile nel sorgente~\refwithpage{lst:code_ver2}.
 
 Il flusso di elaborazione ottimizzato si articola nelle seguenti fasi:
 
 \begin{enumerate}
-    \item \textbf{Inizializzazione del dataset}: Il sistema carica file di log pre-annotati con etichette ground truth (Y/N) per ogni riga
+    \item \textbf{Inizializzazione del dataset}: Il sistema carica file di log pre-annotati con etichette \textit{ground truth} (Y/N) per ogni riga
     \item \textbf{Streaming sequenziale}: Ogni riga viene processata individualmente, eliminando la necessità di caricare grandi volumi in memoria
-    \item \textbf{Preprocessamento}: Le etichette di ground truth vengono estratte e conservate per la valutazione, mentre il contenuto della riga di log viene inviato al modello
+    \item \textbf{Preprocessamento}: Le etichette di \textit{ground truth} vengono estratte e conservate per la valutazione, mentre il contenuto della riga di log viene inviato al modello
     \item \textbf{Analisi LLM}: Il modello personalizzato analizza la singola riga e produce una classificazione binaria (sensibile/non sensibile)
     \item \textbf{Post-processing}: Le risposte vengono elaborate per rimuovere eventuali tag di reasoning e standardizzare il formato
-    \item \textbf{Valutazione in tempo reale}: Ogni risposta viene immediatamente confrontata con il ground truth e le metriche vengono aggiornate
+    \item \textbf{Valutazione in tempo reale}: Ogni risposta viene immediatamente confrontata con il \textit{ground truth} e le metriche vengono aggiornate
     \item \textbf{Gestione della memoria}: Il contesto viene ripristinato periodicamente per mantenere performance ottimali indefinitamente, anche su file di log di grandi dimensioni
 \end{enumerate}
 
@@ -808,7 +809,7 @@ Il sistema implementa innanzitutto l'\textbf{elaborazione in tempo reale}, perme
 \label{subsubsec:ver3_architettura}
 
 L'architettura della terza versione introduce un cambio del paradigma rispetto alle versioni precedenti, passando da un modello client-server a un sistema basato su stream processing. Il sistema opera come un micro-servizio che si posiziona tra Graylog e i modelli LLM, fungendo da ponte per l'analisi dei log.\\
-L'implementazione completa è disponibile nell'appendice~\refwithpage{lst:code_ver3}.
+L'implementazione completa è disponibile nel sorgente~\refwithpage{lst:code_ver3}.
 
 Il flusso di elaborazione real-time si articola nelle seguenti fasi:
 
@@ -880,40 +881,27 @@ Queste limitazioni, pur non compromettendo l'utilità operativa del sistema, rap
 %			CAPITOLO: Test
 %
 
-\todochapter{Test e valutazione}{chap:test}{aggiungere i nuovi risultati, sistemare il testo}
+\todochapter{Test e valutazione}{chap:test}{aggiungere i nuovi risultati}
 
-Il sistema \textit{Sensitive Data Detector} è stato sottoposto a un processo di testing e valutazione sistematico attraverso due fasi evolutive principali, corrispondenti alle prime due versioni del progetto. Ogni fase ha introdotto metodologie di test sempre più raffinate e metriche di valutazione quantitative per misurare l'efficacia del sistema nell'identificazione di dati sensibili.
-
-La terza versione del sistema, pur rappresentando un'evoluzione significativa dal punto di vista architetturale e operativo, non è stata sottoposta a un processo di testing sistematico analogo alle versioni precedenti.\\
-Questa scelta è motivata da considerazioni sia tecniche che metodologiche. Da un lato, sussiste un'equivalenza algoritmica con la seconda versione: la logica di identificazione dei dati sensibili rimane sostanzialmente invariata e vengono utilizzati gli stessi LLM e i medesimi \textit{Modelfile}, riducendo il valore informativo di una nuova campagna di test controllati. Dall'altro, la natura operativa della terza versione, che elabora direttamente stream di log provenienti da Graylog, rende impraticabile l'impiego di dataset pre-annotati con ground truth.\\
-Inoltre, l'integrazione con sistemi reali introduce variabili ambientali non controllabili che comprometterebbero la riproducibilità e l'affidabilità di misure quantitative.
+\textit{Sensitive Data Detector} è stato sottoposto a un processo di testing e valutazione durante e dopo le fasi dello sviluppo. La seconda versione del sistema opera su file di log preparati ed etichettati (come spiegato nella sezione~\refwithpage{sec:ver2}), permettendo così di definire un \textit{ground truth} per verificare i risultati ottenuti e condurre un processo di testing sistematico.\\
+Dato che la terza versione di \textit{Sensitive Data Detector} è analoga alla seconda versione sia nel funzionamento che nei \textit{Modelfile} utilizzati, essa non è stata sottoposta a un processo di testing. L'unica differenza tra le due versioni è che la terza analizza i flussi di log provenienti da Graylog in tempo reale, rendendo impossibile definire un \textit{ground truth} per verificare i risultati ottenuti. Inoltre, l'integrazione con sistemi reali introduce variabili ambientali non controllabili che comprometterebbero la riproducibilità e l'affidabilità di misure quantitative.
 
 \section{Metodologia di test}
 \label{sec:metodologia_test}
 
 La metodologia di test si è evoluta significativamente tra le due versioni principali del sistema, passando da un approccio qualitativo basato su osservazione manuale a un sistema quantitativo automatizzato.
 
-\subsubsection{Versione 1: Testing esplorativo}
-\label{subsubsec:metodologia_v1}
-
-La prima versione ha utilizzato un approccio esplorativo per validare la fattibilità dell'utilizzo di Large Language Models nell'identificazione di dati sensibili. Il testing si è concentrato sull'\textbf{analisi qualitativa delle risposte}, dove ogni output del modello LLM veniva analizzato manualmente per identificare la presenza di falsi positivi e falsi negativi. Parallelamente, sono stati condotti test di diverse combinazioni di parametri, come il numero di righe per messaggio e i messaggi per chat, per l'\textbf{ottimizzazione delle configurazioni} e massimizzare l'efficacia del sistema. La valutazione dei vincoli di memoria e performance sull'architettura hardware utilizzata ha permesso di \textbf{gestire le limitazioni hardware}, mentre l'analisi del comportamento del sistema su dataset di dimensioni crescenti (100 e 1000 righe) ha fornito indicazioni sulla \textbf{scalabilità} della soluzione.
+La prima versione ha utilizzato un approccio esplorativo per validare la fattibilità dell'utilizzo di Large Language Models nell'identificazione di dati sensibili. Il testing si è concentrato sull'\textbf{analisi qualitativa delle risposte}, dove ogni output del modello LLM è stato analizzato manualmente per identificare la presenza di falsi positivi e falsi negativi. Parallelamente, sono stati condotti test manuali di diverse combinazioni di parametri, come il numero di righe per messaggio e i messaggi per chat, per l'\textbf{ottimizzazione delle configurazioni} e massimizzare l'efficacia del sistema. La valutazione dei vincoli di memoria e performance ha permesso di gestire le limitazioni \textbf{hardware}, mentre l'analisi del comportamento del sistema su dataset di dimensioni crescenti (100 e 1000 righe) ha fornito indicazioni sulla \textbf{scalabilità} della soluzione.
 
 L'approccio della prima versione ha evidenziato problematiche critiche legate alla gestione del context window limitato dei modelli LLM, portando allo sviluppo di strategie di segmentazione e ripristino delle conversazioni.
 
-\subsubsection{Versione 2: Testing quantitativo}
-\label{subsubsec:metodologia_v2}
-
-La seconda versione ha introdotto un framework di testing quantitativo basato su ground truth annotato manualmente. La metodologia prevede innanzitutto la \textbf{preparazione del dataset} attraverso l'annotazione manuale di file di log con etichette binarie (Y/N) per ogni riga, indicando la presenza o assenza di dati sensibili. Successivamente, l'\textbf{elaborazione automatizzata} permette l'implementazione di un sistema di confronto automatico tra le risposte del modello e il ground truth, consentendo il \textbf{calcolo real-time delle metriche} di veri positivi, veri negativi, falsi positivi e falsi negativi. Infine, i \textbf{test comparativi} permettono la valutazione sistematica di modelli LLM differenti con configurazioni standardizzate.
-
-Questa evoluzione metodologica ha permesso un confronto oggettivo e riproducibile delle performance tra diversi modelli e configurazioni.
+La seconda versione ha introdotto un framework di testing quantitativo basato su \textit{ground truth} annotato manualmente. La metodologia ha previsto la \textbf{preparazione del dataset} attraverso l'annotazione manuale di file di log con etichette binarie (Y/N) per ogni riga, indicando la presenza o assenza di dati sensibili.\\
+L'\textbf{elaborazione automatizzata} implementa un sistema di confronto automatico tra le risposte del modello e il \textit{ground truth}, consentendo il \textbf{calcolo delle metriche} di veri positivi, veri negativi, falsi positivi e falsi negativi e delle metriche derivate accuratezza, \textit{precision} e \textit{recall}, descritte nella sezione~\refwithpage{sec:metriche_test}. Infine, i \textbf{test comparativi} permettono la valutazione sistematica di modelli LLM differenti con configurazioni standardizzate.
 
 \section{Metriche di valutazione}
 \label{sec:metriche_test}
 
 Il sistema di valutazione utilizza metriche standard di classificazione binaria, adattate al contesto specifico dell'identificazione di dati sensibili nei log.
-
-\subsubsection{Metriche primarie}
-\label{subsubsec:metriche_primarie}
 
 Le metriche principali utilizzate per la valutazione sono elencate nella tabella~\refwithpage{tab:metriche_primarie}.
 
@@ -936,39 +924,44 @@ Le metriche principali utilizzate per la valutazione sono elencate nella tabella
     \label{tab:metriche_primarie}
 \end{table}
 
-\subsubsection{Metriche derivate}
-\label{subsubsec:metriche_derivate}
-
-Dalle metriche primarie vengono calcolate le percentuali elencate nella tabella~\refwithpage{tab:metriche_derivate}.
+Dalle metriche primarie sono state calcolate le metriche derivate elencate nella tabella~\refwithpage{tab:metriche_derivate}.
 
 \begin{table}[h!]
     \centering
-    \begin{tabular}{|p{0.3\textwidth}|p{0.25\textwidth}|p{0.35\textwidth}|}
+    \begin{tabular}{|p{0.25\textwidth}|p{0.25\textwidth}|p{0.4\textwidth}|}
         \hline
         \textbf{Metrica} & \textbf{Formula} & \textbf{Descrizione} \\
         \hline
-        Accuratezza Complessiva & $\frac{TP + TN}{TP + TN + FP + FN} \times 100$ & Percentuale complessiva di classificazioni corrette \\
+        Perc. Falsi Positivi & $\frac{FP}{TP + TN + FP + FN} \times 100$ & Incidenza di righe non sensibili classificate come sensibili \\
         \hline
-        Percentuale di Falsi Positivi & $\frac{FP}{TP + TN + FP + FN} \times 100$ & Incidenza di righe non sensibili classificate come sensibili \\
+        Perc. Falsi Negativi & $\frac{FN}{TP + TN + FP + FN} \times 100$ & Incidenza di righe sensibili non identificate \\
         \hline
-        Percentuale di Falsi Negativi & $\frac{FN}{TP + TN + FP + FN} \times 100$ & Incidenza di righe sensibili non identificate \\
+        Accuratezza & $\frac{TP + TN}{TP + TN + FP + FN} \times 100$ & Percentuale complessiva di classificazioni corrette \\
+        \hline
+        \textit{Precision} & $\frac{TP}{TP + FP} \times 100$ & Percentuale di righe classificate come sensibili che sono effettivamente sensibili \\
+        \hline
+        \textit{Recall} & $\frac{TP}{TP + FN} \times 100$ & Percentuale di righe sensibili correttamente identificate dal modello \\
         \hline
     \end{tabular}
     \caption{Metriche derivate di valutazione}
     \label{tab:metriche_derivate}
 \end{table}
 
-Nel contesto applicativo, i falsi negativi rappresentano un rischio di sicurezza maggiore rispetto ai falsi positivi, in quanto comportano la mancata identificazione di dati sensibili effettivamente presenti nei log.
+Nel contesto applicativo, i falsi negativi rappresentano un rischio di sicurezza maggiore rispetto ai falsi positivi, in quanto comportano la mancata identificazione di dati sensibili effettivamente presenti nei log. Di conseguenza, la \textit{recall} assume un ruolo particolarmente critico, mentre la \textit{precision} quantifica il costo operativo legato ai falsi allarmi generati dal sistema.
 
 \section{Risultati sperimentali}
 \label{sec:risultati_sperimentali}
 
-I test sono stati condotti su architettura Apple M1 Max (32 GB di memoria unificata, 32 GPU Core) utilizzando il framework Ollama per l'esecuzione locale dei modelli LLM.
+I test sono stati condotti sulle seguenti architetture hardware:
+\begin{itemize}
+    \item \textbf{Apple M1 Max}: 32 GB memoria unificata, 32 GPU Core
+    \item \textbf{AMD RX6950XT}: 16 GB VRAM, 80 Compute Unit\footnote{Compute Unit: \url{https://rocm.docs.amd.com/projects/rocprofiler-compute/en/latest/conceptual/compute-unit.html}} con 5,120 Vector ALU\footnote{Vector ALU (Arithmetic Logic Unit): \url{https://rocm.docs.amd.com/projects/HIP/en/latest/understand/hardware_implementation.html}}
+\end{itemize}
 
-\subsubsection{Risultati Versione 1}
+
 \label{subsubsec:risultati_v1}
 
-La prima versione ha fornito risultati promettenti ma ha evidenziato significative limitazioni hardware, come mostrato nella tabella~\refwithpage{tab:risultati_v1}.
+Il test della prima versione, come spiegato nella sezione~\refwithpage{sec:metodologia_test}, ha lo scopo di fornire una valutazione preliminare sulla fattibilità dell'approccio e sulla definizione di parametri in grado di gestire le limitazioni hardware. I risultati sono riportati nella tabella~\refwithpage{tab:risultati_v1}.
 
 \begin{table}[h!]
     \centering
@@ -983,49 +976,39 @@ La prima versione ha fornito risultati promettenti ma ha evidenziato significati
         Llama3.1 70b     & \multicolumn{5}{c|}{\textit{Memoria non sufficiente}}                                                                                 \\ \hline
         Command-R 35b    & \multicolumn{5}{c|}{\textit{Memoria non sufficiente}}                                                                                 \\ \hline
     \end{tabular}
-    \caption{Risultati della versione 1 su Apple M1 Max}
+    \caption{Risultati (test v.1 su Apple M1 Max 32 GB, 32 GPU Core)}
     \label{tab:risultati_v1}
 \end{table}
-\todo{TODO ri-verificare tabella}
 
-I risultati mostrano che:
-\begin{itemize}
-    \item I modelli a 8 miliardi di parametri sono eseguibili con performance accettabili
-    \item L'incremento del dataset da 100 a 1000 righe migliora l'accuratezza riducendo i falsi positivi
-    \item I modelli più grandi (70b+ parametri) superano i limiti hardware disponibili
-\end{itemize}
+\label{subsubsec:risultati_v2_m1}
 
-\subsubsection{Risultati Versione 2}
-\label{subsubsec:risultati_v2}
+La seconda versione ha introdotto metriche quantitative precise permettendo un confronto sistematico, come mostrato nelle tabelle~\refwithpage{tab:risultati_v2_m1} e \refwithpage{tab:risultati_v2_6950} e nelle figure~\refwithpage{fig:grafico_accuratezza_v2_m1}, \refwithpage{fig:grafico_accuratezza_v2_6950}, \refwithpage{fig:grafico_precision_v2_m1}, \refwithpage{fig:grafico_precision_v2_6950}, \refwithpage{fig:grafico_recall_v2_m1} e \refwithpage{fig:grafico_recall_v2_6950}.
 
-La seconda versione ha introdotto metriche quantitative precise permettendo un confronto sistematico, come mostrato nella tabella~\refwithpage{tab:risultati_v2} e il grafico~\refwithpage{fig:grafico_risultati_v2}.
+Lo script utilizzato per automatizzare il processo di testing della seconda versione è disponibile nel sorgente~\refwithpage{lst:code_testing_ver2}.
 
 \begin{table}[h!]
     \centering
-    \begin{tabular}{|l|c|c|c|c|c|c|}
-        \hline
-        \textbf{Modello} & \textbf{Righe} & \textbf{Tempo} & \textbf{VN}   & \textbf{VP}   & \textbf{FN}   & \textbf{FP}   \\ \hline
-        llama3.1:8b      & 100            & 00m 57s        & $\approx$70\% & $\approx$14\% & $\approx$10\% & $\approx$6\%  \\ \hline
-        llama3.1:8b      & 1000           & 09m 05s        & $\approx$68\% & $\approx$14\% & $\approx$5\%  & $\approx$13\% \\ \hline
-        llama3.2:3b      & 100            & 01m 08s        & $\approx$64\% & $\approx$21\% & $\approx$3\%  & $\approx$12\% \\ \hline
-        llama3.2:3b      & 1000           & 07m 15s        & $\approx$59\% & $\approx$16\% & $\approx$2\%  & $\approx$23\% \\ \hline
-        mistral:7b       & 100            & 06m 48s        & $\approx$0\%  & $\approx$24\% & $\approx$0\%  & $\approx$76\% \\ \hline
-        mistral:7b       & 1000           & 72m 58s        & $\approx$0\%  & $\approx$19\% & $\approx$0\%  & $\approx$81\% \\ \hline
-        mistral-nemo:12b & 100            & 04m 10s        & $\approx$45\% & $\approx$13\% & $\approx$11\% & $\approx$31\% \\ \hline
-        mistral-nemo:12b & 1000           & 35m 15s        & $\approx$48\% & $\approx$12\% & $\approx$7\%  & $\approx$33\% \\ \hline
-        qwen2.5:7b       & 100            & 01m 45s        & $\approx$76\% & $\approx$21\% & $\approx$3\%  & $\approx$0\%  \\ \hline
-        qwen2.5:7b       & 1000           & 16m 44s        & $\approx$68\% & $\approx$18\% & $\approx$1\%  & $\approx$13\% \\ \hline
-        gemma3:4b        & 100            & 01m 17s        & $\approx$58\% & $\approx$21\% & $\approx$3\%  & $\approx$18\% \\ \hline
-        gemma3:12b       & 100            & 03m 18s        & $\approx$74\% & $\approx$23\% & $\approx$1\%  & $\approx$2\%  \\ \hline
-        deepseek         & todo           & todo           & todo          & todo          & todo          & todo          \\ \hline
-        deepseek         & todo           & todo           & todo          & todo          & todo          & todo          \\ \hline
-    \end{tabular}
-    \caption{Risultati della versione 2 con metriche quantitative}
-    \label{tab:risultati_v2}
+    \csvreader[
+        tabular=|l|r|r|r|r|r|r|r|r|,
+        table head=\hline \textbf{Modello} & \textbf{Righe} & \textbf{Tempo} & \textbf{TN} & \textbf{TP} & \textbf{FN} & \textbf{FP} & \textbf{\textit{Precision}} & \textbf{\textit{Recall}} \\ \hline,
+        late after line=\\ \hline,
+    ]{test_results_m1_v2.csv}{model=\model, righe=\righe, tempo=\tempo, tn=\tn, tp=\tp, fn=\fn, fp=\fp, precision=\precision, recall=\recall}
+    {\model & \righe & \tempo & \tn\% & \tp\% & \fn\% & \fp\% & \precision\% & \recall\%}
+    \caption{Risultati (test v.2, Apple M1 Max)}
+    \label{tab:risultati_v2_m1}
 \end{table}
 
-\todo{TODO: aggiungere i risultati dei modelli deepseek}
-\todo{TODO: aggiungere i risultati dei modelli gemma con 1000 righe}
+\begin{table}[h!]
+    \centering
+    \csvreader[
+        tabular=|l|r|r|r|r|r|r|r|r|,
+        table head=\hline \textbf{Modello} & \textbf{Righe} & \textbf{Tempo} & \textbf{TN} & \textbf{TP} & \textbf{FN} & \textbf{FP} & \textbf{\textit{Precision}} & \textbf{\textit{Recall}} \\ \hline,
+        late after line=\\ \hline,
+    ]{test_results_6950_v2.csv}{model=\model, righe=\righe, tempo=\tempo, tn=\tn, tp=\tp, fn=\fn, fp=\fp, precision=\precision, recall=\recall}
+    {\model & \righe & \tempo & \tn\% & \tp\% & \fn\% & \fp\% & \precision\% & \recall\%}
+    \caption{Risultati (test v.2, AMD RX6950XT)}
+    \label{tab:risultati_v2_6950}
+\end{table}
 
 \begin{figure}[h!]
     \centering
@@ -1034,112 +1017,424 @@ La seconda versione ha introdotto metriche quantitative precise permettendo un c
                 ybar,
                 width=\textwidth,
                 height=8cm,
-                xlabel={Modelli LLM},
+                xlabel={LLM},
                 ylabel={Accuratezza (\%)},
-                symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek:7b, deepseek:8b},
+                symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek-r1:7b, deepseek-r1:8b},
                 xtick=data,
                 x tick label style={rotate=45, anchor=east},
                 legend pos=north west,
-                bar width=15pt,
+                bar width=8pt,
                 ymin=0,
-                ymax=100
+                ymax=150,
+                nodes near coords,
+                nodes near coords style={font=\tiny},
+                every node near coord/.append style={/pgf/number format/fixed, /pgf/number format/precision=0}
             ]
 
-            % Accuratezza su 100 righe (VN% + VP%)
-            \addplot coordinates {
-                    (llama3.1:8b, 84)      % 70+14
-                    (llama3.2:3b, 85)      % 64+21
-                    (mistral:7b, 24)       % 0+24
-                    (mistral-nemo:12b, 58) % 45+13
-                    (qwen2.5:7b, 97)       % 76+21
-                    (gemma3:4b, 79)        % 58+21
-                    (gemma3:12b, 97)       % 74+23
-                    (deepseek:7b, 1)       % TODO: placeholder
-                    (deepseek:8b, 1)       % TODO: placeholder
-                };
+            % Accuratezza su 100 righe
+            \addplot table[
+                x=model,
+                y=accuracy,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{99:101}
+            ] {test_results_m1_v2.csv};
 
-            % Accuratezza su 1000 righe (VN% + VP%) dove disponibile
-            \addplot coordinates {
-                    (llama3.1:8b, 82)      % 68+14
-                    (llama3.2:3b, 75)      % 59+16
-                    (mistral:7b, 19)       % 0+19
-                    (mistral-nemo:12b, 60) % 48+12
-                    (qwen2.5:7b, 86)       % 68+18
-                    (gemma3:4b, 0)         % Non testato su 1000
-                    (gemma3:12b, 0)        % Non testato su 1000
-                    (deepseek:7b, 1)       % TODO: placeholder
-                    (deepseek:8b, 1)       % TODO: placeholder
-                };
+            % Accuratezza su 200 righe
+            \addplot table[
+                x=model,
+                y=accuracy,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{199:201}
+            ] {test_results_m1_v2.csv};
 
-            \legend{100 righe, 1000 righe}
+            % Accuratezza su 1000 righe
+            \addplot table[
+                x=model,
+                y=accuracy,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{999:1001}
+            ] {test_results_m1_v2.csv};
+
+            \legend{100 righe, 200 righe, 1000 righe}
         \end{axis}
     \end{tikzpicture}
-    \caption{Confronto dell'accuratezza dei modelli LLM sui dataset di test}
-    \label{fig:grafico_risultati_v2}
+    \caption{Confronto dell'accuratezza (test v.2, Apple M1 Max)}
+    \label{fig:grafico_accuratezza_v2_m1}
 \end{figure}
 
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+                ybar,
+                width=\textwidth,
+                height=8cm,
+                xlabel={LLM},
+                ylabel={Accuratezza (\%)},
+                symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek-r1:7b, deepseek-r1:8b},
+                xtick=data,
+                x tick label style={rotate=45, anchor=east},
+                legend pos=north west,
+                bar width=8pt,
+                ymin=0,
+                ymax=150,
+                nodes near coords,
+                nodes near coords style={font=\tiny},
+                every node near coord/.append style={/pgf/number format/fixed, /pgf/number format/precision=0}
+            ]
 
-\subsubsection{Confronto dei modelli LLM utilizzati}
-\label{subsubsec:confronto_modelli}
+            % Accuratezza su 100 righe
+            \addplot table[
+                x=model,
+                y=accuracy,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{99:101}
+            ] {test_results_6950_v2.csv};
 
-\subsubsection{Modelli ad alte performance}
-I modelli che hanno mostrato le migliori performance complessive sono:
+            % Accuratezza su 200 righe
+            \addplot table[
+                x=model,
+                y=accuracy,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{199:201}
+            ] {test_results_6950_v2.csv};
 
-\begin{itemize}
-    \item \textbf{Qwen2.5:7b}: Eccellente combinazione di accuratezza ($\approx$94\% su 100 righe, $\approx$86\% su 1000 righe) e velocità di esecuzione
-    \item \textbf{Gemma3:12b}: Migliore accuratezza ($\approx$97\% su 100 righe) ma tempi di esecuzione più elevati
-    \item \textbf{Llama3.1:8b}: Performance equilibrate con buona scalabilità
-\end{itemize}
+            % Accuratezza su 1000 righe
+            \addplot table[
+                x=model,
+                y=accuracy,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{999:1001}
+            ] {test_results_6950_v2.csv};
 
-\subsubsection{Modelli problematici}
-Alcuni modelli hanno mostrato comportamenti problematici:
+            \legend{100 righe, 200 righe, 1000 righe}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Confronto dell'accuratezza (test v.2, AMD RX6950XT)}
+    \label{fig:grafico_accuratezza_v2_6950}
+\end{figure}
 
-\begin{itemize}
-    \item \textbf{Mistral:7b}: Tasso di falsi positivi estremamente elevato ($\approx$76-81\%), probabilmente dovuto a una configurazione di prompt non ottimale per questo modello specifico
-    \item \textbf{Mistral-nemo:12b}: Performance mediocri nonostante le dimensioni maggiori
-\end{itemize}
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+                ybar,
+                width=\textwidth,
+                height=8cm,
+                xlabel={LLM},
+                ylabel={\textit{Precision} (\%)},
+                symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek-r1:7b, deepseek-r1:8b},
+                xtick=data,
+                x tick label style={rotate=45, anchor=east},
+                legend pos=north west,
+                bar width=8pt,
+                ymin=0,
+                ymax=150,
+                nodes near coords,
+                nodes near coords style={font=\tiny},
+                every node near coord/.append style={/pgf/number format/fixed, /pgf/number format/precision=0}
+            ]
 
-\subsubsection{Modelli reasoning}
-\label{subsubsec:modelli_reasoning}
+            % Precision su 100 righe
+            \addplot table[
+                x=model,
+                y=precision,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{99:101}
+            ] {test_results_m1_v2.csv};
 
-Alcuni modelli testati includono capacità di reasoning avanzate, utilizzando tag speciali per mostrare il processo di ragionamento interno. I modelli DeepSeek R1 (7B e 8B) utilizzano tag \texttt{<think>...</think>} per visualizzare il ragionamento prima della risposta finale.
+            % Precision su 200 righe
+            \addplot table[
+                x=model,
+                y=precision,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{199:201}
+            ] {test_results_m1_v2.csv};
 
-Il sistema implementa un meccanismo di post-processing per rimuovere automaticamente questi tag di reasoning e considerare solo la risposta finale, garantendo compatibilità con il formato di output atteso.
+            % Precision su 1000 righe
+            \addplot table[
+                x=model,
+                y=precision,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{999:1001}
+            ] {test_results_m1_v2.csv};
 
-\section{Analisi delle performance}
-\label{sec:analisi_performance}
+            \legend{100 righe, 200 righe, 1000 righe}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Confronto della \textit{Precision} (test v.2, Apple M1 Max)}
+    \label{fig:grafico_precision_v2_m1}
+\end{figure}
 
-\subsubsection{Relazione dimensioni-accuratezza}
-\label{subsubsec:relazione_dimensioni_accuratezza}
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+                ybar,
+                width=\textwidth,
+                height=8cm,
+                xlabel={LLM},
+                ylabel={\textit{Precision} (\%)},
+                symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek-r1:7b, deepseek-r1:8b},
+                xtick=data,
+                x tick label style={rotate=45, anchor=east},
+                legend pos=north west,
+                bar width=8pt,
+                ymin=0,
+                ymax=150,
+                nodes near coords,
+                nodes near coords style={font=\tiny},
+                every node near coord/.append style={/pgf/number format/fixed, /pgf/number format/precision=0}
+            ]
 
-L'analisi delle performance evidenzia diversi fattori critici per l'efficacia del sistema.
+            % Precision su 100 righe
+            \addplot table[
+                x=model,
+                y=precision,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{99:101}
+            ] {test_results_6950_v2.csv};
 
-Contrariamente alle aspettative, i modelli più grandi non sempre offrono performance superiori:
-\begin{itemize}
-    \item Qwen2.5:7b supera modelli più grandi come Mistral-nemo:12b
-    \item Llama3.2:3b mostra performance comparabili a modelli significativamente più grandi
-    \item La qualità del fine-tuning sembra essere più importante delle dimensioni del modello
-\end{itemize}
+            % Precision su 200 righe
+            \addplot table[
+                x=model,
+                y=precision,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{199:201}
+            ] {test_results_6950_v2.csv};
 
-\subsubsection{Efficienza computazionale}
-\label{subsubsec:efficienza_computazionale}
+            % Precision su 1000 righe
+            \addplot table[
+                x=model,
+                y=precision,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{999:1001}
+            ] {test_results_6950_v2.csv};
 
-I risultati mostrano variazioni significative nell'efficienza computazionale. In particolare, modelli come Llama3.2:3b, Qwen2.5:7b e Gemma3:4b completano l'elaborazione di 100 righe in meno di due minuti, mentre Mistral:7b richiede oltre sei minuti per lo stesso carico. Da ciò si evince che una maggiore velocità non si traduce necessariamente in minore accuratezza.
-\todo{TODO aggiungere più confronti}
+            \legend{100 righe, 200 righe, 1000 righe}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Confronto della \textit{Precision} (test v.2, AMD RX6950XT)}
+    \label{fig:grafico_precision_v2_6950}
+\end{figure}
 
-\subsubsection{Limitazioni hardware}
-\label{subsubsec:limitazioni_hardware}
-\todo{TODO Rivalutare in seguito a test con altro hw}
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+                ybar,
+                width=\textwidth,
+                height=8cm,
+                xlabel={LLM},
+                ylabel={\textit{Recall} (\%)},
+                symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek-r1:7b, deepseek-r1:8b},
+                xtick=data,
+                x tick label style={rotate=45, anchor=east},
+                legend pos=north west,
+                bar width=8pt,
+                ymin=0,
+                ymax=150,
+                nodes near coords,
+                nodes near coords style={font=\tiny},
+                every node near coord/.append style={/pgf/number format/fixed, /pgf/number format/precision=0}
+            ]
 
-L'hardware utilizzato (Apple M1 Max, 32GB RAM) ha posto vincoli significativi:
-\begin{itemize}
-    \item Impossibilità di eseguire modelli superiori a 12-15 miliardi di parametri
-    \item Necessità di ottimizzazioni specifiche per l'architettura Apple Silicon
-    \item Compromessi tra dimensioni del modello e velocità di inferenza
-\end{itemize}
+            % Recall su 100 righe
+            \addplot table[
+                x=model,
+                y=recall,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{99:101}
+            ] {test_results_m1_v2.csv};
 
-I risultati confermano la fattibilità dell'utilizzo di LLM per l'identificazione di dati sensibili, evidenziando l'importanza della selezione del modello appropriato in base ai requisiti specifici di accuratezza, velocità e risorse disponibili.
+            % Recall su 200 righe
+            \addplot table[
+                x=model,
+                y=recall,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{199:201}
+            ] {test_results_m1_v2.csv};
 
+            % Recall su 1000 righe
+            \addplot table[
+                x=model,
+                y=recall,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{999:1001}
+            ] {test_results_m1_v2.csv};
+
+            \legend{100 righe, 200 righe, 1000 righe}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Confronto della \textit{Recall} (test v.2, Apple M1 Max)}
+    \label{fig:grafico_recall_v2_m1}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+                ybar,
+                width=\textwidth,
+                height=8cm,
+                xlabel={LLM},
+                ylabel={\textit{Recall} (\%)},
+                symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek-r1:7b, deepseek-r1:8b},
+                xtick=data,
+                x tick label style={rotate=45, anchor=east},
+                legend pos=north west,
+                bar width=8pt,
+                ymin=0,
+                ymax=150,
+                nodes near coords,
+                nodes near coords style={font=\tiny},
+                every node near coord/.append style={/pgf/number format/fixed, /pgf/number format/precision=0}
+            ]
+
+            % Recall su 100 righe
+            \addplot table[
+                x=model,
+                y=recall,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{99:101}
+            ] {test_results_6950_v2.csv};
+
+            % Recall su 200 righe
+            \addplot table[
+                x=model,
+                y=recall,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{199:201}
+            ] {test_results_6950_v2.csv};
+
+            % Recall su 1000 righe
+            \addplot table[
+                x=model,
+                y=recall,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{999:1001}
+            ] {test_results_6950_v2.csv};
+
+            \legend{100 righe, 200 righe, 1000 righe}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Confronto della \textit{Recall} (test v.2, AMD RX6950XT)}
+    \label{fig:grafico_recall_v2_6950}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+                ybar,
+                ymode=log,
+                width=\textwidth,
+                height=8cm,
+                xlabel={LLM},
+                ylabel={\textit{Tempo} (minuti, scala logaritmica)},
+                symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek-r1:7b, deepseek-r1:8b},
+                xtick=data,
+                x tick label style={rotate=45, anchor=east},
+                legend pos=north west,
+                bar width=8pt,
+                ymin=1,
+                ymax=2500,
+                point meta=explicit symbolic,
+                nodes near coords,
+                nodes near coords style={font=\tiny, rotate=90, anchor=west},
+            ]
+
+            % Tempo su 100 righe
+            \addplot table[
+                x=model,
+                y=tempo_minuti,
+                meta=tempo,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{99:101}
+            ] {test_results_m1_v2.csv};
+
+            % Tempo su 200 righe
+            \addplot table[
+                x=model,
+                y=tempo_minuti,
+                meta=tempo,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{199:201}
+            ] {test_results_m1_v2.csv};
+
+            % Tempo su 1000 righe
+            \addplot table[
+                x=model,
+                y=tempo_minuti,
+                meta=tempo,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{999:1001}
+            ] {test_results_m1_v2.csv};
+
+            \legend{100 righe, 200 righe, 1000 righe}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Confronto del tempo impiegato (test v.2, Apple M1 Max)}
+    \label{fig:grafico_tempo_v2}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+                ybar,
+                ymode=log,
+                width=\textwidth,
+                height=8cm,
+                xlabel={LLM},
+                ylabel={\textit{Tempo} (minuti, scala logaritmica)},
+                symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek-r1:7b, deepseek-r1:8b},
+                xtick=data,
+                x tick label style={rotate=45, anchor=east},
+                legend pos=north west,
+                bar width=8pt,
+                ymin=1,
+                ymax=2500,
+                point meta=explicit symbolic,
+                nodes near coords,
+                nodes near coords style={font=\tiny, rotate=90, anchor=west},
+            ]
+
+            % Tempo su 100 righe
+            \addplot table[
+                x=model,
+                y=tempo_minuti,
+                meta=tempo,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{99:101}
+            ] {test_results_6950_v2.csv};
+
+            % Tempo su 200 righe
+            \addplot table[
+                x=model,
+                y=tempo_minuti,
+                meta=tempo,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{199:201}
+            ] {test_results_6950_v2.csv};
+
+            % Tempo su 1000 righe
+            \addplot table[
+                x=model,
+                y=tempo_minuti,
+                meta=tempo,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{999:1001}
+            ] {test_results_6950_v2.csv};
+
+            \legend{100 righe, 200 righe, 1000 righe}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Confronto del tempo impiegato (test v.2, AMD RX6950XT)}
+    \label{fig:grafico_tempo_v2_6950}
+\end{figure}
+
+\clearpage
 
 
 %
@@ -1149,9 +1444,7 @@ I risultati confermano la fattibilità dell'utilizzo di LLM per l'identificazion
 \chapter{Conclusioni}
 \label{chap:conclusioni}
 
-\todosection{Risultati raggiunti}{sec:risultati_raggiunti}{finire}
-
-Questo progesso ci ha permesso di confermare l'utilizzo di LLM per l'identificazione e il report di dati sensibili all'interno di log di sistemi complessi in un'ambiente di produzione.
+I risultati raggiunti durante la fase di sperimentazione e testing (\refwithpage{chap:test}) confermano la fattibilità dell'utilizzo di LLM per l'identificazione di dati sensibili, in tempo reale in un'ambiente di produzione, evidenziando l'importanza della selezione del modello appropriato in base ai requisiti specifici di accuratezza, velocità e risorse disponibili.
 
 \section{Sviluppi futuri}
 \label{sec:sviluppi_futuri}
@@ -1159,9 +1452,11 @@ Questo progesso ci ha permesso di confermare l'utilizzo di LLM per l'identificaz
 \subsubsection{Addestramento di LoRA}
 \label{subsubsec:addestramento_lora}
 
-LoRA (Low-Rank Adaptation) è una tecnica di fine-tuning efficiente che modifica solo un sottoinsieme dei parametri del modello e permette di creare un nuovo LLM a partire da uno già addestrato.
+LoRA (Low-Rank Adaptation) è una tecnica di fine-tuning efficiente che modifica solo un sottoinsieme dei parametri del modello e permette di creare una versione ulteriormente addestrata di un LLM già disponibile ed utilizzabile.
 
-Tramite questa tecnica è possibile addestrare un modello per un dominio specifico, ad esempio il dominio dei log, senza dover addestrare un nuovo modello completamente da zero, operazione estremamente complicata da eseguire nei progetti di ricerca accademica a causa dei costi computazionali elevati, dei tempi di sviluppo estremamente lunghi, delle competenze multidisciplinari richieste e della necessità di dataset di addestramento di dimensioni elevate.
+A differenza dei \textit{Modelfile} di Ollama, che si limitano a modificare il prompt di sistema e i parametri di configurazione senza alterare i pesi del modello, un LoRA esegue un vero e proprio addestramento che aggiorna i parametri del modello stesso. Mentre i \textit{Modelfile} permettono di personalizzare il comportamento del modello attraverso istruzioni testuali, il LoRA apprende direttamente dai dati di training, modificando la rappresentazione interna del modello e consentendo un adattamento molto più profondo al dominio specifico.
+
+Tramite questa tecnica è possibile addestrare un modello per un dominio specifico, ad esempio il dominio dei log, senza dover addestrarne uno completamente da zero. Quest'ultima opzione risulta infatti impraticabile per progetti di ricerca accademica a causa dei costi computazionali elevati, dei tempi di sviluppo prolungati, delle competenze multidisciplinari richieste e della necessità di dataset di addestramento di dimensioni elevate.
 
 In seguito a un periodo prolungato di utilizzo del sistema in ambiente di produzione e di raccolta sistematica dei dati e dei report generati, sarebbe possibile utilizzare questi dati come dataset di training per addestrare un LoRA specificamente ottimizzato per questo caso d'uso.\\
 Il fine-tuning potrebbe partire da uno dei modelli LLM attualmente utilizzati che ha dimostrato le performance migliori durante la fase di testing.
@@ -1172,20 +1467,13 @@ Il fine-tuning potrebbe partire da uno dei modelli LLM attualmente utilizzati ch
 La versione finale del progetto è stata sviluppata specificamente per l'integrazione con Graylog e lo script di setup dell'ambiente è stato scritto per interagire con questa piattaforma.\\
 Un possibile sviluppo futuro consiste nella generalizzazione delle integrazioni attraverso lo sviluppo di un protocollo standard che consenta la creazione di adattatori modulari per diversi sistemi di gestione dei log.
 
-Questa evoluzione permetterebbe di:
-\begin{enumerate}
-    \item Estendere la compatibilità del sistema a piattaforme alternative come Elasticsearch\footnote{Elasticsearch \url{https://www.elastic.co/elasticsearch}}, Splunk\footnote{Splunk \url{https://www.splunk.com}}, o Fluentd\footnote{Fluentd \url{https://www.fluentd.org}}
-    \item Standardizzare le interfacce di comunicazione tra il sistema di analisi e i sistemi di logging
-    \item Semplificare la distribuzione del sistema in ambienti enterprise eterogenei
-    \item Migliorare la tracciabilità e la gestione delle notifiche attraverso un framework unificato
-\end{enumerate}
-
-Un protocollo di integrazione standardizzato ridurrebbe significativamente la complessità di deployment e aumenterebbe l'adozione del sistema in contesti operativi diversificati.
+Questa evoluzione permetterebbe di estendere la compatibilità del sistema a piattaforme alternative come Elasticsearch\footnote{Elasticsearch \url{https://www.elastic.co/elasticsearch}}, Splunk\footnote{Splunk \url{https://www.splunk.com}}, o Fluentd\footnote{Fluentd \url{https://www.fluentd.org}}, standardizzando al contempo le interfacce di comunicazione tra il sistema di analisi e i sistemi di logging. Inoltre, la definizione di un protocollo comune semplificherebbe la distribuzione del sistema in ambienti enterprise eterogenei e migliorerebbe la tracciabilità e la gestione delle notifiche attraverso un framework unificato. Un protocollo di integrazione standardizzato ridurrebbe significativamente la complessità di deployment e aumenterebbe l'adozione del sistema in contesti operativi diversificati.
 
 \subsubsection{Rassegna delle alternative a Graylog}
 \label{subsubsec:alternative_graylog}
 
-Tra le alternative più rilevanti si distinguono diverse categorie di strumenti.\\
+Tra le alternative più rilevanti si distinguono diverse categorie di strumenti.
+
 \textbf{SigNoz}\footnote{SigNoz \url{https://signoz.io}} rappresenta una soluzione moderna open source focalizzata sull'osservabilità completa, offrendo un pannello unificato per visualizzare traces, metriche e log provenienti da OpenTelemetry. Utilizza ClickHouse\footnote{ClickHouse \url{https://clickhouse.com}} come database per garantire performance elevate e supporta l'ingestione di dati da oltre 50 sorgenti diverse, rendendolo particolarmente adatto ad ambienti cloud-native dove l'integrazione con standard aperti è prioritaria. La piattaforma offre inoltre correlazione automatica tra i diversi segnali telemetrici per un debugging più efficace.
 
 \textbf{Logstash}\footnote{Logstash \url{https://www.elastic.co/logstash}} si configura come una pipeline di data processing server-side altamente flessibile con un framework estensibile che conta oltre 200 plugin. Il sistema implementa code persistenti per garantire delivery at-least-once degli eventi e supporta monitoraggio centralizzato delle pipeline attraverso un'interfaccia unificata, risultando ideale in scenari dove è necessaria una pre-elaborazione complessa dei dati.
@@ -1223,7 +1511,6 @@ caption=Prompt usato nella versione 1,
 label=lst:prompt_ver1,
 literate={è}{{\`e}}1 {à}{{\`a}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {ì}{{\`i}}1
 ]{"../ollama extractor v1/prompt.txt"}
-\todo{sistemare testo che esce dai confini del box}
 
 \clearpage
 
@@ -1235,6 +1522,13 @@ label=lst:code_ver2,
 language=Python,
 literate={è}{{\`e}}1 {à}{{\`a}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {ì}{{\`i}}1
 ]{"../ollama extractor v2/main.py"}
+
+\lstinputlisting[
+caption=Script di testing automatico della versione 2,
+label=lst:code_testing_ver2,
+language=Bash,
+literate={è}{{\`e}}1 {à}{{\`a}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {ì}{{\`i}}1
+]{"../ollama extractor v2/test-all.sh"}
 
 \clearpage
 
@@ -1258,7 +1552,6 @@ label=lst:modelfile,
 language=Python,
 literate={è}{{\`e}}1 {à}{{\`a}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {ì}{{\`i}}1
 ]{"../modelfiles/sensitive-data-detector-BASE.modelfile"}
-\todo{sistemare testo che esce dai confini del box}
 
 \clearpage
 
