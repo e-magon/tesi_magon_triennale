@@ -20,6 +20,9 @@ ollama pull command-r
 ## Esecuzione dello script
 
 ```sh
+# (Opzionale) Su Nix o NixOS, entrare nella nix shell
+nix-shell
+
 # Creare il virtual environment (usare python 3.12)
 python3 -m venv .venv
 
