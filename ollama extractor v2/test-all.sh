@@ -58,8 +58,13 @@ for MODEL in "${MODELS[@]}"; do
       echo "LOG FILE: ${LOG_FILE}"
       echo "Data di inizio: $(date)"
       echo
-      # Esegue il programma principale misurando il tempo di esecuzione
-      /usr/bin/time -p python3 main.py "${MODEL}" "${LOG_FILE}"
+      # Esegue il programma principale misurando il tempo di esecuzione.
+      # Usa /usr/bin/time su macOS, "time" integrato nella shell su altri sistemi
+      if [[ "$OSTYPE" == "darwin"* ]]; then
+        /usr/bin/time -p python3 main.py "${MODEL}" "${LOG_FILE}"
+      else
+        time python3 main.py "${MODEL}" "${LOG_FILE}"
+      fi
       echo
       echo "Fine esecuzione: $(date)"
     } > "${OUTPUT_FILE}" 2>&1
