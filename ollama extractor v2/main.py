@@ -1,6 +1,8 @@
 """
-Script che chiama il modello llama3.1:3b (4.7 GB) tramite le API REST ollama e cerca
-di estrarre tutti i dati privati presenti in un estratto dei log.
+Script che utilizza degli LLM tramite le API REST ollama e prova ad identificare
+tutti i dati privati presenti in un estratto dei log.
+In questa versione (v2) il modello analizza i log riga per riga e opera su un
+dataset pre-annotato in modo da poter calcolare diverse metriche di valutazione.
 """
 import datetime
 import os
@@ -19,16 +21,20 @@ n_messaggi_prima_di_cambiare_chat = 15
 avviato_timestamp = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 risposte_formattate = ''
 
-# llm = 'sensitive-data-detector-llama3.1:8b'
+# Modello utilizzato di default. Se l'LLM viene specificato come argomento,
+# usa quello.
+llm = 'sensitive-data-detector-llama3.1:8b'
 # llm = 'sensitive-data-detector-llama3.2:3b'
 # llm = 'sensitive-data-detector-mistral:7b'
 # llm = 'sensitive-data-detector-mistral-nemo:12b'
 # llm = 'sensitive-data-detector-qwen2.5:7b'
 # llm = 'sensitive-data-detector-gemma3:4b'
-llm = 'sensitive-data-detector-gemma3:12b'
+# llm = 'sensitive-data-detector-gemma3:12b'
 # llm = 'sensitive-data-detector-deepseek-r1:7b'
 # llm = 'sensitive-data-detector-deepseek-r1:8b'
 
+# File di log usato di default. Se il file di log viene specificato come
+# argomento, usa quello.
 log_filename = 'messages_100.log'
 # log_filename = 'messages_200.log'
 # log_filename = 'messages_1000.log'
@@ -74,7 +80,7 @@ def main() -> None:
     global recall
     global recall_p
 
-    # Legge i log e li aggiunge al prompt
+    # Legge le righe di log e le aggiunge al prompt
     n_righe_aggiunte = 0
     n_messaggi_inviati_chat_corrente = 0
     prompt = ''
@@ -92,7 +98,7 @@ def main() -> None:
         while True:
             # Se è il momento di cambiare chat, resetta l'elenco dei messaggi
             if (
-                n_messaggi_prima_di_cambiare_chat != 0 and  # type: ignore
+                n_messaggi_prima_di_cambiare_chat != 0 and
                 n_messaggi_inviati_chat_corrente == n_messaggi_prima_di_cambiare_chat
             ):
                 print('\tRipristino chat, limite messaggi ({}) raggiunto\n'.format(
@@ -104,11 +110,11 @@ def main() -> None:
 
             righe_da_aggiungere = righe[n_righe_aggiunte: n_righe_aggiunte + 1]
             if len(righe_da_aggiungere) == 0:
-                # Finito il file
+                # Raggiunta la fine del file
                 break
 
-            # Toglie la Y o N a inizio messaggio (che indica se la riga contiene dati sensibili,
-            # usata per misurare la correttezza del modello)
+            # Toglie la Y o N a inizio messaggio (che indica se la riga contiene
+            # dati sensibili, usata per misurare la correttezza del modello)
             riga = righe_da_aggiungere[0]
             riga_sensibile = riga.startswith('Y\t')
 
@@ -116,7 +122,7 @@ def main() -> None:
             prompt += riga
             n_righe_aggiunte += 1
 
-            messaggi.append({  # type: ignore
+            messaggi.append({
                 'role': 'user',
                 'content': prompt
             })
@@ -124,7 +130,7 @@ def main() -> None:
             try:
                 response = ollama.chat(
                     model=llm,
-                    messages=messaggi  # type: ignore
+                    messages=messaggi
                 )
             except httpx.ConnectError as e:
                 print(
@@ -134,16 +140,16 @@ def main() -> None:
                 print(e)
                 sys.exit(1)
 
-            risposta: str = response['message']['content']  # type: ignore
-            risposta_formattata: str = risposta + '\n\n'  # type: ignore
-            print(risposta_formattata)  # type: ignore
+            risposta: str = response['message']['content']
+            risposta_formattata: str = risposta + '\n\n'
+            print(risposta_formattata)
 
             # Elimina i tag <think>, </think> e tutto ciò che è contenuto in mezzo
             risposta = re.sub(r'<think>.*?</think>', '', risposta)
             risposta = risposta.strip()
 
             # Controlla la correttezza della risposta del modello
-            riga_segnalata = not risposta.lower().startswith("none")  # type: ignore
+            riga_segnalata = not risposta.lower().startswith("none")
             # 1. Se la riga non contiene dati sensibili (inizia con N) e il modello non l'ha segnalata come sensibile,
             # aggiunge 1 a veri_negativi
             if not riga_sensibile and not riga_segnalata:
@@ -171,9 +177,9 @@ def main() -> None:
 
             print('\tRighe rimanenti: {}\n'.format(
                 len(righe) - n_righe_aggiunte))
-            risposte_formattate += risposta_formattata  # type: ignore
+            risposte_formattate += risposta_formattata
 
-            messaggi.append(response['message'])  # type: ignore
+            messaggi.append(response['message'])
             n_messaggi_inviati_chat_corrente += 1
 
             # Ripristina il prompt
@@ -182,7 +188,7 @@ def main() -> None:
         risposte_corrette = veri_negativi + veri_positivi
         risposte_errate = falsi_negativi + falsi_positivi
 
-        # :.3f serve per arrotondare a 3 cifre decimali
+        # Arrotonda a 3 cifre decimali
         veri_negativi_p = f"{veri_negativi / num_righe * 100:.3f}"
         veri_positivi_p = f"{veri_positivi / num_righe * 100:.3f}"
         falsi_negativi_p = f"{falsi_negativi / num_righe * 100:.3f}"
@@ -191,8 +197,8 @@ def main() -> None:
         risposte_corrette_p = f"{risposte_corrette / num_righe * 100:.3f}"
         risposte_errate_p = f"{risposte_errate / num_righe * 100:.3f}"
 
-        # Calcola precision e recall in percentuale
-        # precision indica la percentuale di risposte positive corrette
+        # Calcola precision e recall in percentuale.
+        # precision indica la percentuale di risposte positive corrette,
         # recall indica la percentuale di risposte positive trovate
         if (veri_positivi + falsi_positivi) > 0:
             precision = veri_positivi / (veri_positivi + falsi_positivi)
@@ -228,7 +234,7 @@ def main() -> None:
 
 def salva_output():
     # Scrive tutte le risposte formattate in un file
-    # Crea la cartella `out` se non esiste
+    # Crea la cartella di output se non esiste
     try:
         os.mkdir('output')
     except FileExistsError:

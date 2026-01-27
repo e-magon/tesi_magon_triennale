@@ -1,6 +1,6 @@
 """
-Script che chiama il modello llama3 (4.7 GB) tramite le API REST ollama e cerca di estrarre tutti i dati privati presenti
-in un estratto dei log.
+Script che utilizza degli LLM tramite le API REST ollama e prova ad identificare
+tutti i dati privati presenti in un estratto dei log.
 """
 import datetime
 import os
@@ -9,16 +9,16 @@ import httpx
 import ollama
 
 # Numero di righe da aggiungere ad ogni "messaggio" della chat.
-# 20 righe sono troppe, si perde la spiegazione a inizio prompt.
+# Evitare un numero elevato, altrimenti si perde la spiegazione a inizio prompt.
 # Viene impostato successivamente in base al modello avviato.
 n_righe_da_aggiungere_in_ogni_messaggio = None
 
 # Numero di messaggi da inviare prima di cambiare chat.
 # Serve per evitare di saturare la "memoria" (token) del modello.
-# Dopo aver inviato `n_messaggi_prima_di_cambiare_chat` messaggi, la chat viene resettata e quindi
-# riparte con il prompt iniziale.
+# Dopo aver inviato `n_messaggi_prima_di_cambiare_chat` messaggi, la chat viene
+# resettata e quindi riparte con il prompt iniziale.
 # Mettere 0 per non cambiare mai chat.
-# Viene impostato successivamente in base al modello avviato
+# Viene impostato successivamente in base al modello avviato.
 n_messaggi_prima_di_cambiare_chat = None
 
 avviato_timestamp = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
@@ -34,7 +34,6 @@ with open('./prompt.txt', 'r') as file:
 
 
 def main() -> None:
-    # global in modo da poterle modificare
     global risposte_formattate
     global n_righe_da_aggiungere_in_ogni_messaggio
     global n_messaggi_prima_di_cambiare_chat
@@ -42,7 +41,7 @@ def main() -> None:
 
     args = sys.argv
 
-    # Se non ci sono argomenti errore
+    # Controllo degli argomenti passati
     if len(args) == 1:
         print('Errore: chiamare lo script specificando il modello da usare (llama3, llama3:70b, llama3.1, llama3.1:70b, command-r)')
         print('Esempio: python main.py llama3')
@@ -78,7 +77,7 @@ def main() -> None:
         print(f'Errore: modello non riconosciuto ({llm})')
         sys.exit(1)
 
-    # Legge i log e li aggiunge al prompt
+    # Legge le righe di log e le aggiunge al prompt
     n_righe_aggiunte = 0
     n_messaggi_inviati_chat_corrente = 0
     file_terminato = False
@@ -91,7 +90,7 @@ def main() -> None:
         while file_terminato is False:
             # Se è il momento di cambiare chat, resetta l'elenco dei messaggi
             if (
-                n_messaggi_prima_di_cambiare_chat != 0 and  # type: ignore
+                n_messaggi_prima_di_cambiare_chat != 0 and
                 n_messaggi_inviati_chat_corrente == n_messaggi_prima_di_cambiare_chat
             ):
                 print('\tRipristino chat, limite messaggi ({}) raggiunto\n'.format(
@@ -109,14 +108,14 @@ def main() -> None:
             prompt += ''.join(righe_da_aggiungere) + '```'
             n_righe_aggiunte += len(righe_da_aggiungere)
 
-            messaggi.append({  # type: ignore
+            messaggi.append({
                 'role': 'user',
                 'content': prompt
             })
 
             try:
                 risposta = ollama.chat(
-                    model=llm, messages=messaggi)  # type: ignore
+                    model=llm, messages=messaggi)
             except httpx.ConnectError as e:
                 print(
                     'Errore: impossibile connettersi al server Ollama. Assicurarsi che sia attivo.')
@@ -125,13 +124,13 @@ def main() -> None:
                 print(e)
                 sys.exit(1)
 
-            risposta_formattata = risposta['message']['content'] + '\n\n\n' # type: ignore
-            print(risposta_formattata)  # type: ignore
+            risposta_formattata = risposta['message']['content'] + '\n\n\n'
+            print(risposta_formattata)
             print('\tRighe rimanenti: {}\n'.format(
                 len(righe) - n_righe_aggiunte))
-            risposte_formattate += risposta_formattata  # type: ignore
+            risposte_formattate += risposta_formattata
 
-            messaggi.append(risposta['message'])  # type: ignore
+            messaggi.append(risposta['message'])
             n_messaggi_inviati_chat_corrente += 1
 
             # Ripristina il prompt
@@ -142,7 +141,7 @@ def main() -> None:
 
 def salva_output():
     # Scrive tutte le risposte formattate in un file
-    # Crea la cartella `out` se non esiste
+    # Crea la cartella di output se non esiste
     try:
         os.mkdir('output')
     except FileExistsError:

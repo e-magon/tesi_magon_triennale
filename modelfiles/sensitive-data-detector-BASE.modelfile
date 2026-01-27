@@ -1,4 +1,5 @@
 # https://github.com/ollama/ollama/blob/main/docs/modelfile.md
+# Sostituire <modello-base:tag> con un modello di partenza come "gemma3:4b".
 FROM <modello-base:tag>
 # Imposta la temperatura (più alto è più creativo, più basso è più coerente. Predefinito 0.8)
 PARAMETER temperature 0.2
@@ -35,7 +36,7 @@ Method create_token for user: admin@revetec.it took: 97.468142ms to complete wit
 """
 MESSAGE assistant """
 <think>
-I see an email address, it is sensitive data so I should output it as expected (type: value)
+I see an email address, it is sensitive data so I should output it as expected (type value)
 </think>
 email admin@revetec.it
 """
@@ -44,7 +45,7 @@ eneltecService, login success: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3
 """
 MESSAGE assistant """
 <think>
-I see a token, it is sensitive data so I should output it as expected (type: value)
+I see a token, it is sensitive data so I should output it as expected (type value)
 </think>
 token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTI0NzcxMDAsImlhdCI6MTcxMjQ0MTEwMCwiaXNzIjoibWFpbmZsdXguYXV0aCIsInN1YiI6I-mFkbWluQHJldmV0ZWMuaXQiLCJpc3N1ZXJfaWQiOiI2MzNmZWRiYS1hOGE4LTRhOWUtOTU1MC0xODNlN2Y2Yj-BmMjkiLCJ0eXBlIjowfQ._fdS_wKnl9ARlFYc6Kw
 """
@@ -54,7 +55,7 @@ Method update_lamp for user: admin@revetec.it and lamp: {\"ID\":\"1287a017-2bc3-
 MESSAGE assistant """
 <think>
 I see a JSON object. The JSON object by itself isn't sensitive data, so I should check all the keys and values inside it.
-I see an email address and some coordinates, they are sensitive data so I should output them as expected (type: value)
+I see an email address and some coordinates, they are sensitive data so I should output them as expected (type value)
 </think>
 email admin@revetec.it, latitude 32.28024422, longitude 34.8617076
 """

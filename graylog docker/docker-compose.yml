@@ -2,7 +2,8 @@
 name: graylog-environment
 
 services:
-  # MongoDB: https://hub.docker.com/_/mongo/
+  # MongoDB: database NoSQL utilizzato da Graylog per memorizzare configurazioni e metadati
+  # https://hub.docker.com/_/mongo/
   mongodb:
     image: "mongo:6.0.18"
     ports:
@@ -14,10 +15,14 @@ services:
       - "mongodb_data:/data/db"
       - "mongodb_config:/data/configdb"
 
-  #Graylog Data Node: https://hub.docker.com/r/graylog/graylog-datanode
+  # Graylog Data Node: nodo di archiviazione dei log basato su OpenSearch
+  # Gestisce l'indicizzazione e la ricerca dei log
+  # https://hub.docker.com/r/graylog/graylog-datanode
   datanode:
     image: "graylog/graylog-datanode:6.1"
     hostname: "datanode"
+    # Configurazione delle variabili d'ambiente per il Data Node
+    # Imposta l'identificativo del nodo, le credenziali di accesso e la connessione a MongoDB
     environment:
       GRAYLOG_DATANODE_NODE_ID_FILE: "/var/lib/graylog-datanode/node-id"
       GRAYLOG_DATANODE_PASSWORD_SECRET: "somepasswordpepper"
@@ -40,7 +45,9 @@ services:
       - "graylog-datanode:/var/lib/graylog-datanode"
     restart: "on-failure"
 
-  # Graylog: https://hub.docker.com/r/graylog/graylog/
+  # Graylog: server principale per la gestione e visualizzazione dei log
+  # Fornisce l'interfaccia web, REST API e gestisce gli input per la ricezione dei log
+  # https://hub.docker.com/r/graylog/graylog/
   graylog:
     hostname: "server"
     image: "graylog/graylog-enterprise:6.1"
@@ -51,6 +58,8 @@ services:
       datanode:
         condition: "service_started"
     entrypoint: "/usr/bin/tini -- /docker-entrypoint.sh"
+    # Configurazione delle variabili d'ambiente per Graylog
+    # Imposta l'identificativo del nodo, l'indirizzo di binding, le credenziali e l'URI esterno
     environment:
       GRAYLOG_NODE_ID_FILE: "/usr/share/graylog/data/config/node-id"
       GRAYLOG_HTTP_BIND_ADDRESS: "0.0.0.0:9000"
@@ -89,10 +98,12 @@ services:
     volumes:
       - "graylog_data:/usr/share/graylog/data"
 
+# Configurazione della rete Docker per la comunicazione tra i container
 networks:
   graylog:
     driver: "bridge"
 
+# Volumi persistenti per conservare i dati anche dopo il riavvio dei container
 volumes:
   mongodb_data:
   mongodb_config:

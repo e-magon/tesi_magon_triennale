@@ -219,6 +219,7 @@ def main():
             input_log
         )
 
+        # Crea lo stream per le segnalazioni di log sensibili
         stream_sensitive = setup.create_stream(
             'Sensitive Data Detector segnalazioni log sensibili stream',
             'Stream per le notifiche di dati sensibili',
@@ -233,7 +234,7 @@ def main():
             24367
         )
 
-        # Crea le regole pipeline
+        # Crea le regole della pipeline
         email_rule = setup.create_pipeline_rule(
             'Regex email',
             r'''

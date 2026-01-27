@@ -1,7 +1,8 @@
 """
-Script che chiama il modello llama3 (4.7 GB) tramite le API REST ollama e cerca
-di estrarre tutti i dati privati presenti in un estratto dei log.
-Questa versione (v3) ascolta sulla porta TCP 24367 dalla quale legge righe di log in formato GELF.
+Script che utilizza degli LLM tramite le API REST ollama e prova ad identificare
+tutti i dati privati presenti all'interno di righe di log.
+In questa versione (v3) lo script ascolta sulla porta TCP 24367 dalla quale
+legge le righe di log in formato GELF, inoltrate da GrayLog.
 """
 
 import asyncio
@@ -11,9 +12,14 @@ import socket
 import sys
 import httpx
 import ollama
-# import regex_list
+import regex_list
 
 port = 24367
+
+# GrayLog applica già delle regex per cercare dati sensibili.
+# Per evitare duplicazioni, la gestione delle regex manuali di questo script
+# è disabilitata di default.
+regex_enabled = False
 
 # Numero di messaggi da inviare prima di cambiare chat.
 # Serve per evitare di saturare la "memoria" (token) del modello.
@@ -22,7 +28,8 @@ port = 24367
 # Mettere 0 per non cambiare mai chat.
 n_messaggi_prima_di_cambiare_chat = 15
 
-# llm = 'sensitive-data-detector-llama3.1:8b'
+# Modello utilizzato di default.
+llm = 'sensitive-data-detector-llama3.1:8b'
 # llm = 'sensitive-data-detector-llama3.2:3b'
 # llm = 'sensitive-data-detector-mistral:7b'
 # llm = 'sensitive-data-detector-mistral-nemo:12b'
@@ -30,13 +37,19 @@ n_messaggi_prima_di_cambiare_chat = 15
 # llm = 'sensitive-data-detector-gemma3:4b'
 # llm = 'sensitive-data-detector-gemma3:12b'
 # llm = 'sensitive-data-detector-deepseek-r1:7b'
-llm = 'sensitive-data-detector-deepseek-r1:8b'
+# llm = 'sensitive-data-detector-deepseek-r1:8b'
 
 n_messaggi_inviati_chat_corrente = 0
 messaggi = []
 
 
 async def handle_connection(reader, _writer):
+    """
+    Metodo di callback eseguito ad ogni connessione in entrata da GrayLog.
+    Legge i messaggi in arrivo, li invia al modello LLM tramite le API REST
+    di Ollama, e invia la risposta a GrayLog tramite una connessione TCP
+    sulla porta 5556.
+    """
     global n_messaggi_inviati_chat_corrente
     global messaggi
 
@@ -64,27 +77,33 @@ async def handle_connection(reader, _writer):
                 n_messaggi_inviati_chat_corrente = 0
                 messaggi = []
 
-            # Gestione regex disabilitata: viene già applicata nelle pipeline di GrayLog.
-            # Applica le regex manuali per cercare dati sensibili
-            # all_regex_matches = []
-            # for regex in regex_list.regex_list:
-            #     matches = re.findall(regex['regex'], riga)
-            #     if matches:
-            #         for m in matches:
-            #             all_regex_matches.append(f"{regex['name']} {m}")
+            if regex_enabled:
+                # Se regex_enabled è True, viene eseguita l'analisi statica
+                # attraverso le regex manuali.
+                # La soluzione migliore è utilizzare GrayLog per l'analisi
+                # statica, ma rimane comunque la possibilità di utilizzare
+                # le regex manuali in questo script.
 
-            # Se sono già stati trovati dati sensibili con la regex, vengono
-            # già inviati a GrayLog.
-            # if len(all_regex_matches) > 0:
-            #     for match in all_regex_matches:
-            #         msg = f'{log_id}: {match}'
-            #         print(msg)
-            #         # Invio della risposta allo stream apposito di GrayLog
-            #         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            #         client.connect(('localhost', 5556))
-            #         msg = msg + '\x00'
-            #         client.send(msg.encode('utf-8'))
-            #         client.close()
+                # Applica le regex manuali per cercare dati sensibili
+                all_regex_matches = []
+                for regex in regex_list.regex_list:
+                    matches = re.findall(regex['regex'], riga)
+                    if matches:
+                        for m in matches:
+                            all_regex_matches.append(f"{regex['name']} {m}")
+
+                # Se sono già stati trovati dati sensibili con la regex, vengono
+                # già inviati a GrayLog.
+                if len(all_regex_matches) > 0:
+                    for match in all_regex_matches:
+                        msg = f'{log_id}: {match}'
+                        print(msg)
+                        # Invio della risposta allo stream apposito di GrayLog
+                        client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                        client.connect(('localhost', 5556))
+                        msg = msg + '\x00'
+                        client.send(msg.encode('utf-8'))
+                        client.close()
 
             messaggi.append({
                 'role': 'user',
@@ -108,7 +127,8 @@ async def handle_connection(reader, _writer):
             if risposta.lower().strip() != 'none':
                 msg = f'{log_id}: {risposta}'
                 print(msg)
-                # Invio della risposta allo stream apposito di GrayLog
+                # Invio della risposta allo stream di GrayLog, in modo che possa
+                # catalogarla e salvarla all'interno del sistema.
                 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 client.connect(('localhost', 5556))
                 msg = msg + '\x00'
@@ -139,6 +159,8 @@ if __name__ == '__main__':
     try:
         print(f'Avvio in corso, in ascolto sulla porta {
               port}. Premere Ctrl+C per interrompere in qualsiasi momento.')
+        # Avvia tramite asyncio il server TCP, in modo da poter gestire
+        # multiple connessioni in entrata contemporaneamente.
         asyncio.run(main())
     except KeyboardInterrupt:
         exit(0)
