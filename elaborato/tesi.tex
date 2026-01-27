@@ -8,16 +8,7 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Pacchetti necessari per compilare questo documento:
-% - babel
-% - geometry
-% - pgfplots
-% - todonotes
-% - xcolor
-
-% Per compilare il documento eseguire:
-% cd "elaborato"
-% latexmk -pdf -f "tesi.tex"
+% Per compilare il documento leggere le istruzioni nel file BUILDING.md
 
 \documentclass[12pt]{report}
 
@@ -34,8 +25,8 @@
 % Esiste anche un'opzione per il formato 17x24 per le tesi di dottorato
 % \usepackage[phd]{tesi}
 
-% Mostra i bounding box per visualizzare il layout (TODO rimuovere per versione finale)
-\geometry{showframe}
+% Mostra i bounding box per visualizzare il layout
+% \geometry{showframe}
 
 % Per disabilitare i todo:
 % \usepackage[disable]{todonotes}
@@ -816,6 +807,9 @@ Il flusso di elaborazione real-time si articola nelle seguenti fasi:
 \begin{enumerate}
     \item \textbf{Ricezione stream}: Il sistema ascolta sulla porta \texttt{TCP 24367} per ricevere log in formato GELF da Graylog
     \item \textbf{Parsing dei messaggi}: Ogni messaggio GELF viene deserializzato per estrarre contenuto e metadati del log
+    \begin{enumerate}
+        \item \textbf{Analisi statica opzionale}: È possibile abilitare opzionalmente l'utilizzo di espressioni regolari direttamente all'interno di questo passaggio per l'identificazione rapida tramite analisi statica. Questa funzionalità è opzionale in quanto ridondante: la pipeline di Graylog viene già configurata automaticamente con regole di analisi statica tramite regex, rendendo superflua una duplicazione del processo
+    \end{enumerate}
     \item \textbf{Analisi LLM}: Il contenuto viene inviato al modello personalizzato per l'identificazione di dati sensibili
     \item \textbf{Gestione risultati}: Le risposte positive vengono elaborate e formattate con gli identificatori originali del log
     \item \textbf{Notifica a Graylog}: I risultati vengono reinviati a Graylog sulla porta \texttt{TCP 5556} per integrazione nei flussi di alerting
