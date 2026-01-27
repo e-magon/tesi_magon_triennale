@@ -54,6 +54,8 @@ risposte_errate = None
 risposte_errate_p = None
 precision = None
 precision_p = None
+specificity = None
+specificity_p = None
 recall = None
 recall_p = None
 
@@ -77,6 +79,8 @@ def main() -> None:
     global risposte_errate_p
     global precision
     global precision_p
+    global specificity
+    global specificity_p
     global recall
     global recall_p
 
@@ -197,14 +201,22 @@ def main() -> None:
         risposte_corrette_p = f"{risposte_corrette / num_righe * 100:.3f}"
         risposte_errate_p = f"{risposte_errate / num_righe * 100:.3f}"
 
-        # Calcola precision e recall in percentuale.
-        # precision indica la percentuale di risposte positive corrette,
-        # recall indica la percentuale di risposte positive trovate
+        # Calcola precision, specificity e recall in percentuale.
+        # Precision indica la percentuale di risposte positive corrette
         if (veri_positivi + falsi_positivi) > 0:
             precision = veri_positivi / (veri_positivi + falsi_positivi)
         else:
             precision = 0.0
 
+        # Specificity indica la percentuale di risposte negative corrette
+        if (veri_negativi + falsi_positivi) > 0:
+            specificity = veri_negativi / (veri_negativi + falsi_positivi)
+        else:
+            specificity = 0.0
+
+        specificity_p = f"{specificity * 100:.3f}"
+
+        # Recall indica la percentuale di risposte positive trovate
         if (veri_positivi + falsi_negativi) > 0:
             recall = veri_positivi / (veri_positivi + falsi_negativi)
         else:
@@ -227,6 +239,7 @@ def main() -> None:
               + f'{risposte_errate} ({risposte_errate_p}%)')
 
         print(f'Precision: {precision_p}%')
+        print(f'Specificity: {specificity_p}%')
         print(f'Recall: {recall_p}%')
 
     salva_output()
@@ -253,6 +266,7 @@ def salva_output():
         file.write(f'+ Correct answers: {risposte_corrette} ({risposte_corrette_p}%) +\n')
         file.write(f'+ Wrong answers: {risposte_errate} ({risposte_errate_p}%) +\n')
         file.write(f'+ Precision: {precision} ({precision_p}%) +\n')
+        file.write(f'+ Specificity: {specificity} ({specificity_p}%) +\n')
         file.write(f'+ Recall: {recall} ({recall_p}%) +\n')
 
         file.write('\n+ LLM answers: +\n')

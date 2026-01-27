@@ -590,7 +590,7 @@ Ulteriori dettagli sono disponibili nella sezione~\refwithpage{sec:ver1}.
 
 La seconda versione rappresenta un'evoluzione significativa con focus sulla scalabilità e la valutazione \textbf{quantitativa} delle performance. Introduce l'elaborazione \textbf{riga per riga} dei log per ottimizzare l'uso della memoria e utilizza modelli LLM personalizzati creati tramite \textit{Modelfile} di Ollama, che incorporano prompt specifici per l'identificazione di dati sensibili.
 
-Un aspetto fondamentale di questa versione è l'implementazione di un sistema di \textbf{\textit{ground truth}}\footnote{\textit{Ground truth} indica i dati di riferimento considerati corretti e utilizzati come standard per valutare la precisione di un sistema di classificazione. Nel contesto di questo progetto, consiste in etichette manuali che indicano se ogni riga di log contiene o meno dati sensibili.} per la valutazione automatica, che consente il calcolo real-time di metriche di classificazione \textbf{binaria} (veri/falsi positivi/negativi) e delle metriche derivate \textit{precision} e \textit{recall}, oltre all'analisi comparativa di diversi modelli LLM.
+Un aspetto fondamentale di questa versione è l'implementazione di un sistema di \textbf{\textit{ground truth}}\footnote{\textit{Ground truth} indica i dati di riferimento considerati corretti e utilizzati come standard per valutare la precisione di un sistema di classificazione. Nel contesto di questo progetto, consiste in etichette manuali che indicano se ogni riga di log contiene o meno dati sensibili.} per la valutazione automatica, che consente il calcolo real-time di metriche di classificazione \textbf{binaria} (veri/falsi positivi/negativi) e delle metriche derivate \textit{precision}, \textit{specificity} e \textit{recall}, oltre all'analisi comparativa di diversi modelli LLM.
 
 Ulteriori dettagli sono disponibili nella sezione~\refwithpage{sec:ver2}.
 
@@ -695,7 +695,7 @@ Questa versione si concentra sull'elaborazione efficiente di file di log di dime
 
 L'obiettivo principale di questa seconda implementazione è duplice: da un lato migliorare la scalabilità del sistema per gestire volumi di log più elevati, dall'altro introdurre un framework di valutazione automatica per misurare obiettivamente le performance dei modelli LLM.
 
-La versione introduce diversi miglioramenti sostanziali: l'\textbf{elaborazione riga per riga} per ottimizzare l'uso della memoria e semplificare il processo di rilevazione della correttezza delle risposte, l'\textbf{utilizzo di modelli personalizzati} con prompt engineering avanzato, un \textbf{sistema di \textit{ground truth}} per la valutazione automatica e il \textbf{calcolo di metriche di classificazione binaria} quali veri/falsi positivi/negativi, accuratezza complessiva e metriche derivate come \textit{precision} e \textit{recall}.
+La versione introduce diversi miglioramenti sostanziali: l'\textbf{elaborazione riga per riga} per ottimizzare l'uso della memoria e semplificare il processo di rilevazione della correttezza delle risposte, l'\textbf{utilizzo di modelli personalizzati} con prompt engineering avanzato, un \textbf{sistema di \textit{ground truth}} per la valutazione automatica e il \textbf{calcolo di metriche di classificazione binaria} quali veri/falsi positivi/negativi, accuratezza complessiva e metriche derivate come \textit{precision}, \textit{specificity} e \textit{recall}.
 
 \subsubsection{Architettura e funzionamento}
 \label{subsubsec:ver2_architettura}
@@ -765,7 +765,7 @@ I file di output contengono le seguenti informazioni:
 \begin{itemize}
     \item \textbf{Metadati dell'esecuzione}: timestamp, modello utilizzato, file di log analizzato e numero totale di righe processate
     \item \textbf{Metriche di classificazione}: veri positivi, veri negativi, falsi positivi, falsi negativi
-    \item \textbf{Statistiche di accuratezza}: accuratezza complessiva, percentuali di veri positivi, veri negativi, falsi positivi e falsi negativi, percentuale di risposte corrette e di risposte errate, \textit{precision}, \textit{recall}
+    \item \textbf{Statistiche di accuratezza}: accuratezza complessiva, percentuali di veri positivi, veri negativi, falsi positivi e falsi negativi, percentuale di risposte corrette e di risposte errate, \textit{precision}, \textit{specificity}, \textit{recall}
     \item \textbf{Log dettagliato}: traccia completa di tutte le interazioni con l'LLM
 \end{itemize}
 
@@ -890,7 +890,7 @@ La prima versione ha utilizzato un approccio esplorativo per validare la fattibi
 L'approccio della prima versione ha evidenziato problematiche critiche legate alla gestione del context window limitato dei modelli LLM, portando allo sviluppo di strategie di segmentazione e ripristino delle conversazioni.
 
 La seconda versione ha introdotto un framework di testing quantitativo basato su \textit{ground truth} annotato manualmente. La metodologia ha previsto la \textbf{preparazione del dataset} attraverso l'annotazione manuale di file di log con etichette binarie (Y/N) per ogni riga, indicando la presenza o assenza di dati sensibili.\\
-L'\textbf{elaborazione automatizzata} implementa un sistema di confronto automatico tra le risposte del modello e il \textit{ground truth}, consentendo il \textbf{calcolo delle metriche} di veri positivi, veri negativi, falsi positivi e falsi negativi e delle metriche derivate accuratezza, \textit{precision} e \textit{recall}, descritte nella sezione~\refwithpage{sec:metriche_test}. Infine, i \textbf{test comparativi} permettono la valutazione sistematica di modelli LLM differenti con configurazioni standardizzate.
+L'\textbf{elaborazione automatizzata} implementa un sistema di confronto automatico tra le risposte del modello e il \textit{ground truth}, consentendo il \textbf{calcolo delle metriche} di veri positivi, veri negativi, falsi positivi e falsi negativi e delle metriche derivate accuratezza, \textit{precision} \textit{specificity}, e \textit{recall}, descritte nella sezione~\refwithpage{sec:metriche_test}. Infine, i \textbf{test comparativi} permettono la valutazione sistematica di modelli LLM differenti con configurazioni standardizzate.
 
 \section{Metriche di valutazione}
 \label{sec:metriche_test}
@@ -934,6 +934,8 @@ Dalle metriche primarie sono state calcolate le metriche derivate elencate nella
         \hline
         \textit{Precision} & $\frac{TP}{TP + FP} \times 100$ & Percentuale di righe classificate come sensibili che sono effettivamente sensibili \\
         \hline
+        \textit{Specificity} & $\frac{TN}{TN + FP} \times 100$ & Percentuale di righe classificate come non sensibili che sono effettivamente non sensibili \\
+        \hline
         \textit{Recall} & $\frac{TP}{TP + FN} \times 100$ & Percentuale di righe sensibili correttamente identificate dal modello \\
         \hline
     \end{tabular}
@@ -941,7 +943,7 @@ Dalle metriche primarie sono state calcolate le metriche derivate elencate nella
     \label{tab:metriche_derivate}
 \end{table}
 
-Nel contesto applicativo, i falsi negativi rappresentano un rischio di sicurezza maggiore rispetto ai falsi positivi, in quanto comportano la mancata identificazione di dati sensibili effettivamente presenti nei log. Di conseguenza, la \textit{recall} assume un ruolo particolarmente critico, mentre la \textit{precision} quantifica il costo operativo legato ai falsi allarmi generati dal sistema.
+Nel contesto applicativo, i falsi negativi rappresentano un rischio di sicurezza maggiore rispetto ai falsi positivi, in quanto comportano la mancata identificazione di dati sensibili effettivamente presenti nei log. Di conseguenza, la \textit{recall} assume un ruolo particolarmente critico, mentre la \textit{precision} quantifica il costo operativo legato ai falsi allarmi generati dal sistema. La \textit{specificity}, complementare alla \textit{precision}, misura l'accuratezza nell'identificazione delle righe non sensibili, fornendo una valutazione completa delle capacità classificatorie del modello.
 
 \section{Risultati sperimentali}
 \label{sec:risultati_sperimentali}
@@ -983,11 +985,11 @@ Lo script utilizzato per automatizzare il processo di testing della seconda vers
 \begin{table}[h!]
     \centering
     \csvreader[
-        tabular=|l|r|r|r|r|r|r|r|r|,
-        table head=\hline \textbf{Modello} & \textbf{Righe} & \textbf{Tempo} & \textbf{TN} & \textbf{TP} & \textbf{FN} & \textbf{FP} & \textbf{\textit{Precision}} & \textbf{\textit{Recall}} \\ \hline,
+        tabular=|l|r|r|r|r|r|r|r|r|r|,
+        table head=\hline \textbf{Modello} & \textbf{Righe} & \textbf{Tempo} & \textbf{TN} & \textbf{TP} & \textbf{FN} & \textbf{FP} & \textbf{\textit{Precision}} & \textbf{\textit{Specificity}} & \textbf{\textit{Recall}} \\ \hline,
         late after line=\\ \hline,
-    ]{test_results_m1_v2.csv}{model=\model, righe=\righe, tempo=\tempo, tn=\tn, tp=\tp, fn=\fn, fp=\fp, precision=\precision, recall=\recall}
-    {\model & \righe & \tempo & \tn\% & \tp\% & \fn\% & \fp\% & \precision\% & \recall\%}
+    ]{test_results_m1_v2.csv}{model=\model, righe=\righe, tempo=\tempo, tn=\tn, tp=\tp, fn=\fn, fp=\fp, precision=\precision, specificity=\specificity, recall=\recall}
+    {\model & \righe & \tempo & \tn\% & \tp\% & \fn\% & \fp\% & \precision\% & \specificity\% & \recall\%}
     \caption{Risultati (test v.2, Apple M1 Max)}
     \label{tab:risultati_v2_m1}
 \end{table}
@@ -995,11 +997,11 @@ Lo script utilizzato per automatizzare il processo di testing della seconda vers
 \begin{table}[h!]
     \centering
     \csvreader[
-        tabular=|l|r|r|r|r|r|r|r|r|,
-        table head=\hline \textbf{Modello} & \textbf{Righe} & \textbf{Tempo} & \textbf{TN} & \textbf{TP} & \textbf{FN} & \textbf{FP} & \textbf{\textit{Precision}} & \textbf{\textit{Recall}} \\ \hline,
+        tabular=|l|r|r|r|r|r|r|r|r|r|,
+        table head=\hline \textbf{Modello} & \textbf{Righe} & \textbf{Tempo} & \textbf{TN} & \textbf{TP} & \textbf{FN} & \textbf{FP} & \textbf{\textit{Precision}} & \textbf{\textit{Specificity}} & \textbf{\textit{Recall}} \\ \hline,
         late after line=\\ \hline,
-    ]{test_results_6950_v2.csv}{model=\model, righe=\righe, tempo=\tempo, tn=\tn, tp=\tp, fn=\fn, fp=\fp, precision=\precision, recall=\recall}
-    {\model & \righe & \tempo & \tn\% & \tp\% & \fn\% & \fp\% & \precision\% & \recall\%}
+    ]{test_results_6950_v2.csv}{model=\model, righe=\righe, tempo=\tempo, tn=\tn, tp=\tp, fn=\fn, fp=\fp, precision=\precision, specificity=\specificity, recall=\recall}
+    {\model & \righe & \tempo & \tn\% & \tp\% & \fn\% & \fp\% & \precision\% & \specificity\% & \recall\%}
     \caption{Risultati (test v.2, AMD RX6950XT)}
     \label{tab:risultati_v2_6950}
 \end{table}
@@ -1210,6 +1212,110 @@ Lo script utilizzato per automatizzare il processo di testing della seconda vers
     \end{tikzpicture}
     \caption{Confronto della \textit{Precision} (test v.2, AMD RX6950XT)}
     \label{fig:grafico_precision_v2_6950}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+                ybar,
+                width=\textwidth,
+                height=8cm,
+                xlabel={LLM},
+                ylabel={\textit{Specificity} (\%)},
+                symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek-r1:7b, deepseek-r1:8b},
+                xtick=data,
+                x tick label style={rotate=45, anchor=east},
+                legend pos=north west,
+                bar width=8pt,
+                ymin=0,
+                ymax=150,
+                nodes near coords,
+                nodes near coords style={font=\tiny},
+                every node near coord/.append style={/pgf/number format/fixed, /pgf/number format/precision=0}
+            ]
+
+            % Specificity su 100 righe
+            \addplot table[
+                x=model,
+                y=specificity,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{99:101}
+            ] {test_results_m1_v2.csv};
+
+            % Specificity su 200 righe
+            \addplot table[
+                x=model,
+                y=specificity,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{199:201}
+            ] {test_results_m1_v2.csv};
+
+            % Specificity su 1000 righe
+            \addplot table[
+                x=model,
+                y=specificity,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{999:1001}
+            ] {test_results_m1_v2.csv};
+
+            \legend{100 righe, 200 righe, 1000 righe}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Confronto della \textit{Specificity} (test v.2, Apple M1 Max)}
+    \label{fig:grafico_specificity_v2_m1}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+                ybar,
+                width=\textwidth,
+                height=8cm,
+                xlabel={LLM},
+                ylabel={\textit{Specificity} (\%)},
+                symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek-r1:7b, deepseek-r1:8b},
+                xtick=data,
+                x tick label style={rotate=45, anchor=east},
+                legend pos=north west,
+                bar width=8pt,
+                ymin=0,
+                ymax=150,
+                nodes near coords,
+                nodes near coords style={font=\tiny},
+                every node near coord/.append style={/pgf/number format/fixed, /pgf/number format/precision=0}
+            ]
+
+            % Specificity su 100 righe
+            \addplot table[
+                x=model,
+                y=specificity,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{99:101}
+            ] {test_results_6950_v2.csv};
+
+            % Specificity su 200 righe
+            \addplot table[
+                x=model,
+                y=specificity,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{199:201}
+            ] {test_results_6950_v2.csv};
+
+            % Specificity su 1000 righe
+            \addplot table[
+                x=model,
+                y=specificity,
+                col sep=comma,
+                restrict expr to domain={\thisrow{righe}}{999:1001}
+            ] {test_results_6950_v2.csv};
+
+            \legend{100 righe, 200 righe, 1000 righe}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Confronto della \textit{Specificity} (test v.2, AMD RX6950XT)}
+    \label{fig:grafico_specificity_v2_6950}
 \end{figure}
 
 \begin{figure}[h!]
