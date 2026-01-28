@@ -977,11 +977,11 @@ Il test della prima versione, come spiegato nella sezione~\refwithpage{sec:metod
     \label{tab:risultati_v1}
 \end{table}
 
-\label{subsubsec:risultati_v2_m1}
-
 La seconda versione ha introdotto metriche quantitative precise permettendo un confronto sistematico, come mostrato nelle tabelle~\refwithpage{tab:risultati_v2_m1} e \refwithpage{tab:risultati_v2_6950} e nelle figure~\refwithpage{fig:grafico_accuratezza_v2_m1}, \refwithpage{fig:grafico_accuratezza_v2_6950}, \refwithpage{fig:grafico_precision_v2_m1}, \refwithpage{fig:grafico_precision_v2_6950}, \refwithpage{fig:grafico_recall_v2_m1} e \refwithpage{fig:grafico_recall_v2_6950}.
 
 Lo script utilizzato per automatizzare il processo di testing della seconda versione è disponibile nel sorgente~\refwithpage{lst:code_testing_ver2}.
+
+\clearpage
 
 \begin{table}[h!]
     \centering
@@ -1013,7 +1013,7 @@ Lo script utilizzato per automatizzare il processo di testing della seconda vers
         \begin{axis}[
                 ybar,
                 width=\textwidth,
-                height=8cm,
+                height=7.2cm,
                 xlabel={LLM},
                 ylabel={Accuratezza (\%)},
                 symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek-r1:7b, deepseek-r1:8b},
@@ -1022,7 +1022,7 @@ Lo script utilizzato per automatizzare il processo di testing della seconda vers
                 legend pos=north west,
                 bar width=8pt,
                 ymin=0,
-                ymax=150,
+                ymax=160,
                 nodes near coords,
                 nodes near coords style={font=\tiny},
                 every node near coord/.append style={/pgf/number format/fixed, /pgf/number format/precision=0}
@@ -1065,7 +1065,7 @@ Lo script utilizzato per automatizzare il processo di testing della seconda vers
         \begin{axis}[
                 ybar,
                 width=\textwidth,
-                height=8cm,
+                height=7.2cm,
                 xlabel={LLM},
                 ylabel={Accuratezza (\%)},
                 symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek-r1:7b, deepseek-r1:8b},
@@ -1074,7 +1074,7 @@ Lo script utilizzato per automatizzare il processo di testing della seconda vers
                 legend pos=north west,
                 bar width=8pt,
                 ymin=0,
-                ymax=150,
+                ymax=160,
                 nodes near coords,
                 nodes near coords style={font=\tiny},
                 every node near coord/.append style={/pgf/number format/fixed, /pgf/number format/precision=0}
@@ -1117,7 +1117,7 @@ Lo script utilizzato per automatizzare il processo di testing della seconda vers
         \begin{axis}[
                 ybar,
                 width=\textwidth,
-                height=8cm,
+                height=7.2cm,
                 xlabel={LLM},
                 ylabel={\textit{Precision} (\%)},
                 symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek-r1:7b, deepseek-r1:8b},
@@ -1126,7 +1126,7 @@ Lo script utilizzato per automatizzare il processo di testing della seconda vers
                 legend pos=north west,
                 bar width=8pt,
                 ymin=0,
-                ymax=150,
+                ymax=160,
                 nodes near coords,
                 nodes near coords style={font=\tiny},
                 every node near coord/.append style={/pgf/number format/fixed, /pgf/number format/precision=0}
@@ -1169,7 +1169,7 @@ Lo script utilizzato per automatizzare il processo di testing della seconda vers
         \begin{axis}[
                 ybar,
                 width=\textwidth,
-                height=8cm,
+                height=7.2cm,
                 xlabel={LLM},
                 ylabel={\textit{Precision} (\%)},
                 symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek-r1:7b, deepseek-r1:8b},
@@ -1178,7 +1178,7 @@ Lo script utilizzato per automatizzare il processo di testing della seconda vers
                 legend pos=north west,
                 bar width=8pt,
                 ymin=0,
-                ymax=150,
+                ymax=160,
                 nodes near coords,
                 nodes near coords style={font=\tiny},
                 every node near coord/.append style={/pgf/number format/fixed, /pgf/number format/precision=0}
@@ -1221,7 +1221,7 @@ Lo script utilizzato per automatizzare il processo di testing della seconda vers
         \begin{axis}[
                 ybar,
                 width=\textwidth,
-                height=8cm,
+                height=7.2cm,
                 xlabel={LLM},
                 ylabel={\textit{Specificity} (\%)},
                 symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek-r1:7b, deepseek-r1:8b},
@@ -1230,7 +1230,7 @@ Lo script utilizzato per automatizzare il processo di testing della seconda vers
                 legend pos=north west,
                 bar width=8pt,
                 ymin=0,
-                ymax=150,
+                ymax=160,
                 nodes near coords,
                 nodes near coords style={font=\tiny},
                 every node near coord/.append style={/pgf/number format/fixed, /pgf/number format/precision=0}
@@ -1273,7 +1273,7 @@ Lo script utilizzato per automatizzare il processo di testing della seconda vers
         \begin{axis}[
                 ybar,
                 width=\textwidth,
-                height=8cm,
+                height=7.2cm,
                 xlabel={LLM},
                 ylabel={\textit{Specificity} (\%)},
                 symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek-r1:7b, deepseek-r1:8b},
@@ -1282,7 +1282,7 @@ Lo script utilizzato per automatizzare il processo di testing della seconda vers
                 legend pos=north west,
                 bar width=8pt,
                 ymin=0,
-                ymax=150,
+                ymax=160,
                 nodes near coords,
                 nodes near coords style={font=\tiny},
                 every node near coord/.append style={/pgf/number format/fixed, /pgf/number format/precision=0}
@@ -1325,7 +1325,7 @@ Lo script utilizzato per automatizzare il processo di testing della seconda vers
         \begin{axis}[
                 ybar,
                 width=\textwidth,
-                height=8cm,
+                height=7.2cm,
                 xlabel={LLM},
                 ylabel={\textit{Recall} (\%)},
                 symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek-r1:7b, deepseek-r1:8b},
@@ -1334,7 +1334,7 @@ Lo script utilizzato per automatizzare il processo di testing della seconda vers
                 legend pos=north west,
                 bar width=8pt,
                 ymin=0,
-                ymax=150,
+                ymax=160,
                 nodes near coords,
                 nodes near coords style={font=\tiny},
                 every node near coord/.append style={/pgf/number format/fixed, /pgf/number format/precision=0}
@@ -1377,7 +1377,7 @@ Lo script utilizzato per automatizzare il processo di testing della seconda vers
         \begin{axis}[
                 ybar,
                 width=\textwidth,
-                height=8cm,
+                height=7.2cm,
                 xlabel={LLM},
                 ylabel={\textit{Recall} (\%)},
                 symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek-r1:7b, deepseek-r1:8b},
@@ -1386,7 +1386,7 @@ Lo script utilizzato per automatizzare il processo di testing della seconda vers
                 legend pos=north west,
                 bar width=8pt,
                 ymin=0,
-                ymax=150,
+                ymax=160,
                 nodes near coords,
                 nodes near coords style={font=\tiny},
                 every node near coord/.append style={/pgf/number format/fixed, /pgf/number format/precision=0}
@@ -1430,7 +1430,7 @@ Lo script utilizzato per automatizzare il processo di testing della seconda vers
                 ybar,
                 ymode=log,
                 width=\textwidth,
-                height=8cm,
+                height=7.2cm,
                 xlabel={LLM},
                 ylabel={\textit{Tempo} (minuti, scala logaritmica)},
                 symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek-r1:7b, deepseek-r1:8b},
@@ -1486,7 +1486,7 @@ Lo script utilizzato per automatizzare il processo di testing della seconda vers
                 ybar,
                 ymode=log,
                 width=\textwidth,
-                height=8cm,
+                height=7.2cm,
                 xlabel={LLM},
                 ylabel={\textit{Tempo} (minuti, scala logaritmica)},
                 symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek-r1:7b, deepseek-r1:8b},
