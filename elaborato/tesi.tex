@@ -875,7 +875,8 @@ Queste limitazioni, pur non compromettendo l'utilità operativa del sistema, rap
 %			CAPITOLO: Test
 %
 
-\todochapter{Test e valutazione}{chap:test}{aggiungere i nuovi risultati}
+\chapter{Test e valutazione}
+\label{chap:test}
 
 \textit{Sensitive Data Detector} è stato sottoposto a un processo di testing e valutazione durante e dopo le fasi dello sviluppo. La seconda versione del sistema opera su file di log preparati ed etichettati (come spiegato nella sezione~\refwithpage{sec:ver2}), permettendo così di definire un \textit{ground truth} per verificare i risultati ottenuti e condurre un processo di testing sistematico.\\
 Dato che la terza versione di \textit{Sensitive Data Detector} è analoga alla seconda versione sia nel funzionamento che nei \textit{Modelfile} utilizzati, essa non è stata sottoposta a un processo di testing. L'unica differenza tra le due versioni è che la terza analizza i flussi di log provenienti da Graylog in tempo reale, rendendo impossibile definire un \textit{ground truth} per verificare i risultati ottenuti. Inoltre, l'integrazione con sistemi reali introduce variabili ambientali non controllabili che comprometterebbero la riproducibilità e l'affidabilità di misure quantitative.
@@ -890,7 +891,7 @@ La prima versione ha utilizzato un approccio esplorativo per validare la fattibi
 L'approccio della prima versione ha evidenziato problematiche critiche legate alla gestione del context window limitato dei modelli LLM, portando allo sviluppo di strategie di segmentazione e ripristino delle conversazioni.
 
 La seconda versione ha introdotto un framework di testing quantitativo basato su \textit{ground truth} annotato manualmente. La metodologia ha previsto la \textbf{preparazione del dataset} attraverso l'annotazione manuale di file di log con etichette binarie (Y/N) per ogni riga, indicando la presenza o assenza di dati sensibili.\\
-L'\textbf{elaborazione automatizzata} implementa un sistema di confronto automatico tra le risposte del modello e il \textit{ground truth}, consentendo il \textbf{calcolo delle metriche} di veri positivi, veri negativi, falsi positivi e falsi negativi e delle metriche derivate accuratezza, \textit{precision} \textit{specificity}, e \textit{recall}, descritte nella sezione~\refwithpage{sec:metriche_test}. Infine, i \textbf{test comparativi} permettono la valutazione sistematica di modelli LLM differenti con configurazioni standardizzate.
+L'\textbf{elaborazione automatizzata} implementa un sistema di confronto automatico tra le risposte del modello e il \textit{ground truth}, consentendo il \textbf{calcolo delle metriche} di veri positivi, veri negativi, falsi positivi e falsi negativi e delle metriche derivate accuratezza, \textit{precision}, \textit{specificity} e \textit{recall}, descritte nella sezione~\refwithpage{sec:metriche_test}. Infine, i \textbf{test comparativi} permettono la valutazione sistematica di modelli LLM differenti con configurazioni standardizzate.
 
 \section{Metriche di valutazione}
 \label{sec:metriche_test}
@@ -972,7 +973,7 @@ Il test della prima versione, come spiegato nella sezione~\refwithpage{sec:metod
         Llama3.1 70b     & \multicolumn{5}{c|}{\textit{Memoria non sufficiente}}                                                                                 \\ \hline
         Command-R 35b    & \multicolumn{5}{c|}{\textit{Memoria non sufficiente}}                                                                                 \\ \hline
     \end{tabular}
-    \caption{Risultati (test v.1 su Apple M1 Max 32 GB, 32 GPU Core)}
+    \caption{Risultati (test v.1, Apple M1 Max)}
     \label{tab:risultati_v1}
 \end{table}
 
@@ -986,7 +987,7 @@ Lo script utilizzato per automatizzare il processo di testing della seconda vers
     \centering
     \csvreader[
         tabular=|l|r|r|r|r|r|r|r|r|r|,
-        table head=\hline \textbf{Modello} & \textbf{Righe} & \textbf{Tempo} & \textbf{TN} & \textbf{TP} & \textbf{FN} & \textbf{FP} & \textbf{\textit{Precision}} & \textbf{\textit{Specificity}} & \textbf{\textit{Recall}} \\ \hline,
+        table head=\hline \textbf{Modello} & \textbf{Righe} & \textbf{Tempo} & \textbf{TN} & \textbf{TP} & \textbf{FN} & \textbf{FP} & \textbf{\textit{Precis.}} & \textbf{\textit{Specif.}} & \textbf{\textit{Recall}} \\ \hline,
         late after line=\\ \hline,
     ]{test_results_m1_v2.csv}{model=\model, righe=\righe, tempo=\tempo, tn=\tn, tp=\tp, fn=\fn, fp=\fp, precision=\precision, specificity=\specificity, recall=\recall}
     {\model & \righe & \tempo & \tn\% & \tp\% & \fn\% & \fp\% & \precision\% & \specificity\% & \recall\%}
@@ -998,7 +999,7 @@ Lo script utilizzato per automatizzare il processo di testing della seconda vers
     \centering
     \csvreader[
         tabular=|l|r|r|r|r|r|r|r|r|r|,
-        table head=\hline \textbf{Modello} & \textbf{Righe} & \textbf{Tempo} & \textbf{TN} & \textbf{TP} & \textbf{FN} & \textbf{FP} & \textbf{\textit{Precision}} & \textbf{\textit{Specificity}} & \textbf{\textit{Recall}} \\ \hline,
+        table head=\hline \textbf{Modello} & \textbf{Righe} & \textbf{Tempo} & \textbf{TN} & \textbf{TP} & \textbf{FN} & \textbf{FP} & \textbf{\textit{Precis.}} & \textbf{\textit{Specif.}} & \textbf{\textit{Recall}} \\ \hline,
         late after line=\\ \hline,
     ]{test_results_6950_v2.csv}{model=\model, righe=\righe, tempo=\tempo, tn=\tn, tp=\tp, fn=\fn, fp=\fp, precision=\precision, specificity=\specificity, recall=\recall}
     {\model & \righe & \tempo & \tn\% & \tp\% & \fn\% & \fp\% & \precision\% & \specificity\% & \recall\%}
