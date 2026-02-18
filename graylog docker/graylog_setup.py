@@ -161,15 +161,15 @@ class GraylogSetup:
         print(f'Creata regola pipeline {title} con ID {rule_id}')
         return rule_id
 
-    def create_pipeline(self, title: str, rule_ids: list) -> str:
+    def create_pipeline(self, title: str, rule_names: list) -> str:
         """Crea una pipeline con le regole specificate"""
         url = f'{GRAYLOG_URL}/system/pipelines/pipeline'
 
         # Crea una source pipeline con tutte le regole nello stage 0
         pipeline_source = "pipeline \"" + title + "\"\n"
         pipeline_source += "stage 0 match either\n"
-        for rule_id in rule_ids:
-            pipeline_source += f"  rule \"{rule_id}\";\n"
+        for rule_name in rule_names:
+            pipeline_source += f"  rule \"{rule_name}\";\n"
         pipeline_source += "end"
 
         data = {
@@ -179,7 +179,7 @@ class GraylogSetup:
             'stages': [{
                 'stage': 0,
                 'match': 'EITHER',
-                'rules': rule_ids
+                'rules': rule_names
             }]
         }
 
@@ -203,6 +203,7 @@ class GraylogSetup:
         response = self.session.post(url, json=data)
         response.raise_for_status()
         print(f'Pipeline collegata allo stream')
+
 
 def main():
     setup = GraylogSetup()
@@ -235,7 +236,7 @@ def main():
         )
 
         # Crea le regole della pipeline
-        email_rule = setup.create_pipeline_rule(
+        setup.create_pipeline_rule(
             'Regex email',
             r'''
 rule "Regex email"
@@ -252,7 +253,7 @@ end
 '''
         )
 
-        jwt_rule = setup.create_pipeline_rule(
+        setup.create_pipeline_rule(
             'Regex JWT',
             r'''
 rule "Regex JWT"
@@ -269,7 +270,7 @@ end
 '''
         )
 
-        coordinates_rule = setup.create_pipeline_rule(
+        setup.create_pipeline_rule(
             'Regex coordinate',
             r'''
 rule "Regex coordinate"
@@ -289,7 +290,7 @@ end
         # Crea la pipeline
         pipeline = setup.create_pipeline(
             'Segnalazioni log regex pipeline',
-            [email_rule, jwt_rule, coordinates_rule]
+            ['Regex email', 'Regex JWT', 'Regex coordinate']
         )
 
         # Collega la pipeline allo stream
