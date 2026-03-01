@@ -1,5 +1,7 @@
 .venv
 **/__pycache__
-ollama extractor v*/output/*
 *.DS_Store
 *.old.*
+
+ollama extractor v*/output/*
+ollama extractor v3/last_run_timestamp.txt

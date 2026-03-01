@@ -6,5 +6,28 @@
 	],
 	"settings": {
 		// "python.analysis.typeCheckingMode": "strict"
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "Python Debugger: SDD v3",
+				"type": "debugpy",
+				"request": "launch",
+				"cwd": "${workspaceFolder}/ollama extractor v3",
+				"program": "main.py",
+			},
+			{
+				"name": "Python Debugger: SDD v3 pull mode",
+				"type": "debugpy",
+				"request": "launch",
+				"cwd": "${workspaceFolder}/ollama extractor v3",
+				"program": "main.py",
+				"args": [
+					"--pull-last-logs-from-stream",
+					"6996cbbec03e67410f9b7202"
+				]
+			},
+		]
 	}
 }
