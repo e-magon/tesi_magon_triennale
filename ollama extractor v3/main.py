@@ -52,14 +52,17 @@ n_messaggi_inviati_chat_corrente = 0
 messaggi = []
 
 
-async def handle_message(log_id, riga):
+async def handle_message(log_id, riga) -> bool:
     """
     Metodo che invia al modello LLM tramite le API REST
     di Ollama il messaggio ricevuto, e invia la risposta a GrayLog tramite una connessione TCP
     sulla porta 5556.
+    Restituisce True quando rileva almeno un dato sensibile, False altrimenti.
     """
     global n_messaggi_inviati_chat_corrente
     global messaggi
+
+    trovato_dato_sensibile = False
 
     # Se è il momento di cambiare chat, resetta l'elenco dei messaggi
     if (
@@ -87,6 +90,7 @@ async def handle_message(log_id, riga):
         # Se sono già stati trovati dati sensibili con la regex, vengono
         # già inviati a GrayLog.
         if len(all_regex_matches) > 0:
+            trovato_dato_sensibile = True
             for match in all_regex_matches:
                 msg = f'{log_id}: {match}'
                 print(msg)
@@ -117,6 +121,7 @@ async def handle_message(log_id, riga):
 
     risposta: str = response['message']['content']
     if risposta.lower().strip() != 'none':
+        trovato_dato_sensibile = True
         msg = f'{log_id}: {risposta}'
         print(msg)
         # Invio della risposta allo stream di GrayLog, in modo che possa
@@ -126,11 +131,13 @@ async def handle_message(log_id, riga):
         msg = msg + '\x00'
         client.send(msg.encode('utf-8'))
         client.close()
-    else:
-        print(risposta)
+    # else:
+    #     print(risposta)
 
     messaggi.append(response['message'])
     n_messaggi_inviati_chat_corrente += 1
+
+    return trovato_dato_sensibile
 
 
 async def handle_connection(reader, _writer):
@@ -179,10 +186,11 @@ async def main_push() -> None:
     async with server:
         await server.serve_forever()
 
-async def main_pull() -> None:
+async def main_pull() -> int:
     """
     Metodo principale per la modalità pull, nella quale lo script ottiene i log
     direttamente chiamando le API REST di GrayLog, filtrate per timestamp.
+    Restituisce 254 se trova dati sensibili, 0 altrimenti.
     """
     global n_messaggi_prima_di_cambiare_chat
     global llm
@@ -221,30 +229,37 @@ async def main_pull() -> None:
     response.raise_for_status()
 
     results = response.json()['messages']
+    sensitive_logs_detected = False
     for result in results:
         messaggio = result['message']
         riga = messaggio['message']
         log_id = messaggio['_id']
 
         # Elabora il messaggio ricevuto tramite regex e LLM, e invia la risposta a GrayLog
-        await handle_message(log_id, riga)
+        message_contains_sensitive_data = await handle_message(log_id, riga)
+        if message_contains_sensitive_data:
+            sensitive_logs_detected = True
 
     # Una volta terminata l'elaborazione, salva il timestamp utilizzato nel filtro "to" come "last_run_timestamp"
     with open('last_run_timestamp.txt', 'w') as f:
         f.write(now)
+
+    if sensitive_logs_detected:
+        return 254
+
+    return 0
 
 
 if __name__ == '__main__':
     if len(sys.argv) >= 3 and sys.argv[1] == '--pull-last-logs-from-stream':
         pull_mode = True
         pull_from_stream_id = sys.argv[2]
-        print(pull_mode)
-        print(pull_from_stream_id)
 
     try:
         if pull_mode:
             print(f'Ottengo gli ultimi log dallo stream GrayLog {pull_from_stream_id}...')
-            asyncio.run(main_pull())
+            exit_code = asyncio.run(main_pull())
+            sys.exit(exit_code)
         else:
             print(f'Avvio in corso, in ascolto sulla porta {port}.')
             print('Premere Ctrl+C per interrompere in qualsiasi momento.')
