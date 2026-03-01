@@ -545,7 +545,7 @@ La \textbf{prima versione} costituisce un \textit{proof of concept} per validare
 
 La \textbf{seconda versione} introduce sistemi di valutazione quantitativa e modelli personalizzati per migliorare scalabilità e accuratezza.
 
-La \textbf{terza versione} implementa l'integrazione real-time con Graylog per deployment in ambiente di produzione.
+La \textbf{terza versione} implementa l'integrazione con Graylog, sia in modalità \textit{push} che \textit{pull}, per deployment in ambiente di produzione, permettendo quindi sia l'elaborazione \textit{stream} in real-time che quella \textit{batch} per l'analisi di log pre-esistenti.
 
 Per una descrizione completa dell'architettura, delle funzionalità e dei risultati di ogni versione si rimanda al \textbf{Capitolo~\refwithpage{chap:sensitive_data_detector}}.
 
@@ -601,8 +601,8 @@ Ulteriori dettagli sono disponibili nella sezione~\refwithpage{sec:ver2}.
 
 \subsubsection{Versione 3: Integrazione enterprise}
 
-La terza versione costituisce la soluzione \textit{production-ready} del progetto, implementando un'architettura \textbf{asincrona} completa per l'integrazione real-time con Graylog.\\
-Utilizza la programmazione asincrona con \texttt{asyncio} per gestione concorrente delle connessioni, il protocollo GELF per comunicazione nativa con la piattaforma di gestione log e un server TCP non bloccante per la ricezione dei log in tempo reale.
+La terza versione costituisce la soluzione \textit{production-ready} del progetto, implementando un'architettura \textbf{asincrona} completa per l'integrazione con Graylog sia in modalità \textit{push} che \textit{pull}.\\
+Utilizza la programmazione asincrona con \texttt{asyncio} per gestione concorrente delle connessioni, il protocollo GELF per comunicazione nativa con la piattaforma di gestione log, un server TCP non bloccante per la ricezione dei log tramite \textit{stream} in tempo reale (in modalità \textit{push}) e chiamate REST per l'acquisizione \textit{batch} incrementale dei log (in modalità \textit{pull}).
 
 Il sistema implementa un \textbf{\textit{feedback loop}} bidirezionale che reinvia automaticamente i risultati delle analisi a Graylog, permettendo la visualizzazione unificata di log originali e notifiche di rilevamento di dati sensibili attraverso le sue dashboard specializzate.
 
@@ -791,17 +791,17 @@ Queste limitazioni, sebbene non compromettano l'utilità della versione per scop
 \section{Versione 3: Integrazione con Graylog}
 \label{sec:ver3}
 
-La terza versione di \textit{Sensitive Data Detector} rappresenta l'evoluzione finale del progetto, trasformando il sistema da uno strumento di analisi offline a una soluzione completamente integrata per l'elaborazione in tempo reale dei log.
+La terza versione di \textit{Sensitive Data Detector} rappresenta l'evoluzione finale del progetto, trasformando il sistema da uno strumento di analisi offline a una soluzione completamente integrata per l'elaborazione dei log in ambiente operativo.
 
-Questa versione si interfaccia direttamente con Graylog, creando un sistema\\
-\textbf{\textit{end-to-end}} per il monitoraggio continuo dei log.
+Questa versione si interfaccia direttamente con Graylog sia in modalità \textit{push}, analizzando i log in \textit{stream}, che \textit{pull}, analizzando i log in \textit{batch}, creando un sistema \textbf{\textit{end-to-end}} per il monitoraggio continuo dei log.
 
 \subsubsection{Obiettivi e scopo}
 \label{subsubsec:ver3_obiettivi}
 
 L'obiettivo principale della terza versione è fornire una soluzione pronta per il rilascio in produzione per l'identificazione automatica di dati sensibili in ambienti operativi reali. Questa implementazione affronta le principali limitazioni delle versioni precedenti introducendo funzionalità chiave per contesti enterprise.
 
-Il sistema implementa innanzitutto l'\textbf{elaborazione in tempo reale}, permettendo l'analisi immediata dei log non appena vengono generati dai sistemi. L'interfacciamento nativo con Graylog consente l'inserimento immediato negli stack tecnologici esistenti, mentre l'architettura asincrona garantisce la \textbf{scalabilità operativa} necessaria per gestire volumi elevati di log in produzione. Il sistema include inoltre un \textbf{\textit{feedback loop}} attraverso il quale i risultati delle analisi vengono automaticamente rimandati a Graylog, permettendo di visualizzarli tramite interfaccia integrata. Infine, la \textbf{configurazione centralizzata} consente la gestione unificata di input, processing pipeline e output direttamente attraverso l'interfaccia Graylog.
+Il sistema implementa innanzitutto l'\textbf{elaborazione \textit{stream} in tempo reale} in modalità \textit{push}, permettendo l'analisi immediata dei log non appena vengono generati dai sistemi, e supporta anche una modalità \textit{pull} per l'\textbf{acquisizione \textit{batch} incrementale} dei log tramite API REST di Graylog.\\
+L'interfacciamento nativo con Graylog consente l'inserimento immediato negli stack tecnologici esistenti, mentre l'architettura asincrona garantisce la \textbf{scalabilità operativa} necessaria per gestire volumi elevati di log in produzione. Il sistema include inoltre un \textbf{\textit{feedback loop}} attraverso il quale i risultati delle analisi vengono automaticamente rimandati a Graylog, permettendo di visualizzarli tramite interfaccia integrata. Infine, la \textbf{configurazione centralizzata} consente la gestione unificata di input, processing pipeline e output direttamente attraverso l'interfaccia Graylog.
 
 \subsubsection{Architettura e funzionamento}
 \label{subsubsec:ver3_architettura}
@@ -809,7 +809,13 @@ Il sistema implementa innanzitutto l'\textbf{elaborazione in tempo reale}, perme
 L'architettura della terza versione introduce un cambio del paradigma rispetto alle versioni precedenti, passando da un modello client-server a un sistema basato su stream processing. Il sistema opera come un micro-servizio che si posiziona tra Graylog e i modelli LLM, fungendo da ponte per l'analisi dei log.\\
 L'implementazione completa è disponibile nel sorgente~\refwithpage{lst:code_ver3}.
 
-Il flusso di elaborazione real-time si articola nelle seguenti fasi:
+Il collegamento con Graylog è disponibile in due modalità operative.\\
+In modalità \textbf{\textit{push}}, Graylog inoltra i log al sistema in \textit{stream} tramite output GELF su \texttt{TCP 24367} e l'elaborazione avviene in tempo reale.\\
+In modalità \textbf{pull}, il sistema interroga periodicamente le API REST di Graylog su uno stream specifico e recupera in \textit{batch} solo i log generati dopo l'ultima esecuzione registrata.
+
+\clearpage
+
+Il flusso di elaborazione in modalità \textit{push} real-time si articola nelle seguenti fasi:
 
 \begin{enumerate}
     \item \textbf{Ricezione stream}: Il sistema ascolta sulla porta \texttt{TCP 24367} per ricevere log in formato GELF da Graylog
@@ -823,13 +829,15 @@ Il flusso di elaborazione real-time si articola nelle seguenti fasi:
     \item \textbf{Gestione della memoria}: Il contesto conversazionale dell'LLM viene periodicamente ripristinato per mantenere performance costanti
 \end{enumerate}
 
+In modalità \textit{pull} il flusso mantiene la stessa logica di analisi e notifica verso Graylog ma sostituisce la ricezione TCP con una chiamata alle API REST di Graylog per ottenere le righe di log filtrate per intervallo temporale. Al termine dell'elaborazione viene salvato il timestamp attuale, così da garantire la continuità delle acquisizioni successive.
+
 La comunicazione avviene tramite protocollo GELF, che garantisce la preservazione di tutti i metadati necessari per la tracciabilità e la risoluzione di eventuali problemi.\\
 Un esempio di messaggio GELF è riportato nel sorgente~\refwithpage{lst:esempio_gelf}.
 
 \subsubsection{Integrazione con Graylog}
 \label{subsubsec:ver3_integrazione}
 
-L'integrazione con Graylog avviene attraverso una configurazione di input, stream e output che crea una pipeline completa di elaborazione:
+L'integrazione con Graylog in modalità \textit{push} avviene attraverso una configurazione di input, stream e output che crea una pipeline completa di elaborazione:
 
 \begin{itemize}
     \item \textbf{Input \texttt{TCP 5555}}: Riceve i log originali dai sistemi sorgente
@@ -837,6 +845,8 @@ L'integrazione con Graylog avviene attraverso una configurazione di input, strea
     \item \textbf{Input \texttt{TCP 5556}}: Riceve le notifiche di dati sensibili dal sistema di analisi
     \item \textbf{Pipeline di processing}: Applica regole aggiuntive per categorizzazione e notifica
 \end{itemize}
+
+In modalità \textit{pull}, invece, il sistema utilizza le API REST di Graylog per leggere i log in base al timestamp dell'ultima esecuzione, mantenendo invariata la fase di analisi con LLM e la successiva notifica dei risultati alla porta \texttt{TCP 5556}.
 
 Questa architettura permette di mantenere separati i log originali dalle notifiche di sicurezza, facilitando la creazione di dashboard specializzate e la configurazione di alert specifici per la conformità ai regolamenti sulla privacy direttamente all'interno di Graylog.
 
@@ -887,7 +897,7 @@ Queste limitazioni, pur non compromettendo l'utilità operativa del sistema, rap
 \label{chap:test}
 
 \textit{Sensitive Data Detector} è stato sottoposto a un processo di testing e valutazione durante e dopo le fasi dello sviluppo. La seconda versione del sistema opera su file di log preparati ed \textbf{etichettati} (come spiegato nella sezione~\refwithpage{sec:ver2}), permettendo così di definire un \textit{ground truth} per verificare i risultati ottenuti e condurre un processo di testing sistematico.\\
-Dato che la terza versione di \textit{Sensitive Data Detector} è analoga alla seconda versione sia nel funzionamento che nei \textit{Modelfile} utilizzati, essa non è stata sottoposta a un processo di valutazione. L'unica differenza tra le due versioni è che la terza analizza i \textbf{flussi di log} provenienti da Graylog in \textbf{tempo reale}, rendendo impossibile definire un \textit{ground truth} per verificare i risultati ottenuti. Inoltre, l'integrazione con sistemi reali introduce \textbf{variabili ambientali} non controllabili che comprometterebbero la \textbf{riproducibilità} e l'\textbf{affidabilità} di misure quantitative.
+Dato che la terza versione di \textit{Sensitive Data Detector} è analoga alla seconda versione sia nel funzionamento che nei \textit{Modelfile} utilizzati, essa non è stata sottoposta a un processo di valutazione. La differenza principale tra le due versioni è che la terza analizza i \textbf{flussi di log} provenienti da Graylog in ambiente operativo, sia in tempo reale tramite modalità \textit{push} (\textit{stream}) sia tramite acquisizione incrementale in modalità \textit{pull} (\textit{batch}), rendendo impossibile definire un \textit{ground truth} per verificare i risultati ottenuti. Inoltre, l'integrazione con sistemi reali introduce \textbf{variabili ambientali} non controllabili che comprometterebbero la \textbf{riproducibilità} e l'\textbf{affidabilità} di misure quantitative.
 
 \section{Metodologia di test}
 \label{sec:metodologia_test}
@@ -1556,7 +1566,7 @@ I risultati raggiunti durante la fase di sperimentazione e testing mostrati nel 
 
 Il presente lavoro ha dimostrato che l'adozione di un'\textbf{architettura ibrida} basata sulla combinazione di espressioni regolari e Large Language Model costituisce un approccio \textbf{efficace} e concretamente \textbf{applicabile} in contesti produttivi. L'integrazione di questi due paradigmi di analisi ha permesso di sfruttare i vantaggi di entrambe le tecnologie: le \textbf{espressioni regolari} garantiscono l'\textbf{identificazione} rapida e deterministica di \textit{pattern} strutturati ben definiti, mentre gli \textbf{LLM} forniscono la \textbf{flessibilità} necessaria per rilevare dati sensibili espressi in linguaggio naturale o secondo formati non convenzionali.
 
-L'implementazione \textbf{progressiva} attraverso tre versioni evolutive ha consentito di validare l'approccio in modo \textbf{sistematico}, partendo da un \textit{proof of concept} fino ad arrivare a una soluzione \textit{production-ready} integrata con piattaforme enterprise di \textit{log management} come Graylog. I test condotti hanno evidenziato metriche di \textbf{performance} che confermano la concreta \textbf{usabilità} del sistema in ambienti di \textbf{produzione}, con tempi di risposta compatibili con i requisiti operativi e livelli di accuratezza adeguati per il \textbf{monitoraggio della conformità} alla privacy.
+L'implementazione \textbf{progressiva} attraverso tre versioni evolutive ha consentito di validare l'approccio in modo \textbf{sistematico}, partendo da un \textit{proof of concept} fino ad arrivare a una soluzione \textit{production-ready} integrata con piattaforme enterprise di \textit{log management} come Graylog in modalità \textit{push} (\textit{stream}) e \textit{pull} (\textit{batch}). I test condotti hanno evidenziato metriche di \textbf{performance} che confermano la concreta \textbf{usabilità} del sistema in ambienti di \textbf{produzione}, con tempi di risposta compatibili con i requisiti operativi e livelli di accuratezza adeguati per il \textbf{monitoraggio della conformità} alla privacy.
 
 L'esperienza maturata durante lo sviluppo ha inoltre dimostrato come l'\textbf{architettura modulare} proposta permetta di evolvere il sistema in modo \textbf{incrementale}, adattandosi alle specifiche esigenze del \textbf{contesto} applicativo e consentendo \textbf{sostituzioni} o \textbf{aggiornamenti} dei singoli componenti senza compromettere il funzionamento complessivo.
 
