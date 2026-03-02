@@ -1,6 +1,6 @@
 # Sensitive Data Detector v3
 
-Script che ascolta sulla porta TCP 24367 dalla quale legge righe di log GrayLog (in formato GELF) in arrivo.
+Script che ascolta sulla porta TCP 24367 dalla quale legge righe di log Graylog (in formato GELF) in arrivo.
 Per ogni log ricevuto, chiama un modello personalizzato con ollama tramite le API REST ollama e cerca di estrarre tutti i dati privati presenti nella riga di log.
 
 I modelli personalizzati sono:
@@ -34,7 +34,7 @@ ollama create sensitive-data-detector-deepseek-r1:8b -f ../modelfiles/sensitive-
 
 Per selezionare il modello da utilizzare, decommentare la relativa riga di codice nel file main.py.
 
-## Configurazione GrayLog (Docker)
+## Configurazione Graylog (Docker)
 
 ### Creazione dell'environment
 

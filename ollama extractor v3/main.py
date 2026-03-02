@@ -1,8 +1,12 @@
 """
 Script che utilizza degli LLM tramite le API REST ollama e prova ad identificare
 tutti i dati privati presenti all'interno di righe di log.
-In questa versione (v3) lo script ascolta sulla porta TCP 24367 dalla quale
-legge le righe di log in formato GELF, inoltrate da GrayLog.
+In questa versione (v3) lo script può operare in due modi distinti:
+- In modalità push (stream) ascolta sulla porta TCP 24367 dalla quale
+legge le righe di log in formato GELF, inoltrate da Graylog.
+- In modalità pull (batch) ottiene le righe di log chiamando direttamente
+le API REST di Graylog. Ad ogni esecuzione salva in un file il timestamp attuale,
+in modo da ottenere solamente le righe create successivamente all'esecuzione precedente.
 """
 
 import asyncio
@@ -18,7 +22,7 @@ import regex_list
 
 port = 24367
 
-# GrayLog applica già delle regex per cercare dati sensibili.
+# Graylog applica già delle regex per cercare dati sensibili.
 # Per evitare duplicazioni, la gestione delle regex manuali di questo script
 # è disabilitata di default.
 regex_enabled = False
@@ -55,7 +59,7 @@ messaggi = []
 async def handle_message(log_id, riga) -> bool:
     """
     Metodo che invia al modello LLM tramite le API REST
-    di Ollama il messaggio ricevuto, e invia la risposta a GrayLog tramite una connessione TCP
+    di Ollama il messaggio ricevuto, e invia la risposta a Graylog tramite una connessione TCP
     sulla porta 5556.
     Restituisce True quando rileva almeno un dato sensibile, False altrimenti.
     """
@@ -75,7 +79,7 @@ async def handle_message(log_id, riga) -> bool:
     if regex_enabled:
         # Se regex_enabled è True, viene eseguita l'analisi statica
         # attraverso le regex manuali.
-        # La soluzione migliore è utilizzare GrayLog per l'analisi
+        # La soluzione migliore è utilizzare Graylog per l'analisi
         # statica, ma rimane comunque la possibilità di utilizzare
         # le regex manuali in questo script.
 
@@ -88,13 +92,13 @@ async def handle_message(log_id, riga) -> bool:
                     all_regex_matches.append(f"{regex['name']} {m}")
 
         # Se sono già stati trovati dati sensibili con la regex, vengono
-        # già inviati a GrayLog.
+        # già inviati a Graylog.
         if len(all_regex_matches) > 0:
             trovato_dato_sensibile = True
             for match in all_regex_matches:
                 msg = f'{log_id}: {match}'
                 print(msg)
-                # Invio della risposta allo stream apposito di GrayLog
+                # Invio della risposta allo stream apposito di Graylog
                 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 client.connect(('localhost', 5556))
                 msg = msg + '\x00'
@@ -124,7 +128,7 @@ async def handle_message(log_id, riga) -> bool:
         trovato_dato_sensibile = True
         msg = f'{log_id}: {risposta}'
         print(msg)
-        # Invio della risposta allo stream di GrayLog, in modo che possa
+        # Invio della risposta allo stream di Graylog, in modo che possa
         # catalogarla e salvarla all'interno del sistema.
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client.connect(('localhost', 5556))
@@ -142,9 +146,9 @@ async def handle_message(log_id, riga) -> bool:
 
 async def handle_connection(reader, _writer):
     """
-    Metodo di callback eseguito ad ogni connessione in entrata da GrayLog.
+    Metodo di callback eseguito ad ogni connessione in entrata da Graylog.
     Legge i messaggi in arrivo, li invia al modello LLM tramite le API REST
-    di Ollama, e invia la risposta a GrayLog tramite una connessione TCP
+    di Ollama, e invia la risposta a Graylog tramite una connessione TCP
     sulla porta 5556.
     """
     global n_messaggi_inviati_chat_corrente
@@ -165,14 +169,14 @@ async def handle_connection(reader, _writer):
             riga = messaggio['_message']
             log_id = messaggio['_id']
 
-            # Elabora il messaggio ricevuto tramite regex e LLM, e invia la risposta a GrayLog
+            # Elabora il messaggio ricevuto tramite regex e LLM, e invia la risposta a Graylog
             await handle_message(log_id, riga)
 
 
 async def main_push() -> None:
     """
     Metodo principale per la modalità push, nella quale lo script ascolta
-    sulla porta TCP per ricevere i log in arrivo da GrayLog.
+    sulla porta TCP per ricevere i log in arrivo da Graylog.
     """
     global n_messaggi_prima_di_cambiare_chat
     global llm
@@ -189,7 +193,7 @@ async def main_push() -> None:
 async def main_pull() -> int:
     """
     Metodo principale per la modalità pull, nella quale lo script ottiene i log
-    direttamente chiamando le API REST di GrayLog, filtrate per timestamp.
+    direttamente chiamando le API REST di Graylog, filtrate per timestamp.
     Restituisce 254 se trova dati sensibili, 0 altrimenti.
     """
     global n_messaggi_prima_di_cambiare_chat
@@ -235,7 +239,7 @@ async def main_pull() -> int:
         riga = messaggio['message']
         log_id = messaggio['_id']
 
-        # Elabora il messaggio ricevuto tramite regex e LLM, e invia la risposta a GrayLog
+        # Elabora il messaggio ricevuto tramite regex e LLM, e invia la risposta a Graylog
         message_contains_sensitive_data = await handle_message(log_id, riga)
         if message_contains_sensitive_data:
             sensitive_logs_detected = True
@@ -257,7 +261,7 @@ if __name__ == '__main__':
 
     try:
         if pull_mode:
-            print(f'Ottengo gli ultimi log dallo stream GrayLog {pull_from_stream_id}...')
+            print(f'Ottengo gli ultimi log dallo stream Graylog {pull_from_stream_id}...')
             exit_code = asyncio.run(main_pull())
             sys.exit(exit_code)
         else:

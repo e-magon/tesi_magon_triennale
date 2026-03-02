@@ -1,5 +1,5 @@
 """
-Semplice script per inviare i messaggi di esempio a GrayLog,
+Semplice script per inviare i messaggi di esempio a Graylog,
 in modo da testare tutto il flusso di analisi dei log.
 """
 import socket
