@@ -1,12 +1,12 @@
 __1. Ente presso cui è stato svolto il lavoro di stage__
 
-Il lavoro di tesi è stato svolto durante un tirocinio interno presso il Dipartimento di Informatica dell'Università degli Studi di Milano, sotto la supervisione del Prof. Marco Anisetti e del Dott. Antongiacomo Polimeno.
+Il tirocinio interno è stato svolto presso il Dipartimento di Informatica dell'Università degli Studi di Milano, sotto la supervisione del Prof. Marco Anisetti e del Dott. Antongiacomo Polimeno.
 
 __2. Contesto iniziale__
 
-Il contesto di partenza era caratterizzato dalla presenza di elevati volumi di log generati da micro-servizi eterogenei di una piattaforma di domotica e smart city, con formati e contenuti non uniformi. In tale scenario, i log possono contenere dati sensibili quali indirizzi email, token di autenticazione e coordinate geografiche, con conseguenti implicazioni in termini di tutela della privacy e di conformità normativa.
+Il contesto di partenza era caratterizzato dalla presenza di elevati volumi di log, generati da micro-servizi eterogenei appartenenti a una piattaforma di domotica e smart city, con formati e contenuti non uniformi. In tale scenario, i log possono contenere dati sensibili quali indirizzi email, token di autenticazione e coordinate geografiche, con conseguenti implicazioni in termini di tutela della privacy e di conformità normativa.
 
-Nel contesto operativo considerato non era sempre possibile intervenire direttamente sul codice sorgente dei sistemi che producono i log; si è reso pertanto necessario progettare un sistema esterno in grado di analizzare automaticamente i messaggi e di segnalare le occorrenze critiche.
+Nel contesto operativo considerato non era sempre possibile intervenire direttamente sul codice sorgente dei sistemi che producono i log; si è reso pertanto necessario progettare un sistema esterno in grado di analizzare automaticamente i messaggi e segnalare le occorrenze critiche.
 
 __3. Obiettivi del lavoro__
 
@@ -20,27 +20,27 @@ Gli obiettivi prefissati all'avvio del lavoro erano i seguenti:
 
 __4. Descrizione lavoro svolto__
 
-In una fase preliminare è stata condotta un'analisi dello stato dell'arte relativa a strumenti e approcci esistenti per l'identificazione di dati sensibili nei log.
+In una fase preliminare si è condotta un'analisi dello stato dell'arte riguardante strumenti e approcci esistenti per l'identificazione di dati sensibili nei log.
 
-Il lavoro di sviluppo è stato quindi condotto secondo un approccio iterativo e incrementale, articolato in tre versioni successive del sistema Sensitive Data Detector. Nel corso dello sviluppo sono stati inoltre confrontati diversi modelli LLM su piattaforme hardware differenti (Apple M1 Max e AMD RX6950XT), valutando i compromessi tra tempi di inferenza e qualità del rilevamento.
+Il lavoro di sviluppo è stato condotto secondo un approccio iterativo e incrementale, articolato in tre versioni successive del sistema Sensitive Data Detector. Nel corso dello sviluppo sono stati inoltre confrontati diversi LLM su piattaforme hardware differenti (Apple M1 Max e AMD RX6950XT), valutando i compromessi tra tempi di inferenza e qualità del rilevamento.
 
-Nella prima fase è stato realizzato un proof-of-concept in modalità batch su file di log, finalizzato a validare la fattibilità dell'approccio basato su LLM. Tale fase ha messo in evidenza i primi limiti pratici, con particolare riferimento alla scalabilità e alla misurabilità oggettiva delle prestazioni.
+La prima fase ha prodotto un proof-of-concept in modalità batch su file di log, finalizzato a validare la fattibilità dell'approccio basato su LLM. Ciò ha messo in evidenza i primi limiti pratici, con particolare riferimento alla scalabilità e alla misurabilità oggettiva delle prestazioni.
 
-Nella seconda fase è stato introdotto un flusso di elaborazione riga per riga, con modelli personalizzati mediante Modelfile e un dataset corredato di ground truth. Ciò ha consentito l'implementazione di un processo di valutazione automatica fondato su metriche di classificazione binaria (TP, TN, FP, FN) e su metriche derivate (accuracy, precision, specificity, recall).
+Nella seconda fase è stato introdotto un flusso di elaborazione riga per riga, con modelli personalizzati mediante Modelfile e un dataset corredato di ground truth. Questo ha consentito l'implementazione di un processo di valutazione automatica fondato su metriche di classificazione binaria (TP, TN, FP, FN) e su metriche derivate (accuracy, precision, specificity, recall).
 
-Nella terza fase è stata realizzata l'integrazione con Graylog in modalità push (stream in tempo reale) e pull (batch incrementale), adottando programmazione asincrona e meccanismi di feedback verso la piattaforma di log management per la notifica dei rilevamenti.
+Nella terza e ultima fase è stata realizzata l'integrazione con Graylog in modalità push (stream in tempo reale) e pull (batch incrementale), adottando programmazione asincrona e meccanismi di feedback verso la piattaforma di log management per la notifica dei rilevamenti.
 
 __5. Tecnologie coinvolte__
 
 Le principali tecnologie utilizzate nel corso dello stage sono le seguenti:
 
-- Python 3.12 per la logica applicativa, lo scripting e l'integrazione;
+- Python 3.12 per logica applicativa, scripting e integrazione;
 - librerie Python: ollama, asyncio, httpx, anyio, requests;
 - Graylog per raccolta, stream, pipeline con espressioni regolari, output e API REST;
 - protocollo GELF per lo scambio strutturato dei log;
-- Ollama per esecuzione locale di modelli LLM;
-- modelli LLM open weight personalizzati via Modelfile;
-- Docker e Docker Compose per ambiente riproducibile di test e integrazione.
+- Ollama per l'esecuzione locale di modelli LLM;
+- modelli LLM open weight personalizzati via Modelfile (llama3.1, llama3.2, mistral, mistral-nemo, qwen2.5, gemma3, deepseek-r1);
+- Docker e Docker Compose per l'ambiente riproducibile di test e integrazione.
 
 __6. Competenze e risultati raggiunti__
 
@@ -54,7 +54,7 @@ Quali insegnamenti si possono trarre dall'esperienza effettuata?
 
 - L'approccio ibrido consente di sfruttare la velocità e il determinismo delle espressioni regolari con la flessibilità semantica offerta dai modelli LLM.
 - La qualità dei prompt e la configurazione del contesto esercitano un'influenza significativa sull'affidabilità del rilevamento.
-- In un progetto di natura applicata, l'integrazione con i sistemi esistenti e la tracciabilità operativa rivestono un'importanza pari a quella dell'accuratezza del modello.
+- L'integrazione con i sistemi esistenti e la tracciabilità operativa rivestono un'importanza pari a quella dell'accuratezza del modello.
 
 Quali i problemi incontrati? Quali risolti e quali no? Perché?
 
