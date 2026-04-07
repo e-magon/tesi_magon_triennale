@@ -36,7 +36,7 @@ Le principali tecnologie utilizzate nel corso dello stage sono le seguenti:
 
 - Python 3.12 per la logica applicativa, lo scripting e l'integrazione;
 - librerie Python: ollama, asyncio, httpx, anyio, requests;
-- Graylog per raccolta, stream, pipeline, output e API REST;
+- Graylog per raccolta, stream, pipeline con espressioni regolari, output e API REST;
 - protocollo GELF per lo scambio strutturato dei log;
 - Ollama per esecuzione locale di modelli LLM;
 - modelli LLM open weight personalizzati via Modelfile;
