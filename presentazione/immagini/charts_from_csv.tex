@@ -1,0 +1,126 @@
+\documentclass{article}
+
+\usepackage[paperwidth=17cm,paperheight=11cm,margin=0cm]{geometry}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\pagestyle{empty}
+
+\newcommand{\plotmetric}[3]{%
+\begin{tikzpicture}
+  \begin{axis}[
+    ybar,
+    width=16cm,
+    height=9cm,
+    xlabel={LLM},
+    ylabel={#2},
+    symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek-r1:7b, deepseek-r1:8b},
+    xtick=data,
+    x tick label style={rotate=45, anchor=east},
+    legend pos=north west,
+    bar width=8pt,
+    ymin=0,
+    ymax=160,
+    nodes near coords,
+    nodes near coords style={font=\tiny},
+    every node near coord/.append style={/pgf/number format/fixed, /pgf/number format/precision=0}
+  ]
+    \addplot table[
+      x=model,
+      y=#3,
+      col sep=comma,
+      restrict expr to domain={\thisrow{righe}}{99:101}
+    ] {#1};
+
+    \addplot table[
+      x=model,
+      y=#3,
+      col sep=comma,
+      restrict expr to domain={\thisrow{righe}}{199:201}
+    ] {#1};
+
+    \addplot table[
+      x=model,
+      y=#3,
+      col sep=comma,
+      restrict expr to domain={\thisrow{righe}}{999:1001}
+    ] {#1};
+
+    \legend{100 righe, 200 righe, 1000 righe}
+  \end{axis}
+\end{tikzpicture}
+}
+
+\newcommand{\plottempo}[1]{%
+\begin{tikzpicture}
+  \begin{axis}[
+    ybar,
+    ymode=log,
+    width=16cm,
+    height=9cm,
+    xlabel={LLM},
+    ylabel={\textit{Tempo} (minuti, scala logaritmica)},
+    symbolic x coords={llama3.1:8b, llama3.2:3b, mistral:7b, mistral-nemo:12b, qwen2.5:7b, gemma3:4b, gemma3:12b, deepseek-r1:7b, deepseek-r1:8b},
+    xtick=data,
+    x tick label style={rotate=45, anchor=east},
+    legend pos=north west,
+    bar width=8pt,
+    ymin=1,
+    ymax=2500,
+    point meta=explicit symbolic,
+    nodes near coords,
+    nodes near coords style={font=\tiny, rotate=90, anchor=west}
+  ]
+    \addplot table[
+      x=model,
+      y=tempo_minuti,
+      meta=tempo,
+      col sep=comma,
+      restrict expr to domain={\thisrow{righe}}{99:101}
+    ] {#1};
+
+    \addplot table[
+      x=model,
+      y=tempo_minuti,
+      meta=tempo,
+      col sep=comma,
+      restrict expr to domain={\thisrow{righe}}{199:201}
+    ] {#1};
+
+    \addplot table[
+      x=model,
+      y=tempo_minuti,
+      meta=tempo,
+      col sep=comma,
+      restrict expr to domain={\thisrow{righe}}{999:1001}
+    ] {#1};
+
+    \legend{100 righe, 200 righe, 1000 righe}
+  \end{axis}
+\end{tikzpicture}
+}
+
+\begin{document}
+
+\begin{center}\plotmetric{../../elaborato/test_results_6950_v2.csv}{\textit{Accuracy (\%)}}{accuracy}\end{center}
+\clearpage
+\begin{center}\plotmetric{../../elaborato/test_results_6950_v2.csv}{\textit{Precision} (\%)}{precision}\end{center}
+\clearpage
+\begin{center}\plotmetric{../../elaborato/test_results_6950_v2.csv}{\textit{Recall} (\%)}{recall}\end{center}
+\clearpage
+\begin{center}\plotmetric{../../elaborato/test_results_6950_v2.csv}{\textit{Specificity} (\%)}{specificity}\end{center}
+\clearpage
+\begin{center}\plottempo{../../elaborato/test_results_6950_v2.csv}\end{center}
+\clearpage
+
+\begin{center}\plotmetric{../../elaborato/test_results_m1_v2.csv}{\textit{Accuracy (\%)}}{accuracy}\end{center}
+\clearpage
+\begin{center}\plotmetric{../../elaborato/test_results_m1_v2.csv}{\textit{Precision} (\%)}{precision}\end{center}
+\clearpage
+\begin{center}\plotmetric{../../elaborato/test_results_m1_v2.csv}{\textit{Recall} (\%)}{recall}\end{center}
+\clearpage
+\begin{center}\plotmetric{../../elaborato/test_results_m1_v2.csv}{\textit{Specificity} (\%)}{specificity}\end{center}
+\clearpage
+\begin{center}\plottempo{../../elaborato/test_results_m1_v2.csv}\end{center}
+
+\end{document}
