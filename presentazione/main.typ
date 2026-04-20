@@ -147,7 +147,7 @@ Nessuna di queste soluzioni combina *analisi sintattica* + *analisi semantica* +
 
 - *Modelli proprietari* (OpenAI, Anthropic, Google) vs *open weight* (esecuzione locale):
   - Open weight: *privacy*, *costi ridotti*, *no dipendenze* da servizi cloud
-  - Proprietari: *context window*#footnote[Quantità di testo elaborabile in una singola interazione] e *parametri*#footnote[Numero di connessioni neurali] generalmente superiori rispetto a modelli open weight →~maggiore comprensione e accuratezza
+  - Proprietari: *context window*#footnote[Quantità di testo elaborabile in una singola interazione] e numero di *parametri*#footnote[Numero di connessioni neurali] generalmente superiori rispetto a modelli open weight →~maggiore comprensione e accuratezza
 
 #figure(
   image("../elaborato/immagini/white2024livebench-1.png", height: 96%),
