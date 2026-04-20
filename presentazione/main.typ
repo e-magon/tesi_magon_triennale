@@ -139,7 +139,7 @@
   [logredactor], [Solo durante generazione, pattern predefiniti],
 )
 
-Nessuna di queste soluzioni combina *analisi sintattica* + *analisi semantica* + *integrazione con sistema di log management*
+Nessuna di queste soluzioni combina *analisi sintattica* + *analisi semantica* + *integrazione con sistemi di log management*
 
 == Stato dell'arte: LLM
 
