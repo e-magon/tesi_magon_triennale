@@ -191,15 +191,15 @@ Nessuna di queste soluzioni combina *analisi sintattica* + *analisi semantica* +
     [
       *Graylog*:
       - Log management
-      - L1: Sintassi (regex)
+      - L1: *Sintassi* (via regex)
 
       *Docker*:
-      - Container Graylog (+~MongoDB e datanode)
+      - Container Graylog (+~MongoDB e `datanode`)
     ],
     [
       *Ollama*:
-      - API REST, Modelfile
-      - L2: Semantica (LLM open weight)
+      - Esecuzione LLM open weight
+      - L2: *Semantica* (via LLM)
 
       *Python 3.12*:
       - Codifica del progetto
