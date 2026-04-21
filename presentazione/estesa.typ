@@ -1,4 +1,4 @@
-#import "page_counter_fix_diatypst.typ": *
+#import "@preview/diatypst:0.9.1": *
 
 #let presentation-title = "Sensitive Data Detector:\nIdentificazione automatica di dati sensibili all'interno di log"
 #let presentation-subtitle = "Laurea triennale in Sicurezza dei Sistemi e delle Reti Informatiche"
@@ -40,6 +40,9 @@
   )
 }
 
+// Riduce di 1 il numero di pagine (per non contare quella dei ringraziamenti)
+#counter(page).update(v => v - 1)
+
 // Prima slide: clonata dalla title slide di default di diatypst, con logo in overlay
 #set page(
   footer: none,
@@ -78,8 +81,6 @@
   image("immagini/unimi_transparent.png", width: 180pt),
 )
 
-#counter(page).update(v => v - 1)
-
 #show: slides.with(
   title: presentation-title,
   subtitle: presentation-subtitle,
@@ -97,7 +98,6 @@
 )
 
 = Introduzione
-#counter(page).update(v => v - 1)
 
 == Contesto e obiettivo
 
@@ -121,8 +121,40 @@
 
 *Obiettivo*: sviluppare _Sensitive Data Detector_, un sistema *automatico*, *scalabile* e *integrato con il sistema di log management* per il rilevamento di dati sensibili nei log
 
+= Stato dell'arte
+
+== Stato dell'arte: Analisi dei log
+
+#table(
+  columns: (auto, auto),
+  inset: 5pt,
+  align: (left, left),
+  table.header([*Strumento*], [*Limite principale*]),
+  [Microsoft Presidio], [Non specializzato per flussi continui di log],
+  [anonympy], [Solo documenti strutturati, pre-elaborazione necessaria],
+  [Data Protection Framework], [Incompleto, orientato a dati tabellari],
+  [NgAnonymize], [Nessun rilevamento automatico],
+  [ARX], [Orientato a dati tabellari],
+  [LogAnalyzer], [Analisi manuale tramite GUI, no API],
+  [logredactor], [Solo durante generazione, pattern predefiniti],
+)
+
+Nessuna di queste soluzioni combina *analisi sintattica* + *analisi semantica* + *integrazione con sistemi di log management*
+
+== Stato dell'arte: LLM
+
+- *Large Language Models*: modelli AI basati su architettura *Transformer* con meccanismi di *self-attention* →~migliore comprensione contestuale del testo rispetto ad altri sistemi di Natural Language Processing
+
+- *Modelli proprietari* (OpenAI, Anthropic, Google) vs *open weight* (esecuzione locale):
+  - Open weight: *privacy*, *costi ridotti*, *no dipendenze* da servizi cloud
+  - Proprietari: *context window*#footnote[Quantità di testo elaborabile in una singola interazione] e numero di *parametri*#footnote[Numero di connessioni neurali] generalmente superiori rispetto a modelli open weight →~maggiore comprensione e accuratezza
+
+#figure(
+  image("../elaborato/immagini/white2024livebench-1.png", height: 96%),
+  caption: [Confronto performance su LiveBench: proprietari vs open weight],
+)
+
 = Architettura e tecnologie
-#counter(page).update(v => v - 1)
 
 == Approccio ibrido: Regex & LLM
 
@@ -191,7 +223,6 @@
 )
 
 = Sensitive Data Detector
-#counter(page).update(v => v - 1)
 
 == V1: Proof of Concept
 
@@ -238,7 +269,6 @@
 - Stessi 9 modelli personalizzati da Modelfile della V2
 
 = Test e risultati\ (SDD V2)
-#counter(page).update(v => v - 1)
 
 == Metodologia e metriche
 
@@ -286,8 +316,16 @@ Risultati simili su *Apple M1 Max*, con tempi di elaborazione superiori (circa +
 == Analisi comparativa
 
 #figure(
+  image("immagini/accuratezza_amd.png", height: 98%),
+  caption: [_Accuracy_ per modello, AMD RX6950XT],
+)
+#figure(
   image("immagini/precision_amd.png", height: 98%),
   caption: [_Precision_ per modello, AMD RX6950XT],
+)
+#figure(
+  image("immagini/specificity_amd.png", height: 98%),
+  caption: [_Specificity_ per modello, AMD RX6950XT],
 )
 #figure(
   image("immagini/recall_amd.png", height: 98%),
@@ -295,7 +333,6 @@ Risultati simili su *Apple M1 Max*, con tempi di elaborazione superiori (circa +
 )
 
 = Conclusioni
-#counter(page).update(v => v - 1)
 
 == Risultati raggiunti
 
@@ -336,7 +373,6 @@ Risultati simili su *Apple M1 Max*, con tempi di elaborazione superiori (circa +
 )
 
 ==
-#counter(page).update(v => v - 1)
 
 #block(
   inset: (x: 0.5 * first-slide-space, y: 1em),
